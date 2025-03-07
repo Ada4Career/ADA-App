@@ -1,13 +1,13 @@
 export interface ApiReturn<T> {
   data: T;
   message: string;
-  status: number;
+  code: number;
 }
 
 export interface ApiError {
-  code?: number;
   message: string;
-  status: number;
+  data: string;
+  code: number;
 }
 
 export type UninterceptedApiError = {
