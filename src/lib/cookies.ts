@@ -4,17 +4,17 @@ const cookies = new Cookies();
 
 // Login
 export const getToken = (): string => {
-  return cookies.get('@setickets/token');
+  return cookies.get('ada4career-token');
 };
 
 export const setToken = (token: string) => {
-  cookies.set('@setickets/token', token, {
+  cookies.set('ada4career-token', token, {
     path: '/',
   });
 };
 
 export const removeToken = () => {
-  cookies.remove('@setickets/token', {
+  cookies.remove('ada4career-token', {
     path: '/',
   });
 };

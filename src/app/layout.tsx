@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
@@ -56,6 +57,7 @@ export default function RootLayout({
 }) {
   return (
     <html>
+      <ToastContainer />
       <body>{children}</body>
     </html>
   );

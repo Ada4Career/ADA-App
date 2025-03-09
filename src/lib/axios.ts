@@ -41,6 +41,8 @@ api.interceptors.request.use(function (config) {
       token = getToken();
     }
 
+    console.log(token);
+
     config.headers.Authorization = token ? `Bearer ${token}` : '';
   }
 

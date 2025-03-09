@@ -4,13 +4,13 @@ import { create } from 'zustand';
 
 import { removeToken, setToken } from '@/lib/cookies';
 
-import { User, withToken } from '@/types/entities/user.types';
+import { UserInterface, withToken } from '@/types/entities/user.types';
 
 type AuthStoreType = {
-  user: User | null;
+  user: UserInterface | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (user: User & withToken) => void;
+  login: (user: UserInterface & withToken) => void;
   logout: () => void;
   stopLoading: () => void;
 };

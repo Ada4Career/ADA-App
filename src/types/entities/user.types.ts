@@ -1,12 +1,8 @@
 export type UserRole = 'jobseeker' | 'human_resources' | 'admin';
 
-interface BaseUser {
-  email: string;
-  name: string;
-  age: number;
-  address: string;
-  gender: string;
-  role: UserRole;
+interface HumanResourceData {
+  company: string;
+  position: string;
 }
 
 interface JobSeekerData {
@@ -16,14 +12,18 @@ interface JobSeekerData {
   resume_url: string;
 }
 
-interface HumanResourceData {
-  company: string;
-  position: string;
-}
+type Role = 'human_resources' | 'jobseeker';
 
-export interface User<T = null> extends BaseUser {
-  job_seeker_data?: T extends 'job_seeker' ? JobSeekerData : never;
-  human_resource_data?: T extends 'human_resource' ? HumanResourceData : never;
+export interface UserInterface {
+  email: string;
+  password: string;
+  name: string;
+  age: number;
+  address: string;
+  gender: string;
+  role: Role[];
+  human_resource_data?: HumanResourceData;
+  job_seeker_data?: JobSeekerData;
 }
 
 export interface withToken {

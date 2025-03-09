@@ -1,13 +1,15 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import type React from 'react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import api from '@/lib/axios';
+import { setToken } from '@/lib/cookies';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -29,9 +31,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import useAuthStore from '@/store/useAuthStore';
+
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiError, ApiReturn } from '@/types/api.types';
+import { UserInterface } from '@/types/entities/user.types';
 import { RegisterAndLoginResponse } from '@/types/response/auth';
 
 interface RegisterFormProps {
@@ -51,14 +56,15 @@ const formSchema = z.object({
 });
 
 export function RegisterForm({ onLoginClick }: RegisterFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { login } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onTouched',
   });
 
-  const { mutateAsync } = useMutation<
+  const { mutateAsync, isLoading } = useMutation<
     ApiReturn<RegisterAndLoginResponse>,
     ApiError,
     z.infer<typeof formSchema>
@@ -69,33 +75,31 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
         password: data.password,
         role: [data.role],
       };
-      await api.post(`${API_BASE_URL}/user/register`, dataStr);
+      const response = await api.post(`${API_BASE_URL}/user/register`, dataStr);
 
-      const dataLogin = {
-        email: data.email,
-        password: data.password,
-      };
-
-      const loginResponse = await api.post(
-        `${API_BASE_URL}/user/login`,
-        dataLogin
+      const token = response.data.data.token;
+      setToken(token);
+      const meResponse = await api.get<ApiReturn<UserInterface>>(
+        `${API_BASE_URL}/me`
       );
-      return loginResponse.data;
+      const meData = meResponse.data.data;
+      login({
+        ...meData,
+        token: token,
+      });
+      return response.data;
     },
     {
       onSuccess: (data) => {
         console.log(data);
+        toast.success('Register Successfully');
+        router.push('/onboarding');
       },
     }
   );
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     await mutateAsync(values);
-    setIsLoading(false);
     // Handle registration logic here
     console.log('Registration submitted');
   };
