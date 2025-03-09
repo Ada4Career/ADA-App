@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import AuthDialog from '@/components/features/auth/auth-dialog';
 
@@ -17,23 +18,25 @@ const NAV_LINKS = [
   },
 ];
 
+const queryClient = new QueryClient();
+
 const Navbar = () => {
   // const { user, isAuthenticated, isLoading } = useAuthStore();
   return (
     <nav className='max-w-6xl mx-auto py-4 px-4 flex items-center justify-between'>
-      <div className='flex items-center gap-3'>
+      <div className='flex items-center gap-5'>
         <Image
           src={logo}
           alt='ADA Logo'
           className='mr-1'
-          width={36}
-          height={36}
+          width={40}
+          height={40}
         />
         {NAV_LINKS.map((l) => (
           <Link
             href={l.url}
             key={l.name}
-            className='text-sm text-gray-600 hover:text-gradient-ms hover:font-medium'
+            className=' text-gray-700 hover:text-gradient-ms hover:font-medium'
           >
             {l.name}
           </Link>
@@ -48,7 +51,9 @@ const Navbar = () => {
           </Link>
         ) : (
         )} */}
-        <AuthDialog />
+        <QueryClientProvider client={queryClient}>
+          <AuthDialog />
+        </QueryClientProvider>
         {/* <LoginDialog />
         <RegisterDialog /> */}
       </div>

@@ -4,6 +4,8 @@ import Head from 'next/head';
 import * as React from 'react';
 import '@/lib/env';
 
+import Navbar from '@/components/layout/navbar';
+
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -22,7 +24,9 @@ export default function HomePage() {
       <Head>
         <title>Hi</title>
       </Head>
-      <section className='bg-white'>hi</section>
+      <section className='bg-white'>
+        <Navbar />
+      </section>
     </main>
   );
 }

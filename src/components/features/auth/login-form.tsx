@@ -59,7 +59,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
           </p>
           <Button
             type='button'
-            variant='outline'
+            variant='ghost'
             onClick={onRegisterClick}
             className='w-full'
           >
