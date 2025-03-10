@@ -4,7 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
+
+import api from '@/lib/axios';
+import { getCookie } from '@/lib/cookies-action';
 
 import AdaLogo from '@/components/ada-logo';
 import { Button } from '@/components/ui/button';
@@ -21,6 +26,9 @@ import {
 import Expectation from '@/app/onboarding/jobseeker/form/Expectation';
 import PersonalInfo from '@/app/onboarding/jobseeker/form/PersonalInfo';
 import SkillExperience from '@/app/onboarding/jobseeker/form/SkillExperience';
+import { API_BASE_URL } from '@/constant/config';
+
+import { ApiError, ApiReturn } from '@/types/api.types';
 
 const JobSeekerFormPage = () => {
   const [step, setStep] = React.useState(1);
@@ -37,8 +45,45 @@ const JobSeekerFormPage = () => {
 
   const router = useRouter();
 
+  const { mutateAsync: mutateAsyncUptData, isLoading } = useMutation<
+    ApiReturn<null>,
+    ApiError,
+    z.infer<typeof jobSeekerSchema>
+  >(
+    async (data) => {
+      const email = (await getCookie('ada4career-email'))?.value;
+
+      const personalData = {
+        name: data.personalInfo.fullName,
+        age: data.personalInfo.age,
+        address: data.personalInfo.address,
+        gender: data.personalInfo.gender,
+      };
+
+      await api.post(`${API_BASE_URL}/user/update/${email}`, personalData);
+
+      const jobseekerData = {
+        skill: data.skillExperience.skill,
+        experiences: data.skillExperience.experience,
+        expectations: data.expectation.expectation,
+      };
+
+      const response = await api.post(
+        `${API_BASE_URL}/user/role/${email}`,
+        jobseekerData
+      );
+
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        toast.success('Data saved successfully');
+      },
+    }
+  );
+
   const onSubmit = async (values: JobSeekerData) => {
-    console.log(values);
+    await mutateAsyncUptData(values);
   };
 
   // Function to validate current step before proceeding
@@ -112,7 +157,7 @@ const JobSeekerFormPage = () => {
   };
 
   return (
-    <div className='min-h-screen w-screen py-8 px-4 flex items-center justify-center relative overflow-hidden'>
+    <div className='min-h-screen w-screen py-8 px-4 overflow-x-clip flex items-center justify-center relative'>
       <div className='w-[560px] h-[560px] rounded-full blur-3xl -translate-x-48 -translate-y-20 absolute opacity-50 bg-orange-200 top-0 left-0' />
       <div className='w-[560px] h-[560px] rounded-full blur-3xl translate-x-48 translate-y-20 absolute opacity-50 bg-orange-200 bottom-0 right-0' />
       <div className='max-w-6xl mx-auto rounded-md bg-white z-10 p-6 w-full text-center shadow-md'>
@@ -131,7 +176,7 @@ const JobSeekerFormPage = () => {
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
-              <div className='flex flex-col gap-y-8 items-start justify-start w-full'>
+              <div className='flex flex-col gap-y-8 items-start text-start justify-start w-full'>
                 {renderStepContent()}
               </div>
 

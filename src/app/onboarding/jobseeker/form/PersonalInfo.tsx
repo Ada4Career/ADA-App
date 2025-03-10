@@ -26,7 +26,7 @@ const PersonalInfo = ({ form }: JobSeekerSectionProps) => {
         control={form.control}
         name='personalInfo.fullName'
         render={({ field }) => (
-          <FormItem className='w-full items-start flex flex-col'>
+          <FormItem className='w-full'>
             <FormLabel>Full Name *</FormLabel>
             <FormControl>
               <Input placeholder='Enter your full name' {...field} />
@@ -43,7 +43,12 @@ const PersonalInfo = ({ form }: JobSeekerSectionProps) => {
           <FormItem>
             <FormLabel>Age *</FormLabel>
             <FormControl>
-              <Input type='number' placeholder='19' {...field} />
+              <Input
+                type='number'
+                className='w-full'
+                placeholder='19'
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
