@@ -8,9 +8,12 @@ import {
   HandHeart,
   HandIcon,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
+
+import api from '@/lib/axios';
+import { getCookie } from '@/lib/cookies-action';
 
 import AdaLogo from '@/components/ada-logo';
 import { ChoiceGroup, ChoiceItem } from '@/components/chooice-group';
@@ -19,7 +22,9 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 
-import useAuthStore from '@/store/useAuthStore';
+import { API_BASE_URL } from '@/constant/config';
+
+import { ApiError, ApiReturn } from '@/types/api.types';
 
 // Define types for our questions and answers
 interface DisabilityType {
@@ -108,13 +113,7 @@ function transformData(
   return result;
 }
 
-const DisabilityTest = () => {
-  const router = useRouter();
-  const { user } = useAuthStore();
-  // const { submitDisabilityQuestionnaire, isLoading, error } =
-  //   useUserRoleStore();
-  // const { user } = useAuthStore();
-
+const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
   // State for tracking selected disability types and step progress
   const [selectedDisabilities, setSelectedDisabilities] = React.useState<
     string[]
@@ -201,8 +200,38 @@ const DisabilityTest = () => {
     return answers[currentDisability]?.description || '';
   };
 
-  // Handle next button click
-  const handleNext = () => {
+  const { mutateAsync, isLoading } = useMutation<
+    ApiReturn<null>,
+    ApiError,
+    {
+      question: string;
+      answer: string;
+    }[]
+  >(
+    async (data) => {
+      const email = await getCookie('ada4career-email');
+
+      const dataToSend = {
+        email: email?.value,
+        answers: data,
+      };
+
+      const response = await api.post(
+        `${API_BASE_URL}/questionnaire`,
+        dataToSend
+      );
+
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        toast.success('Disability Questionnaire submitted successfully!');
+        refetch();
+      },
+    }
+  );
+
+  const handleNext = async () => {
     try {
       if (currentStep === 0) {
         setCurrentDisabilityIndex(0);
@@ -226,13 +255,7 @@ const DisabilityTest = () => {
           },
           ...transformedDataPerDisability,
         ];
-        toast.success('Questionnaire submitted successfully');
-        // console.log(user);
-        if (user?.role[0] == 'jobseeker') {
-          router.push('/onboard/cv');
-        } else if (user?.role[0] == 'human_resources') {
-          router.push('/onboard/hr');
-        }
+        await mutateAsync(structured);
       }
     } catch (error) {
       console.error('Error submitting disability questionnaire:', error);
@@ -418,7 +441,7 @@ const DisabilityTest = () => {
               variant='ghost'
               className='text-lg px-14 py-6'
               onClick={handlePrevious}
-              disabled={!isPreviousEnabled()}
+              disabled={!isPreviousEnabled() || isLoading}
             >
               <ArrowLeft />
               Previous
@@ -427,7 +450,7 @@ const DisabilityTest = () => {
             <Button
               className='text-lg px-14 bg-blue-600 py-6'
               onClick={handleNext}
-              disabled={!isNextEnabled()}
+              disabled={!isNextEnabled() || isLoading}
             >
               {currentStep === totalSteps - 1 ? 'Submit' : 'Next'}{' '}
               <ArrowRight />

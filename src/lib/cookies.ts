@@ -18,3 +18,19 @@ export const removeToken = () => {
     path: '/',
   });
 };
+
+export const getTokenEmail = (): string => {
+  return cookies.get('ada4career-email');
+};
+
+export const setTokenEmail = (token: string) => {
+  cookies.set('ada4career-email', token, {
+    path: '/',
+  });
+};
+
+export const removeTokenEmail = () => {
+  cookies.remove('ada4career-email', {
+    path: '/',
+  });
+};

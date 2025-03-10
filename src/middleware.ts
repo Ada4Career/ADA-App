@@ -90,7 +90,7 @@ export async function middleware(request: NextRequest) {
         user.gender != 'female' &&
         user.gender != 'other'
       ) {
-        return NextResponse.redirect(new URL('/onboard', request.url));
+        return NextResponse.redirect(new URL('/onboarding', request.url));
       } else {
         return NextResponse.redirect(
           new URL(
@@ -131,7 +131,7 @@ export async function middleware(request: NextRequest) {
         user.gender != 'female' &&
         user.gender != 'other'
       ) {
-        return NextResponse.redirect(new URL('/onboard', request.url));
+        return NextResponse.redirect(new URL('/onboarding', request.url));
       } else {
         return NextResponse.redirect(
           new URL(

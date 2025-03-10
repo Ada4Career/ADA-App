@@ -25,7 +25,11 @@ const OnboardingPage = () => {
     },
   });
 
-  const { data: disabilityData, isLoading: isLoadingDisability } = useQuery({
+  const {
+    data: disabilityData,
+    isLoading: isLoadingDisability,
+    refetch,
+  } = useQuery({
     queryKey: ['disability'],
     queryFn: async () => {
       try {
@@ -43,7 +47,7 @@ const OnboardingPage = () => {
   const renderOnboard = () => {
     if (data?.data.data.role[0] == 'jobseeker') {
       if (disabilityData?.data == undefined) {
-        return <DisabilityTest />;
+        return <DisabilityTest refetch={refetch} />;
       } else {
         return <JobSeekerFormPage />;
       }
