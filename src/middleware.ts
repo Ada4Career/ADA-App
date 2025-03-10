@@ -2,6 +2,8 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { API_BASE_URL } from '@/constant/config';
+
 // Route constants
 const LOGIN_ROUTE = '/?auth=login';
 const JOBSEEKER_ROUTE = '/app/home';
@@ -34,7 +36,9 @@ export async function middleware(request: NextRequest) {
   const redirectParam = request.nextUrl.searchParams.get('redirect');
 
   // Get token from cookies
-  const token = request.cookies.get('token')?.value;
+  const token = request.cookies.get('ada4career-token')?.value;
+
+  console.log(token);
 
   // Determine route role for the current path (default to authenticated)
   let routeRole = 'authenticated';
@@ -64,15 +68,12 @@ export async function middleware(request: NextRequest) {
   // If token exists, verify it and get user info
   try {
     // Fetch user data using the token
-    const userResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/me`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        cache: 'no-store',
-      }
-    );
+    const userResponse = await fetch(`${API_BASE_URL}/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store',
+    });
 
     if (!userResponse.ok) {
       // Invalid token, clear it and redirect to login
@@ -93,12 +94,12 @@ export async function middleware(request: NextRequest) {
     }
 
     // Redirect authenticated users away from public routes (like login)
-    if (routeRole === 'public') {
-      const dashboardUrl =
-        redirectParam ||
-        (userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE);
-      return NextResponse.redirect(new URL(dashboardUrl, request.url));
-    }
+    // if (routeRole === 'public') {
+    //   const dashboardUrl =
+    //     redirectParam ||
+    //     (userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE);
+    //   return NextResponse.redirect(new URL(dashboardUrl, request.url));
+    // }
 
     // For authenticated route, any logged-in user can access
     if (routeRole === 'authenticated') {
@@ -111,9 +112,9 @@ export async function middleware(request: NextRequest) {
       (routeRole === 'human_resources' && userRole !== 'human_resources')
     ) {
       // Redirect to the appropriate dashboard for their role
-      const dashboardUrl =
-        userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE;
-      return NextResponse.redirect(new URL(dashboardUrl, request.url));
+      // const dashboardUrl =
+      //   userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE;
+      // return NextResponse.redirect(new URL(dashboardUrl, request.url));
     }
 
     // User is authenticated and has correct role, allow access
