@@ -14,6 +14,7 @@ export enum RouteRole {
   public,
   optional,
   authenticated, // Requires login (any role)
+  onboarding,
   jobseeker,
   human_resources,
 }
@@ -21,7 +22,7 @@ export enum RouteRole {
 // Map paths to roles
 const routeRoleMap = {
   '/': 'public',
-  '/onboarding': 'authenticated',
+  '/onboarding': 'onboarding',
   '/app/home': 'jobseeker',
   '/app/hr': 'human_resources',
   '/app/profile': 'authenticated',
@@ -55,6 +56,7 @@ export async function middleware(request: NextRequest) {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    // * Token Valid, Ada User
     if (!userResponse.ok) {
       const response = NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
       response.cookies.delete('ada4career-token');
@@ -83,7 +85,11 @@ export async function middleware(request: NextRequest) {
     });
 
     if (routeRole === 'public') {
-      if (!user.gender) {
+      if (
+        user.gender != 'male' &&
+        user.gender != 'female' &&
+        user.gender != 'other'
+      ) {
         return NextResponse.redirect(new URL('/onboard', request.url));
       } else {
         return NextResponse.redirect(
@@ -99,11 +105,32 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
+    // masuk ke onboarding, tapi udah onboarding
+    // alasan cek gender doang, karena form gender itu setelah disability, kalo gender udah, disability pasti udah
+    if (routeRole === 'onboarding') {
+      if (
+        user.gender == 'male' ||
+        user.gender == 'female' ||
+        user.gender == 'other'
+      ) {
+        return NextResponse.redirect(
+          new URL(
+            userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE,
+            request.url
+          )
+        );
+      }
+    }
+
     if (
       (routeRole === 'jobseeker' && userRole !== 'jobseeker') ||
       (routeRole === 'human_resources' && userRole !== 'human_resources')
     ) {
-      if (!user.gender) {
+      if (
+        user.gender != 'male' &&
+        user.gender != 'female' &&
+        user.gender != 'other'
+      ) {
         return NextResponse.redirect(new URL('/onboard', request.url));
       } else {
         return NextResponse.redirect(
