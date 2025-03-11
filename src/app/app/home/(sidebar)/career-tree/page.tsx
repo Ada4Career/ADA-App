@@ -261,15 +261,8 @@ export default function CareerTreePage() {
   }
 
   return (
-    <main className='min-h-screen p-4 md:p-8'>
+    <main className='min-h-screen '>
       <div className='max-w-7xl mx-auto'>
-        <h1 className='text-3xl font-bold mb-2'>
-          Software Engineering Career Path
-        </h1>
-        <p className='text-muted-foreground mb-6'>
-          Explore different career paths and skills needed for progression
-        </p>
-
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
           <div className='lg:col-span-2 bg-white rounded-lg border shadow-sm'>
             <div className='p-4 border-b flex justify-between items-center'>

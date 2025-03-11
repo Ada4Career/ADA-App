@@ -64,7 +64,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={isActive}>
                   <Link
                     href={url}
-                    className='flex h-fit flex-col items-center gap-2'
+                    className={`flex h-fit flex-col items-center gap-2 `}
                   >
                     {icon}
                     <span className='text-sm'>{label}</span>
