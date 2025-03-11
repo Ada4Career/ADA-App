@@ -1,8 +1,9 @@
 'use client';
 
 import { LogOut, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import api from '@/lib/axios';
 
@@ -31,18 +32,21 @@ import { API_BASE_URL } from '@/constant/config';
 import { ApiReturn } from '@/types/api.types';
 import { UserInterface } from '@/types/entities/user.types';
 
-// This would typically come from your auth context or API
-// const userProfile = {
-//   name: 'Jane Doe',
-//   email: 'jane.doe@example.com',
-//   avatarUrl: '/placeholder.svg?height=40&width=40',
-// };
-
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { logout } = useAuthStore();
-  const handleLogout = () => {
+  const router = useRouter();
+
+  const { isLoading: isLoadingLogout, mutateAsync: logoutMutation } =
+    useMutation(async () => {
+      const resp = await api.post(`${API_BASE_URL}/logout`);
+      return resp.data;
+    });
+
+  const handleLogout = async () => {
     // Implement your logout logic here
-    console.log('Logging out...');
+    await logoutMutation();
+    logout();
+    router.replace('/');
   };
 
   const { setUser, user } = useAuthStore();
@@ -107,9 +111,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem
+                    disabled={isLoadingLogout}
+                    onClick={handleLogout}
+                    className='cursor-pointer !hover:bg-red-500'
+                  >
                     <LogOut className='mr-2 h-4 w-4' />
-                    <span>Log out</span>
+                    <span>
+                      {isLoadingLogout ? 'Logging Out...' : 'Log Out'}
+                    </span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

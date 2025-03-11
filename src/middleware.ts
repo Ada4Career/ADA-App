@@ -24,7 +24,7 @@ const routeRoleMap = {
   '/': 'public',
   '/onboarding': 'onboarding',
   '/app/home/jobs': 'jobseeker',
-  '/app/hr': 'human_resources',
+  '/app/hr/dashboard': 'human_resources',
   '/app/profile': 'authenticated',
 };
 

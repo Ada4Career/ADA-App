@@ -1,10 +1,16 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ApiError } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
+
+import api from '@/lib/axios';
+import { getCookie } from '@/lib/cookies-action';
 
 import AdaLogo from '@/components/ada-logo';
 import { Button } from '@/components/ui/button';
@@ -19,6 +25,9 @@ import {
 } from '@/app/onboarding/form.types';
 import CompanyPosition from '@/app/onboarding/hr/form/CompanyPosition';
 import PersonalInfo from '@/app/onboarding/hr/form/PersonalInfo';
+import { API_BASE_URL } from '@/constant/config';
+
+import { ApiReturn } from '@/types/api.types';
 
 const HRFormPage = () => {
   const [step, setStep] = React.useState(1);
@@ -35,7 +44,45 @@ const HRFormPage = () => {
 
   const router = useRouter();
 
+  const { mutateAsync: mutateAsyncUptData, isLoading } = useMutation<
+    ApiReturn<null>,
+    ApiError,
+    z.infer<typeof hrFormSchema>
+  >(
+    async (data) => {
+      const email = (await getCookie('ada4career-email'))?.value;
+
+      const personalData = {
+        name: data.personalInfo.fullName,
+        age: parseInt(data.personalInfo.age),
+        address: data.personalInfo.address,
+        gender: data.personalInfo.gender,
+      };
+
+      const humanResourcesData = {
+        company: data.companyAndPosition.company,
+        position: data.companyAndPosition.position,
+      };
+
+      const response = await api.post(
+        `${API_BASE_URL}/user/role/${email}`,
+        humanResourcesData
+      );
+
+      await api.post(`${API_BASE_URL}/user/update/${email}`, personalData);
+
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        toast.success('Data saved successfully');
+        router.push('/app/hr/dashboard');
+      },
+    }
+  );
+
   const onSubmit = async (values: HRFormData) => {
+    await mutateAsyncUptData(values);
     console.log(values);
   };
 
@@ -120,7 +167,7 @@ const HRFormPage = () => {
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
-              <div className='flex flex-col gap-y-8 items-start justify-start w-full'>
+              <div className='flex flex-col text-start gap-y-8 items-start justify-start w-full'>
                 {renderStepContent()}
               </div>
 
@@ -129,14 +176,14 @@ const HRFormPage = () => {
                   type='button'
                   variant='outline'
                   onClick={() => step > 1 && setStep(step - 1)}
-                  disabled={step === 1}
+                  disabled={step === 1 || isLoading}
                 >
                   Previous
                 </Button>
                 <Button
                   type='button'
                   onClick={handleNext}
-                  disabled={isValidating}
+                  disabled={isValidating || isLoading}
                 >
                   {step === totalSteps ? 'Submit' : 'Next'}
                 </Button>
