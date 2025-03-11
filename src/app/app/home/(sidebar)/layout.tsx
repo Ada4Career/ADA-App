@@ -32,19 +32,20 @@ import { ApiReturn } from '@/types/api.types';
 import { UserInterface } from '@/types/entities/user.types';
 
 // This would typically come from your auth context or API
-const userProfile = {
-  name: 'Jane Doe',
-  email: 'jane.doe@example.com',
-  avatarUrl: '/placeholder.svg?height=40&width=40',
-};
+// const userProfile = {
+//   name: 'Jane Doe',
+//   email: 'jane.doe@example.com',
+//   avatarUrl: '/placeholder.svg?height=40&width=40',
+// };
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const { logout } = useAuthStore();
   const handleLogout = () => {
     // Implement your logout logic here
     console.log('Logging out...');
   };
 
-  const { setUser } = useAuthStore();
+  const { setUser, user } = useAuthStore();
   const { isLoading } = useQuery({
     queryKey: ['me'],
     queryFn: async () => {
@@ -77,23 +78,20 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   >
                     <div className='flex items-center gap-2'>
                       <Avatar className='h-8 w-8'>
-                        <AvatarImage
-                          src={userProfile.avatarUrl}
-                          alt={userProfile.name}
-                        />
+                        <AvatarImage src={user?.address} alt={user?.name} />
                         <AvatarFallback>
-                          {userProfile.name
+                          {user?.name
                             .split(' ')
                             .map((n) => n[0])
                             .join('')}
                         </AvatarFallback>
                       </Avatar>
                       <div className='hidden flex-col items-start text-left md:flex'>
-                        <span className='text-sm font-medium'>
-                          {userProfile.name}
+                        <span className='text-sm truncate font-medium'>
+                          {user?.name}
                         </span>
-                        <span className='text-xs text-muted-foreground'>
-                          {userProfile.email}
+                        <span className='text-xs truncate text-muted-foreground'>
+                          {user?.email}
                         </span>
                       </div>
                     </div>
