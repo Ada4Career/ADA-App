@@ -181,7 +181,7 @@ const CVResult = () => {
             <div className='flex items-center justify-between gap-4 mt-auto'>
               <Button
                 onClick={() => {
-                  router.replace('/app/home');
+                  router.replace('/app/home/jobs');
                 }}
                 size='lg'
                 className='flex-1 py-8 w-full'

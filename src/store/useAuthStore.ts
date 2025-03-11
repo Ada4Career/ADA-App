@@ -13,6 +13,7 @@ type AuthStoreType = {
   login: (user: UserInterface & withToken) => void;
   logout: () => void;
   stopLoading: () => void;
+  setUser: (user: UserInterface) => void;
 };
 
 const useAuthStoreBase = create<AuthStoreType>((set) => ({
@@ -41,6 +42,13 @@ const useAuthStoreBase = create<AuthStoreType>((set) => ({
     set(
       produce<AuthStoreType>((state) => {
         state.isLoading = false;
+      })
+    );
+  },
+  setUser: (user) => {
+    set(
+      produce<AuthStoreType>((state) => {
+        state.user = user;
       })
     );
   },
