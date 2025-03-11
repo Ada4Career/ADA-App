@@ -9,3 +9,15 @@ export interface RoleMapResponse {
   CreatedAt: string;
   UpdatedAt: string;
 }
+
+export interface CourseRecommendation {
+  courseName: string;
+  level: string;
+  description: string;
+  source: string;
+  url: string;
+}
+
+export interface RecommendationsResponse {
+  recommendations: CourseRecommendation[];
+}
