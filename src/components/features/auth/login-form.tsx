@@ -86,7 +86,6 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
       onSuccess: (data) => {
         toast.success('Login success');
         router.push('/onboarding');
-        console.log(data);
       },
     }
   );

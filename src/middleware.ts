@@ -105,8 +105,6 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
-    console.log(user, 'ini data user');
-
     // masuk ke onboarding, tapi udah onboarding
     // alasan cek gender doang, karena form gender itu setelah disability, kalo gender udah, disability pasti udah
     if (routeRole === 'onboarding') {

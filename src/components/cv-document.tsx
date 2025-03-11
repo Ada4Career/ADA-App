@@ -168,9 +168,7 @@ const parseResumeContent = (resumeContent: Resume) => {
 };
 
 const CVDocument = ({ resumeContent }: { resumeContent: Resume }) => {
-  console.log('belum parsed', resumeContent);
   const parsedResume = parseResumeContent(resumeContent);
-  console.log('parsed ini', parsedResume);
 
   return (
     <Document>

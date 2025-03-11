@@ -91,7 +91,6 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
     },
     {
       onSuccess: (data) => {
-        console.log(data);
         toast.success('Register Successfully');
         router.push('/onboarding');
       },
@@ -101,7 +100,6 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     await mutateAsync(values);
     // Handle registration logic here
-    console.log('Registration submitted');
   };
 
   return (

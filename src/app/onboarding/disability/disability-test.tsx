@@ -241,7 +241,6 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
         setCustomType('');
       } else {
         // Completed all forms, submit
-        // console.log('All answers:', answers);
 
         const transformedDataPerDisability = transformData(answers);
         const structured = [

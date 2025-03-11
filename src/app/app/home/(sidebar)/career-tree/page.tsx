@@ -188,7 +188,6 @@ export default function CareerTreePage() {
       const response = await api.get<ApiReturn<RoleMapResponse[]>>(
         `${API_BASE_URL}/career-tree/${user?.email}`
       );
-      console.log('ini data career tree', response.data.data);
       return response.data.data;
     },
   });
