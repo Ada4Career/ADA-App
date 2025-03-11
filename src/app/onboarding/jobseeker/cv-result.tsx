@@ -2,7 +2,6 @@
 
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { ArrowLeft, ArrowRight, Download, Loader2 } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -180,12 +179,16 @@ const CVResult = () => {
             </Card>
 
             <div className='flex items-center justify-between gap-4 mt-auto'>
-              <Link href='/app/home' className='w-full'>
-                <Button size='lg' className='flex-1 py-8 w-full'>
-                  Continue to Dashboard
-                  <ArrowRight className='ml-2 h-4 w-4' />
-                </Button>
-              </Link>
+              <Button
+                onClick={() => {
+                  router.replace('/app/home');
+                }}
+                size='lg'
+                className='flex-1 py-8 w-full'
+              >
+                Continue to Dashboard
+                <ArrowRight className='ml-2 h-4 w-4' />
+              </Button>
             </div>
           </div>
 

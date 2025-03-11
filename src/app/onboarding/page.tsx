@@ -1,5 +1,6 @@
 'use client';
 import { LoaderCircleIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useQuery } from 'react-query';
 
@@ -15,6 +16,7 @@ import { UserInterface } from '@/types/entities/user.types';
 import { DisabilityResponse } from '@/types/response/disability';
 
 const OnboardingPage = () => {
+  const router = useRouter();
   const { data, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -49,7 +51,11 @@ const OnboardingPage = () => {
       if (disabilityData?.data == undefined) {
         return <DisabilityTest refetch={refetch} />;
       } else {
-        return <JobSeekerFormPage />;
+        if (data.data.data.gender == '') {
+          return <JobSeekerFormPage />;
+        } else {
+          router.replace('/onboarding/jobseeker/result');
+        }
       }
     } else {
       return <HRFormPage />;

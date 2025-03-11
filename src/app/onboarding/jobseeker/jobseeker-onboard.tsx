@@ -78,7 +78,7 @@ const JobSeekerFormPage = () => {
     {
       onSuccess: (data) => {
         toast.success('Data saved successfully');
-        router.push('/onboarding/result');
+        router.push('/onboarding/jobseeker/result');
       },
     }
   );
