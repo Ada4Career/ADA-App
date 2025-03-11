@@ -105,6 +105,8 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
+    console.log(user, 'ini data user');
+
     // masuk ke onboarding, tapi udah onboarding
     // alasan cek gender doang, karena form gender itu setelah disability, kalo gender udah, disability pasti udah
     if (routeRole === 'onboarding') {
@@ -113,12 +115,13 @@ export async function middleware(request: NextRequest) {
         user.gender == 'female' ||
         user.gender == 'other'
       ) {
-        return NextResponse.redirect(
-          new URL(
-            userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE,
-            request.url
-          )
-        );
+        if (userRole === 'jobseeker') {
+          if (user.job_seeker_data?.resume_url != '') {
+            return NextResponse.redirect(new URL(JOBSEEKER_ROUTE, request.url));
+          }
+        } else {
+          return NextResponse.redirect(new URL(HR_ROUTE, request.url));
+        }
       }
     }
 

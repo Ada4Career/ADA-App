@@ -55,15 +55,13 @@ const JobSeekerFormPage = () => {
 
       const personalData = {
         name: data.personalInfo.fullName,
-        age: data.personalInfo.age,
+        age: parseInt(data.personalInfo.age),
         address: data.personalInfo.address,
         gender: data.personalInfo.gender,
       };
 
-      await api.post(`${API_BASE_URL}/user/update/${email}`, personalData);
-
       const jobseekerData = {
-        skill: data.skillExperience.skill,
+        skill: data.skillExperience.skill.join(', '),
         experiences: data.skillExperience.experience,
         expectations: data.expectation.expectation,
       };
@@ -73,11 +71,14 @@ const JobSeekerFormPage = () => {
         jobseekerData
       );
 
+      await api.post(`${API_BASE_URL}/user/update/${email}`, personalData);
+
       return response.data;
     },
     {
       onSuccess: (data) => {
         toast.success('Data saved successfully');
+        router.push('/onboarding/result');
       },
     }
   );
