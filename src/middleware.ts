@@ -7,7 +7,7 @@ import { API_BASE_URL } from '@/constant/config';
 // Route constants
 const LOGIN_ROUTE = '/?auth=login';
 const JOBSEEKER_ROUTE = '/app/home/jobs';
-const HR_ROUTE = '/app/hr';
+const HR_ROUTE = '/app/hr/dashboard';
 
 // Define route roles
 export enum RouteRole {
