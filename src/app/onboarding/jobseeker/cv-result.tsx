@@ -1,10 +1,10 @@
 'use client';
 
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, ArrowRight, Download, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import api from '@/lib/axios';
 import { getCookie } from '@/lib/cookies-action';

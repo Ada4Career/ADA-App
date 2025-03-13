@@ -1,8 +1,8 @@
 'use client';
+import { useQuery } from '@tanstack/react-query';
 import { LoaderCircleIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import api from '@/lib/axios';
 

@@ -1,7 +1,7 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AuthDialog from '@/components/features/auth/auth-dialog';
 
