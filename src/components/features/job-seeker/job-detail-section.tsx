@@ -96,7 +96,7 @@ export default function JobDetailSection({ id }: { id: string }) {
         stage: stg,
       };
 
-      console.log('ini data', newData);
+      // console.log('ini data', newData);
       return newData;
     },
   });
