@@ -51,6 +51,7 @@ export const metadata: Metadata = {
 };
 
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+
 import { ReactQueryClientProvider } from '@/components/layout/query-provider';
 
 export default function RootLayout({
