@@ -1,11 +1,11 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { ApiError } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -48,8 +48,8 @@ const HRFormPage = () => {
     ApiReturn<null>,
     ApiError,
     z.infer<typeof hrFormSchema>
-  >(
-    async (data) => {
+  >({
+    mutationFn: async (data) => {
       const email = (await getCookie('ada4career-email'))?.value;
 
       const personalData = {
@@ -73,13 +73,12 @@ const HRFormPage = () => {
 
       return response.data;
     },
-    {
-      onSuccess: (data) => {
-        toast.success('Data saved successfully');
-        router.push('/app/hr/dashboard');
-      },
-    }
-  );
+
+    onSuccess: (data) => {
+      toast.success('Data saved successfully');
+      router.push('/app/hr/dashboard');
+    },
+  });
 
   const onSubmit = async (values: HRFormData) => {
     await mutateAsyncUptData(values);

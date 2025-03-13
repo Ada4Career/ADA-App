@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useQueryState } from 'nuqs';
 import React from 'react';
 
-import { client } from '@/app/app/layout';
 import { API_AI_URL } from '@/constant/config';
+import { client } from '@/components/layout/query-provider';
 
 // Define TypeScript interfaces for our data structures
 interface Conversation {

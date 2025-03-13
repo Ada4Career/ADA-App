@@ -40,11 +40,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   const { isPending: isLoadingLogout, mutateAsync: logoutMutation } =
-    useMutation(async () => {
-      const resp = await api.post(`${API_BASE_URL}/logout`);
-      return resp.data;
+    useMutation({
+      mutationFn: async () => {
+        const resp = await api.post(`${API_BASE_URL}/logout`);
+        return resp.data;
+      },
     });
-
   const handleLogout = async () => {
     // Implement your logout logic here
     await logoutMutation();
@@ -53,16 +54,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   };
 
   const { setUser, user } = useAuthStore();
-  const { isPending } = useQuery({
+  const { isPending } = useQuery<ApiReturn<UserInterface>>({
     queryKey: ['me'],
     queryFn: async () => {
       const meResponse = await api.get<ApiReturn<UserInterface>>(
         `${API_BASE_URL}/me`
       );
+      setUser(meResponse.data.data);
       return meResponse.data;
-    },
-    onSuccess: (data) => {
-      setUser(data.data);
     },
   });
 

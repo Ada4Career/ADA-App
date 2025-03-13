@@ -1,10 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -49,8 +49,8 @@ const JobSeekerFormPage = () => {
     ApiReturn<null>,
     ApiError,
     z.infer<typeof jobSeekerSchema>
-  >(
-    async (data) => {
+  >({
+    mutationFn: async (data) => {
       const email = (await getCookie('ada4career-email'))?.value;
 
       const personalData = {
@@ -75,13 +75,11 @@ const JobSeekerFormPage = () => {
 
       return response.data;
     },
-    {
-      onSuccess: (data) => {
-        toast.success('Data saved successfully');
-        router.push('/onboarding/jobseeker/result');
-      },
-    }
-  );
+    onSuccess: (data) => {
+      toast.success('Data saved successfully');
+      router.push('/onboarding/jobseeker/result');
+    },
+  });
 
   const onSubmit = async (values: JobSeekerData) => {
     await mutateAsyncUptData(values);

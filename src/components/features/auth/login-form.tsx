@@ -1,10 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -57,8 +57,8 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
     ApiReturn<RegisterAndLoginResponse>,
     ApiError,
     z.infer<typeof formSchema>
-  >(
-    async (data) => {
+  >({
+    mutationFn: async (data) => {
       const dataLogin = {
         email: data.email,
         password: data.password,
@@ -82,13 +82,12 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
 
       return loginResponse.data;
     },
-    {
-      onSuccess: (data) => {
-        toast.success('Login success');
-        router.push('/onboarding');
-      },
-    }
-  );
+
+    onSuccess: (data) => {
+      toast.success('Login success');
+      router.push('/onboarding');
+    },
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     await mutateAsync(values);

@@ -1,4 +1,5 @@
 'use client';
+import { useMutation } from '@tanstack/react-query';
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,7 +10,6 @@ import {
   HandIcon,
 } from 'lucide-react';
 import React from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 import api from '@/lib/axios';
@@ -207,8 +207,8 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
       question: string;
       answer: string;
     }[]
-  >(
-    async (data) => {
+  >({
+    mutationFn: async (data) => {
       const email = await getCookie('ada4career-email');
 
       const dataToSend = {
@@ -223,13 +223,11 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
 
       return response.data;
     },
-    {
-      onSuccess: (data) => {
-        toast.success('Disability Questionnaire submitted successfully!');
-        refetch();
-      },
-    }
-  );
+    onSuccess: (data) => {
+      toast.success('Disability Questionnaire submitted successfully!');
+      refetch();
+    },
+  });
 
   const handleNext = async () => {
     try {

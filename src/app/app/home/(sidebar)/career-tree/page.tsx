@@ -1,9 +1,9 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { Briefcase, ChevronDown, ChevronRight, Clock } from 'lucide-react';
 import { useState } from 'react';
 import Tree from 'react-d3-tree';
-import { useQuery } from '@tanstack/react-query';
 
 import api from '@/lib/axios';
 
