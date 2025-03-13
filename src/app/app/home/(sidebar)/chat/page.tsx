@@ -20,7 +20,7 @@ const AidaChatPage = () => {
     sendMessage,
     messages,
     // selectConversation,
-    isLoading,
+    isPending,
     error,
   } = useChatConversation(user?.email ?? '');
 
@@ -108,10 +108,10 @@ const AidaChatPage = () => {
         <Button
           className='h-full'
           onClick={handleSubmit}
-          disabled={isLoading}
+          disabled={isPending}
           type='submit'
         >
-          {isLoading ? 'Sending...' : 'Send'}
+          {isPending ? 'Sending...' : 'Send'}
           <SendIcon className='ml-2' />
         </Button>
       </form>

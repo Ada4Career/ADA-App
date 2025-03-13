@@ -9,7 +9,7 @@ import {
   HandIcon,
 } from 'lucide-react';
 import React from 'react';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 import api from '@/lib/axios';
@@ -200,7 +200,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
     return answers[currentDisability]?.description || '';
   };
 
-  const { mutateAsync, isLoading } = useMutation<
+  const { mutateAsync, isPending } = useMutation<
     ApiReturn<null>,
     ApiError,
     {
@@ -440,7 +440,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
               variant='ghost'
               className='text-lg px-14 py-6'
               onClick={handlePrevious}
-              disabled={!isPreviousEnabled() || isLoading}
+              disabled={!isPreviousEnabled() || isPending}
             >
               <ArrowLeft />
               Previous
@@ -449,7 +449,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
             <Button
               className='text-lg px-14 bg-blue-600 py-6'
               onClick={handleNext}
-              disabled={!isNextEnabled() || isLoading}
+              disabled={!isNextEnabled() || isPending}
             >
               {currentStep === totalSteps - 1 ? 'Submit' : 'Next'}{' '}
               <ArrowRight />

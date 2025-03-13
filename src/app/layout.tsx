@@ -51,6 +51,7 @@ export const metadata: Metadata = {
 };
 
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { ReactQueryClientProvider } from '@/components/layout/query-provider';
 
 export default function RootLayout({
   children,
@@ -58,11 +59,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>
-        <ToastContainer />
-        <NuqsAdapter>{children}</NuqsAdapter>
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html>
+        <body>
+          <ToastContainer />
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }

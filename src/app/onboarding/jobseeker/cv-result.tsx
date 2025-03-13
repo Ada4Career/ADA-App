@@ -4,7 +4,7 @@ import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { ArrowLeft, ArrowRight, Download, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import api from '@/lib/axios';
 import { getCookie } from '@/lib/cookies-action';
@@ -30,7 +30,7 @@ const CVResult = () => {
 
   const [suggestedRole, setSuggestedRole] = useState<string>('');
 
-  const { data: userData, isLoading } = useQuery<UserInterface>({
+  const { data: userData, isPending } = useQuery<UserInterface>({
     queryKey: ['me'],
     queryFn: async () => {
       const meResponse = await api.get<ApiReturn<UserInterface>>(
@@ -42,7 +42,7 @@ const CVResult = () => {
 
   const {
     data: resumeData,
-    isLoading: isLoadingResume,
+    isPending: isLoadingResume,
     error,
   } = useQuery<Resume>({
     queryKey: ['resume'],
@@ -60,7 +60,7 @@ const CVResult = () => {
     enabled: userData != undefined,
   });
 
-  const { data: roleMappingData, isLoading: isLoadingRoleMapping } = useQuery<
+  const { data: roleMappingData, isPending: isLoadingRoleMapping } = useQuery<
     ApiReturn<string>
   >({
     queryKey: ['role-mapping'],
@@ -92,7 +92,7 @@ const CVResult = () => {
           <div className='flex flex-col'>
             <Card className='mb-6'>
               <CardContent className='p-6'>
-                {isLoading || isLoadingResume || resumeData == undefined ? (
+                {isPending || isLoadingResume || resumeData == undefined ? (
                   <div className='flex flex-col items-center justify-center space-y-4 py-12'>
                     <Loader2 className='h-12 w-12 animate-spin text-primary' />
                     <div className='text-center'>
@@ -199,7 +199,7 @@ const CVResult = () => {
                 <h2 className='text-xl font-semibold mb-4'>
                   Career Suggestions
                 </h2>
-                {isLoading || suggestedRole === '' ? (
+                {isPending || suggestedRole === '' ? (
                   <div className='space-y-2'>
                     <Skeleton className='h-6 w-full' />
                     <Skeleton className='h-6 w-3/4' />

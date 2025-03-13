@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -64,7 +64,7 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
     mode: 'onTouched',
   });
 
-  const { mutateAsync, isLoading } = useMutation<
+  const { mutateAsync, isPending } = useMutation<
     ApiReturn<RegisterAndLoginResponse>,
     ApiError,
     z.infer<typeof formSchema>
@@ -178,8 +178,8 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
               </Button>
             </Label>
           </div>
-          <Button type='submit' className='w-full' disabled={isLoading}>
-            {isLoading ? 'Creating account...' : 'Create Account'}
+          <Button type='submit' className='w-full' disabled={isPending}>
+            {isPending ? 'Creating account...' : 'Create Account'}
           </Button>
         </form>
       </Form>

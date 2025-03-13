@@ -1,7 +1,7 @@
 'use client';
+import { useQuery } from '@tanstack/react-query';
 import { Clock, ExternalLink, Star, Users } from 'lucide-react';
 import React from 'react';
-import { useQuery } from 'react-query';
 
 import api from '@/lib/axios';
 
@@ -16,7 +16,7 @@ import {
 
 const CoursePage = () => {
   const { user } = useAuthStore();
-  const { data, isLoading } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['courses'],
     queryFn: async () => {
       const responseRole = await api.post(
@@ -38,7 +38,7 @@ const CoursePage = () => {
     refetchOnWindowFocus: false,
   });
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <div className='animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-500'></div>

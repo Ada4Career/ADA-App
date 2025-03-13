@@ -9,7 +9,7 @@ import { UserInterface, withToken } from '@/types/entities/user.types';
 type AuthStoreType = {
   user: UserInterface | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  isPending: boolean;
   login: (user: UserInterface & withToken) => void;
   logout: () => void;
   stopLoading: () => void;
@@ -19,7 +19,7 @@ type AuthStoreType = {
 const useAuthStoreBase = create<AuthStoreType>((set) => ({
   user: null,
   isAuthenticated: false,
-  isLoading: true,
+  isPending: true,
   login: (user) => {
     setToken(user.token);
     set(
@@ -41,7 +41,7 @@ const useAuthStoreBase = create<AuthStoreType>((set) => ({
   stopLoading: () => {
     set(
       produce<AuthStoreType>((state) => {
-        state.isLoading = false;
+        state.isPending = false;
       })
     );
   },

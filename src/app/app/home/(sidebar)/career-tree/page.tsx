@@ -3,7 +3,7 @@
 import { Briefcase, ChevronDown, ChevronRight, Clock } from 'lucide-react';
 import { useState } from 'react';
 import Tree from 'react-d3-tree';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import api from '@/lib/axios';
 
@@ -182,7 +182,7 @@ export default function CareerTreePage() {
   // const { getAICareerTree } = useAIServicesStore();
   const { user } = useAuthStore();
 
-  const { data, isLoading } = useQuery<RoleMapResponse[]>({
+  const { data, isPending } = useQuery<RoleMapResponse[]>({
     queryKey: ['careerTree'],
     queryFn: async () => {
       const response = await api.get<ApiReturn<RoleMapResponse[]>>(
@@ -255,7 +255,7 @@ export default function CareerTreePage() {
     );
   };
 
-  if (isLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 

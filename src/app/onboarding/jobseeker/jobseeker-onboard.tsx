@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -45,7 +45,7 @@ const JobSeekerFormPage = () => {
 
   const router = useRouter();
 
-  const { mutateAsync: mutateAsyncUptData, isLoading } = useMutation<
+  const { mutateAsync: mutateAsyncUptData, isPending } = useMutation<
     ApiReturn<null>,
     ApiError,
     z.infer<typeof jobSeekerSchema>

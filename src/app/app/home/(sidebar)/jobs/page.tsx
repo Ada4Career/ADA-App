@@ -1,6 +1,6 @@
 'use client';
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { useQuery } from 'react-query';
 
 import api from '@/lib/axios';
 import {
@@ -27,7 +27,7 @@ import {
 } from '@/types/response/job';
 
 const HomePage = () => {
-  const { data, isLoading } = useQuery<JobPostingDataExtended[]>({
+  const { data, isPending } = useQuery<JobPostingDataExtended[]>({
     queryKey: ['jobs'],
     queryFn: async () => {
       const response = await api.get<ApiReturn<JobPostingData[]>>(
@@ -62,7 +62,7 @@ const HomePage = () => {
     workplaceType: 'all' as WorkplaceType | 'all',
   });
 
-  if (isLoading || data === undefined) {
+  if (isPending || data === undefined) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <div className='animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-500'></div>

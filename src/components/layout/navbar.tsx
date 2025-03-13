@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AuthDialog from '@/components/features/auth/auth-dialog';
 
@@ -21,7 +21,7 @@ const NAV_LINKS = [
 const queryClient = new QueryClient();
 
 const Navbar = () => {
-  // const { user, isAuthenticated, isLoading } = useAuthStore();
+  // const { user, isAuthenticated, isPending } = useAuthStore();
   return (
     <nav className='max-w-6xl mx-auto py-4 px-4 flex items-center justify-between'>
       <div className='flex items-center gap-5'>

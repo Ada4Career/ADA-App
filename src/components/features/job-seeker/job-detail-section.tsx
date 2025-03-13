@@ -1,4 +1,5 @@
 'use client';
+import { useQuery } from '@tanstack/react-query';
 import {
   Accessibility,
   ArrowLeft,
@@ -16,7 +17,6 @@ import {
   Users,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useQuery } from 'react-query';
 
 import api from '@/lib/axios';
 import {
@@ -70,7 +70,7 @@ export default function JobDetailSection({ id }: { id: string }) {
       .filter(Boolean);
   };
 
-  const { data, isLoading } = useQuery<JobPostingDataExtended>({
+  const { data, isPending } = useQuery<JobPostingDataExtended>({
     queryKey: ['detail-job'],
     queryFn: async () => {
       const response = await api.get<ApiReturn<JobPostingData>>(
@@ -158,7 +158,7 @@ export default function JobDetailSection({ id }: { id: string }) {
   //   )
   //   .slice(0, 3);
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <div className='animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-500'></div>

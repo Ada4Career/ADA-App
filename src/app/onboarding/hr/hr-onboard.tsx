@@ -5,7 +5,7 @@ import { ApiError } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -44,7 +44,7 @@ const HRFormPage = () => {
 
   const router = useRouter();
 
-  const { mutateAsync: mutateAsyncUptData, isLoading } = useMutation<
+  const { mutateAsync: mutateAsyncUptData, isPending } = useMutation<
     ApiReturn<null>,
     ApiError,
     z.infer<typeof hrFormSchema>
@@ -176,14 +176,14 @@ const HRFormPage = () => {
                   type='button'
                   variant='outline'
                   onClick={() => step > 1 && setStep(step - 1)}
-                  disabled={step === 1 || isLoading}
+                  disabled={step === 1 || isPending}
                 >
                   Previous
                 </Button>
                 <Button
                   type='button'
                   onClick={handleNext}
-                  disabled={isValidating || isLoading}
+                  disabled={isValidating || isPending}
                 >
                   {step === totalSteps ? 'Submit' : 'Next'}
                 </Button>

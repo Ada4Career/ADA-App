@@ -2,7 +2,7 @@
 import { LoaderCircleIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import api from '@/lib/axios';
 
@@ -17,7 +17,7 @@ import { DisabilityResponse } from '@/types/response/disability';
 
 const OnboardingPage = () => {
   const router = useRouter();
-  const { data, isLoading } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
       const meResponse = await api.get<ApiReturn<UserInterface>>(
@@ -29,7 +29,7 @@ const OnboardingPage = () => {
 
   const {
     data: disabilityData,
-    isLoading: isLoadingDisability,
+    isPending: isLoadingDisability,
     refetch,
   } = useQuery({
     queryKey: ['disability'],
@@ -62,7 +62,7 @@ const OnboardingPage = () => {
     }
   };
 
-  if (isLoading || isLoadingDisability) {
+  if (isPending || isLoadingDisability) {
     return (
       <div className='w-screen h-screen flex items-center justify-center'>
         <LoaderCircleIcon className='h-20 w-20 animate-spin' />

@@ -1,7 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useQueryState } from 'nuqs';
 import React from 'react';
-import { useMutation } from 'react-query';
 
 import { client } from '@/app/app/layout';
 import { API_AI_URL } from '@/constant/config';
@@ -168,9 +168,9 @@ export const useChatConversation = (userEmail: string) => {
   // const messages = conversationQuery.data?.messages || [];
 
   // Determine loading and error states across all operations
-  const isLoading =
-    // conversationQuery.isLoading ||
-    startConversationMutation.isLoading || addMessageMutation.isLoading;
+  const isPending =
+    // conversationQuery.isPending ||
+    startConversationMutation.isPending || addMessageMutation.isPending;
 
   const error =
     // conversationQuery.error ||
@@ -194,13 +194,13 @@ export const useChatConversation = (userEmail: string) => {
     messages,
 
     // Status
-    isLoading,
+    isPending,
     error,
 
     // Specific loading states if needed
-    isStartingConversation: startConversationMutation.isLoading,
-    isSendingMessage: addMessageMutation.isLoading,
-    // isLoadingConversation: conversationQuery.isLoading,
-    // isLoadingConversations: conversationsQuery.isLoading,
+    isStartingConversation: startConversationMutation.isPending,
+    isSendingMessage: addMessageMutation.isPending,
+    // isLoadingConversation: conversationQuery.isPending,
+    // isLoadingConversations: conversationsQuery.isPending,
   };
 };

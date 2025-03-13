@@ -1,10 +1,10 @@
 'use client';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { LogOut, User } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import type { ReactNode } from 'react';
-import { useMutation, useQuery } from 'react-query';
 
 import api from '@/lib/axios';
 
@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   const pathname = usePathname();
 
-  const { isLoading: isLoadingLogout, mutateAsync: logoutMutation } =
+  const { isPending: isLoadingLogout, mutateAsync: logoutMutation } =
     useMutation(async () => {
       const resp = await api.post(`${API_BASE_URL}/logout`);
       return resp.data;
@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   };
 
   const { setUser, user } = useAuthStore();
-  const { isLoading } = useQuery({
+  const { isPending } = useQuery({
     queryKey: ['me'],
     queryFn: async () => {
       const meResponse = await api.get<ApiReturn<UserInterface>>(
@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   const [conversationId, setConversationId] = useQueryState('conversationId');
 
-  if (isLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
