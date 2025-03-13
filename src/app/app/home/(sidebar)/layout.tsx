@@ -5,6 +5,7 @@ import { LogOut, User } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import type { ReactNode } from 'react';
+import { Suspense } from 'react'; // Add this import
 
 import api from '@/lib/axios';
 
@@ -33,10 +34,30 @@ import { API_BASE_URL } from '@/constant/config';
 import { ApiReturn } from '@/types/api.types';
 import { UserInterface } from '@/types/entities/user.types';
 
+// Create a separate component for the parts that use useQueryState
+function HeaderLabel() {
+  const pathname = usePathname();
+  const [conversationId] = useQueryState('conversationId');
+
+  const getHeaderLabel = () => {
+    if (pathname.includes('jobs')) {
+      return 'Job Recommendation';
+    } else if (pathname.includes('courses')) {
+      return 'Course Recommendation';
+    } else if (pathname.includes('chat')) {
+      return conversationId ? 'Convo: ' + conversationId : 'Chat with AIDA';
+    } else if (pathname.includes('career-tree')) {
+      return 'Your Personalize Career Tree';
+    }
+    return '';
+  };
+
+  return <h3>{getHeaderLabel()}</h3>;
+}
+
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { logout } = useAuthStore();
   const router = useRouter();
-
   const pathname = usePathname();
 
   const { isPending: isLoadingLogout, mutateAsync: logoutMutation } =
@@ -46,8 +67,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         return resp.data;
       },
     });
+
   const handleLogout = async () => {
-    // Implement your logout logic here
     await logoutMutation();
     logout();
     router.replace('/');
@@ -65,23 +86,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     },
   });
 
-  const [conversationId, setConversationId] = useQueryState('conversationId');
-
   if (isPending) {
     return <div>Loading...</div>;
   }
-
-  const getHeaderLabel = () => {
-    if (pathname.includes('jobs')) {
-      return 'Job Recommendation';
-    } else if (pathname.includes('courses')) {
-      return 'Course Recommendation';
-    } else if (pathname.includes('chat')) {
-      return conversationId ? 'Convo: ' + conversationId : 'Chat with AIDA';
-    } else if (pathname.includes('career-tree')) {
-      return 'Your Personalize Career Tree';
-    }
-  };
 
   return (
     <SidebarProvider>
@@ -90,7 +97,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <SidebarInset className='flex-1'>
           <header className='sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-6'>
             <SidebarTrigger className='md:hidden' />
-            <h3>{getHeaderLabel()}</h3>
+
+            {/* Wrap the component that uses useQueryState in Suspense */}
+            <Suspense fallback={<h3>Loading...</h3>}>
+              <HeaderLabel />
+            </Suspense>
+
             <div className='ml-auto'>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -149,7 +161,3 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     </SidebarProvider>
   );
 }
-
-const GetUserData = () => {
-  return <></>;
-};
