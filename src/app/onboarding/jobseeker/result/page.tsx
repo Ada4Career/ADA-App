@@ -1,6 +1,12 @@
+'use client';
+
+import dynamic from 'next/dynamic';
 import React from 'react';
 
-import CVResult from '@/app/onboarding/jobseeker/cv-result';
+// Use dynamic import with ssr: false to prevent server-side rendering
+const CVResult = dynamic(() => import('@/app/onboarding/jobseeker/cv-result'), {
+  ssr: false,
+});
 
 const Page = () => {
   return (

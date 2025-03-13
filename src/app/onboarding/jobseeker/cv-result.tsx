@@ -1,14 +1,15 @@
 'use client';
 
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, ArrowRight, Download, Loader2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import api from '@/lib/axios';
 import { getCookie } from '@/lib/cookies-action';
 
+// Import CVDocument normally since it's not rendered directly
 import CVDocument, { Resume } from '@/components/cv-document';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,6 +20,17 @@ import { API_AI_URL, API_BASE_URL } from '@/constant/config';
 import { ApiReturn } from '@/types/api.types';
 import { UserInterface } from '@/types/entities/user.types';
 
+// Dynamically import PDF components with SSR disabled
+const PDFViewer = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.PDFViewer),
+  { ssr: false }
+);
+
+const PDFDownloadLink = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+  { ssr: false }
+);
+
 const blobToFile = (blob: Blob, fileName: string) => {
   return new File([blob], fileName, { type: 'application/pdf' });
 };
@@ -26,9 +38,13 @@ const blobToFile = (blob: Blob, fileName: string) => {
 const CVResult = () => {
   const router = useRouter();
   const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
-  const pdfLinkRef = useRef(null);
-
+  const [isClient, setIsClient] = useState(false);
   const [suggestedRole, setSuggestedRole] = useState<string>('');
+
+  // Set isClient to true on component mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const { data: userData, isPending } = useQuery<UserInterface>({
     queryKey: ['me'],
@@ -71,6 +87,7 @@ const CVResult = () => {
       return response.data;
     },
   });
+
   // Function to capture PDF as Blob
   const handleCaptureBlob = async (blob: Blob) => {
     setPdfBlob(blob);
@@ -114,7 +131,6 @@ const CVResult = () => {
                   <div className='flex flex-col items-center justify-center py-12'>
                     <div className='text-center text-destructive'>
                       <h3 className='font-medium text-lg'>Error</h3>
-                      {/* <p>{error}</p> */}
                       <Button
                         variant='outline'
                         className='mt-4'
@@ -127,53 +143,52 @@ const CVResult = () => {
                   </div>
                 ) : (
                   <div className='flex flex-col items-center'>
-                    <div className='w-full h-[600px] mb-4'>
-                      <PDFViewer
-                        width='100%'
-                        height='600px'
-                        className='border rounded-md'
-                      >
-                        <CVDocument resumeContent={resumeData} />
-                      </PDFViewer>
-                    </div>
-                    <div className='flex justify-center mt-4 gap-4'>
-                      <div style={{ display: 'none' }}>
-                        <PDFDownloadLink
-                          ref={pdfLinkRef}
-                          document={<CVDocument resumeContent={resumeData} />}
-                          fileName='my-accessible-resume.pdf'
-                        >
-                          {({ blob, url, loading, error }) => {
-                            if (blob && !pdfBlob) {
-                              handleCaptureBlob(blob);
-                            }
-                            return null;
-                          }}
-                        </PDFDownloadLink>
-                      </div>
-                      <PDFDownloadLink
-                        document={<CVDocument resumeContent={resumeData} />}
-                        fileName='my-accessible-resume.pdf'
-                        className='inline-flex'
-                      >
-                        {({ loading }) => (
-                          <Button variant='outline' disabled={loading}>
-                            {loading ? (
-                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                            ) : (
-                              <Download className='mr-2 h-4 w-4' />
+                    {isClient && (
+                      <>
+                        <div className='w-full h-[600px] mb-4'>
+                          <PDFViewer
+                            width='100%'
+                            height='600px'
+                            className='border rounded-md'
+                          >
+                            <CVDocument resumeContent={resumeData} />
+                          </PDFViewer>
+                        </div>
+                        <div className='flex justify-center mt-4 gap-4'>
+                          <div style={{ display: 'none' }}>
+                            <PDFDownloadLink
+                              document={
+                                <CVDocument resumeContent={resumeData} />
+                              }
+                              fileName='my-accessible-resume.pdf'
+                            >
+                              {({ blob, url, loading, error }) => {
+                                if (blob && !pdfBlob) {
+                                  handleCaptureBlob(blob);
+                                }
+                                return null;
+                              }}
+                            </PDFDownloadLink>
+                          </div>
+                          <PDFDownloadLink
+                            document={<CVDocument resumeContent={resumeData} />}
+                            fileName='my-accessible-resume.pdf'
+                            className='inline-flex'
+                          >
+                            {({ loading }) => (
+                              <Button variant='outline' disabled={loading}>
+                                {loading ? (
+                                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                                ) : (
+                                  <Download className='mr-2 h-4 w-4' />
+                                )}
+                                Download Resume
+                              </Button>
                             )}
-                            Download Resume
-                          </Button>
-                        )}
-                      </PDFDownloadLink>
-                      {/* {isSaving && (
-                        <Button variant='outline' disabled>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                          Saving to profile...
-                        </Button>
-                      )} */}
-                    </div>
+                          </PDFDownloadLink>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </CardContent>
@@ -223,5 +238,4 @@ const CVResult = () => {
     </div>
   );
 };
-
 export default CVResult;
