@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +15,8 @@ import {
 import { LoginForm } from './login-form';
 import { RegisterForm } from './register-form';
 
-export default function AuthDialog() {
+// Create a separate component for the parts that use useSearchParams
+function AuthDialogContent() {
   const [open, setOpen] = useState(false);
   const [activeForm, setActiveForm] = useState<'login' | 'register'>('login');
   const searchParams = useSearchParams();
@@ -67,5 +68,23 @@ export default function AuthDialog() {
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+// Main component with Suspense boundary
+export default function AuthDialog() {
+  return (
+    <Suspense
+      fallback={
+        <div className='space-x-4'>
+          <Button disabled>Sign In</Button>
+          <Button disabled variant='outline'>
+            Register
+          </Button>
+        </div>
+      }
+    >
+      <AuthDialogContent />
+    </Suspense>
   );
 }
