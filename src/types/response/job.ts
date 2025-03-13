@@ -5,6 +5,12 @@ export type JobType =
   | 'fixed_term'
   | 'casual';
 export type WorkplaceType = 'remote' | 'hybrid' | 'on_site';
+export type AccessibilityLevel = 'high' | 'medium' | 'standard';
+
+export interface Accommodation {
+  type: string;
+  description: string;
+}
 
 export interface JobPostingData {
   id: string;
@@ -29,4 +35,10 @@ export interface JobPostingDataExtended extends JobPostingData {
   logo?: string;
   match_percentage?: number;
   posted_time?: string;
+
+  // Accessibility and inclusivity fields
+  accessibility_level?: AccessibilityLevel;
+  accommodations?: Accommodation[];
+  disability_friendly?: boolean;
+  inclusive_hiring_statement?: string;
 }

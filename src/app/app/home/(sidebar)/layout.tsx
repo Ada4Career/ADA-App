@@ -1,7 +1,8 @@
 'use client';
 
 import { LogOut, User } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import type { ReactNode } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -36,6 +37,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { logout } = useAuthStore();
   const router = useRouter();
 
+  const pathname = usePathname();
+
   const { isLoading: isLoadingLogout, mutateAsync: logoutMutation } =
     useMutation(async () => {
       const resp = await api.post(`${API_BASE_URL}/logout`);
@@ -62,9 +65,25 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       setUser(data.data);
     },
   });
+
+  const [conversationId, setConversationId] = useQueryState('conversationId');
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const getHeaderLabel = () => {
+    if (pathname.includes('jobs')) {
+      return 'Job Recommendation';
+    } else if (pathname.includes('courses')) {
+      return 'Course Recommendation';
+    } else if (pathname.includes('chat')) {
+      return conversationId ? 'Convo: ' + conversationId : 'Chat with AIDA';
+    } else if (pathname.includes('career-tree')) {
+      return 'Your Personalize Career Tree';
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className='flex min-h-screen w-screen'>
@@ -72,7 +91,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <SidebarInset className='flex-1'>
           <header className='sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-6'>
             <SidebarTrigger className='md:hidden' />
-
+            <h3>{getHeaderLabel()}</h3>
             <div className='ml-auto'>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

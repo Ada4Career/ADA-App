@@ -1,5 +1,5 @@
 'use client';
-import { Clock, ExternalLink, GraduationCap, Star, Users } from 'lucide-react';
+import { Clock, ExternalLink, Star, Users } from 'lucide-react';
 import React from 'react';
 import { useQuery } from 'react-query';
 
@@ -48,12 +48,12 @@ const CoursePage = () => {
 
   return (
     <div className='max-w-7xl mx-auto px-4 py-8'>
-      <div className='flex items-center mb-8'>
+      {/* <div className='flex items-center mb-8'>
         <GraduationCap className='w-8 h-8 text-blue-600 mr-3' />
         <h1 className='text-3xl font-bold text-gray-900'>
           Course Recommendations
         </h1>
-      </div>
+      </div> */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {data ? (
           data.map((course, index) => (

@@ -1,5 +1,7 @@
 'use client';
+
 import {
+  Accessibility,
   ArrowRight,
   Bookmark,
   Building,
@@ -7,6 +9,7 @@ import {
   Clock,
   MapPin,
 } from 'lucide-react';
+import Link from 'next/link';
 
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
 import { Badge } from '@/components/ui/badge';
@@ -35,6 +38,12 @@ export default function JobCard({ job, onClick }: JobCardProps) {
     on_site: 'On-site',
   };
 
+  const accessibilityLevelLabels = {
+    high: 'High Accessibility',
+    medium: 'Medium Accessibility',
+    standard: 'Standard Accessibility',
+  };
+
   // Calculate days since posting (dummy data)
   const daysAgo = Math.floor(Math.random() * 7) + 1;
 
@@ -47,6 +56,9 @@ export default function JobCard({ job, onClick }: JobCardProps) {
     .map((item) => item.replace(/^- /, '').trim())
     .filter(Boolean)
     .slice(0, 3);
+
+  // Get first few accommodations (if available)
+  const accommodations = job.accommodations?.slice(0, 2) || [];
 
   return (
     <Card className='overflow-hidden border-0 shadow-md'>
@@ -93,7 +105,6 @@ export default function JobCard({ job, onClick }: JobCardProps) {
             <div className='flex items-center gap-2 text-gray-600'>
               <Building className='h-4 w-4' />
               <span>{workplaceTypeLabels[job.workplace_type]}</span>
-              {/* <span>{workplaceTypeLabels[job.workplaceType]}</span> */}
             </div>
             <div className='flex items-center gap-2 text-gray-600'>
               <Clock className='h-4 w-4' />
@@ -103,6 +114,28 @@ export default function JobCard({ job, onClick }: JobCardProps) {
               <Calendar className='h-4 w-4' />
               <span>{job.experience || '1+ years exp'}</span>
             </div>
+          </div>
+
+          {/* Accessibility section */}
+          <div className='mt-4 pt-4 border-t'>
+            <div className='flex items-center gap-2 mb-2'>
+              <Accessibility className='h-5 w-5 text-green-600' />
+              <span className='font-medium text-green-600'>
+                {job.accessibility_level
+                  ? accessibilityLevelLabels[job.accessibility_level]
+                  : 'Disability-Friendly'}
+              </span>
+            </div>
+            {accommodations.length > 0 && (
+              <div className='text-sm text-gray-600'>
+                <p className='mb-1'>Accommodations include:</p>
+                <ul className='list-disc pl-5 space-y-1'>
+                  {accommodations.map((accommodation, index) => (
+                    <li key={index}>{accommodation.description}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
 
@@ -126,13 +159,15 @@ export default function JobCard({ job, onClick }: JobCardProps) {
             ))}
           </ul>
 
-          <Button
-            onClick={onClick}
-            className='w-full justify-between bg-blue-500 hover:bg-blue-600'
-          >
-            See Detail
-            <ArrowRight className='h-4 w-4' />
-          </Button>
+          <Link href={`/app/home/jobs/${job.id}`}>
+            <Button
+              onClick={onClick}
+              className='w-full justify-between bg-blue-500 hover:bg-blue-600'
+            >
+              See Detail
+              <ArrowRight className='h-4 w-4' />
+            </Button>
+          </Link>
         </div>
       </div>
     </Card>
