@@ -7,8 +7,7 @@ import { ReactNode } from 'react';
 import api from '@/lib/axios';
 
 import AdaLogo from '@/components/ada-logo';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import UserProfileDropdown from '@/components/features/user-profile-dropdown';
 
 import useAuthStore from '@/store/useAuthStore';
 
@@ -47,7 +46,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       url: '/app/hr/offerings',
     },
     {
-      label: 'List Offering',
+      label: 'Make Offering',
       url: '/app/hr/make-offering',
     },
   ];
@@ -84,20 +83,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </nav>
           </div>
           <div className='flex items-center gap-4'>
-            <div className='flex items-center gap-2'>
-              <Avatar className='h-8 w-8'>
-                <AvatarImage src={user?.name} alt={user?.name} />
-                <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className='hidden md:block'>
-                <p className='text-sm font-medium'>{user?.name}</p>
-                <p className='text-xs text-muted-foreground'>{user?.email}</p>
-              </div>
-            </div>
-            <Button variant='ghost' size='icon' aria-label='Settings'>
-              <span className='sr-only'>Settings</span>
-              <span className='h-6 w-6 rounded-full border' />
-            </Button>
+            <UserProfileDropdown />
           </div>
         </div>
       </header>
