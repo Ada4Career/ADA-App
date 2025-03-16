@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
 export default {
   darkMode: ['class'],
@@ -26,6 +27,11 @@ export default {
           foreground: 'hsl(var(--primary-foreground))',
         },
         dark: '#222222',
+        ms: {
+          blue: '#0761C7',
+          purple: '#7E39E0',
+          red: '#DA5654',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -73,6 +79,17 @@ export default {
           ring: 'hsl(var(--sidebar-ring))',
         },
       },
+      backgroundImage: {
+        'ms-rainbow':
+          'linear-gradient(90deg, #0761C7 0%, #7E39E0 51%, #DA5654 100%)',
+        'blue-linear': 'linear-gradient(90deg, #1D4ED8 0%, #1D4ED8 100%)',
+        'ms-rainbow-diagonal':
+          'linear-gradient(45deg, #0761C7 0%, #7E39E0 51%, #DA5654 100%)',
+        'ms-rainbow-radial':
+          'radial-gradient(circle, #0761C7 0%, #7E39E0 51%, #DA5654 100%)',
+        'ms-rainbow-conic':
+          'conic-gradient(from 0deg, #0761C7 0%, #7E39E0 51%, #DA5654 100%)',
+      },
       keyframes: {
         flicker: {
           '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': {
@@ -109,5 +126,39 @@ export default {
     require('@tailwindcss/forms'),
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.text-gradient-ms': {
+          'background-clip': 'text',
+          '-webkit-background-clip': 'text',
+          color: 'transparent',
+          'background-image':
+            'linear-gradient(90deg, #0761C7 0%, #7E39E0 51%, #DA5654 100%)',
+          display: 'inline-block', // Add this
+          'padding-right': '4px', // Add this
+          // 'padding-bottom': '4px',
+          '-webkit-box-decoration-break': 'clone', // Add this
+          'box-decoration-break': 'clone', // Add this
+        },
+        '.text-blue-linear': {
+          'background-clip': 'text',
+          '-webkit-background-clip': 'text',
+          color: 'transparent',
+          'background-image': 'linear-gradient(90deg, #5AD7FE 0%, #1D4ED8 80%)',
+          display: 'inline-block', // Add this
+          'padding-right': '4px', // Add this
+          // 'padding-bottom': '4px',
+          '-webkit-box-decoration-break': 'clone', // Add this
+          'box-decoration-break': 'clone', // Add this
+        },
+        '.border-gradient-ms': {
+          border: 'double 1px transparent',
+          'background-image':
+            'linear-gradient(white, white), linear-gradient(90deg, #0761C7 0%, #7E39E0 51%, #DA5654 100%)',
+          'background-origin': 'border-box',
+          'background-clip': 'padding-box, border-box',
+        },
+      });
+    }),
   ],
 } satisfies Config;
