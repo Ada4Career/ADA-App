@@ -30,7 +30,7 @@ import Media from '@/app/app/hr/(sidebar)/make-offering/form/media';
 import Review from '@/app/app/hr/(sidebar)/make-offering/review';
 import { API_BASE_URL } from '@/constant/config';
 
-import { ApiError, ApiReturn } from '@/types/api.types';
+import { ApiError } from '@/types/api.types';
 
 const MakeOfferingPage = () => {
   const [step, setStep] = React.useState(1);
@@ -78,14 +78,13 @@ const MakeOfferingPage = () => {
   const router = useRouter();
 
   const { mutateAsync: submitJobPosting, isPending } = useMutation<
-    ApiReturn<null>,
+    null,
     ApiError,
     JobPostingFormData
   >({
     mutationFn: async (data) => {
       // Transform form data to match API expectations
       const jobPostingData = {
-        id: crypto.randomUUID(), // Generate a unique ID
         email: data.basicInfo.email,
         division: data.basicInfo.division,
         job_type: data.jobDetails.job_type,
@@ -102,23 +101,35 @@ const MakeOfferingPage = () => {
         stage: data.jobDetails.stage,
         location: data.basicInfo.location,
         experience: data.jobDetails.experience,
-        logo: data.media.logo,
+        image: data.media.logo,
         accessibility_level: data.inclusivity.accessibility_level,
         accommodations: data.inclusivity.accommodations,
         disability_friendly: data.inclusivity.disability_friendly,
         inclusive_hiring_statement: data.inclusivity.inclusive_hiring_statement,
       };
 
-      const response = await api.post(
-        `${API_BASE_URL}/job-postings`,
-        jobPostingData
-      );
+      const formData = new FormData();
 
-      return response.data;
+      // Menambahkan semua field ke formData
+      Object.entries(jobPostingData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value.toString());
+        }
+      });
+
+      console.log(formData);
+
+      const response = await api.post(`${API_BASE_URL}/job-vacancy`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return null;
     },
     onSuccess: () => {
       toast.success('Job posting created successfully!');
-      router.push('/job-postings'); // Redirect to job listings page
+      router.push('/app/hr/dashboard'); // Redirect to job listings page
     },
     onError: (error) => {
       toast.error(`Error creating job posting: ${error.message}`);

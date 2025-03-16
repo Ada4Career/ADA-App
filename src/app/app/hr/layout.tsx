@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className='flex flex-col gap-y-4'>
-      <header className='sticky top-0 z-10 h-16 border-b flex items-center justify-center bg-white px-4 md:px-6'>
+      <header className='sticky top-0 z-20 h-16 border-b flex items-center justify-center bg-white px-4 md:px-6'>
         <div className='items-center w-full flex justify-between mx-auto container'>
           <div className='flex items-center gap-4'>
             <Link href='/app/hr/dashboard' className='flex items-center gap-2'>
