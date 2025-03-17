@@ -88,6 +88,8 @@ const api = {
 export const useChatConversation = (userEmail: string) => {
   // Use nuqs to store the conversation ID in the URL
   const [conversationId, setConversationId] = useQueryState('conversationId');
+  const [conversationTitle, setConversationTitle] =
+    useQueryState('conversationTitle');
 
   const [messages, setMessages] = React.useState<Message[]>([]);
 
@@ -114,6 +116,7 @@ export const useChatConversation = (userEmail: string) => {
     onSuccess: (data) => {
       // Store conversation ID using nuqs when successfully created
       setConversationId(data.conversation.id);
+      setConversationTitle(data.conversation.title);
       // Update the cache with the new conversation data
       setMessages(data.messages);
       client.setQueryData(['conversation', data.conversation.id], data);

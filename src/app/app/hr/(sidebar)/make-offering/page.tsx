@@ -117,8 +117,6 @@ const MakeOfferingPage = () => {
         }
       });
 
-      console.log(formData);
-
       const response = await api.post(`${API_BASE_URL}/job-vacancy`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

@@ -27,6 +27,7 @@ import { UserInterface } from '@/types/entities/user.types';
 function HeaderLabel() {
   const pathname = usePathname();
   const [conversationId] = useQueryState('conversationId');
+  const [conversationTitle] = useQueryState('conversationTitle');
 
   const getHeaderLabel = () => {
     if (pathname.includes('jobs')) {
@@ -34,7 +35,7 @@ function HeaderLabel() {
     } else if (pathname.includes('courses')) {
       return 'Course Recommendation';
     } else if (pathname.includes('chat')) {
-      return conversationId ? 'Convo: ' + conversationId : 'Chat with AIDA';
+      return conversationId ? 'Convo: ' + conversationTitle : 'Chat with AIDA';
     } else if (pathname.includes('career-tree')) {
       return 'Your Personalize Career Tree';
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ArrowLeft, ArrowRight, Download, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -47,7 +47,7 @@ const CVResult = () => {
   } = useQuery<Resume>({
     queryKey: ['resume'],
     queryFn: async () => {
-      console.log(userData);
+      console.log(userData, 'ini data');
       const response = await api.post(`${API_AI_URL}/resume`, {
         name: userData?.name,
         email: userData?.email,
@@ -71,6 +71,34 @@ const CVResult = () => {
       return response.data;
     },
   });
+
+  const { mutateAsync: saveCv, isPending: isPendingSaveCv } = useMutation({
+    mutationFn: async () => {
+      if (!pdfBlob) return;
+      // console.log('masuk ini bos');
+      const fileBlob = blobToFile(pdfBlob, 'my-accessible-resume.pdf');
+      console.log(pdfBlob);
+      console.log(fileBlob);
+      const formData = new FormData();
+      formData.append('file', fileBlob);
+
+      const response = await api.post(
+        `${API_BASE_URL}/user/resume/${userData?.email}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      return response.data;
+    },
+    onSuccess: () => {
+      router.replace('/app/home/jobs');
+    },
+  });
+
   // Function to capture PDF as Blob
   const handleCaptureBlob = async (blob: Blob) => {
     setPdfBlob(blob);
@@ -181,10 +209,13 @@ const CVResult = () => {
 
             <div className='flex items-center justify-between gap-4 mt-auto'>
               <Button
-                onClick={() => {
-                  router.replace('/app/home/jobs');
+                onClick={async () => {
+                  if (pdfBlob != null) {
+                    await saveCv();
+                  }
                 }}
                 size='lg'
+                disabled={isPending || isPendingSaveCv}
                 className='flex-1 py-8 w-full'
               >
                 Continue to Dashboard
