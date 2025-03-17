@@ -171,7 +171,7 @@ const CVResult = () => {
                           document={<CVDocument resumeContent={resumeData} />}
                           fileName='my-accessible-resume.pdf'
                         >
-                          {({ blob, url, loading, error }) => {
+                          {({ blob, url, loading }) => {
                             if (blob && !pdfBlob) {
                               handleCaptureBlob(blob);
                             }

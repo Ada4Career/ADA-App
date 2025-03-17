@@ -1,12 +1,9 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import type { ReactNode } from 'react';
 import { Suspense } from 'react'; // Add this import
-
-import api from '@/lib/axios';
 
 import { AppSidebar } from '@/components/features/job-seeker/sidebar';
 import UserProfileDropdown from '@/components/features/user-profile-dropdown';
@@ -15,13 +12,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-
-import useAuthStore from '@/store/useAuthStore';
-
-import { API_BASE_URL } from '@/constant/config';
-
-import { ApiReturn } from '@/types/api.types';
-import { UserInterface } from '@/types/entities/user.types';
 
 // Create a separate component for the parts that use useQueryState
 function HeaderLabel() {
@@ -46,23 +36,6 @@ function HeaderLabel() {
 }
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const { setUser } = useAuthStore();
-
-  const { isPending } = useQuery<ApiReturn<UserInterface>>({
-    queryKey: ['me'],
-    queryFn: async () => {
-      const meResponse = await api.get<ApiReturn<UserInterface>>(
-        `${API_BASE_URL}/me`
-      );
-      setUser(meResponse.data.data);
-      return meResponse.data;
-    },
-  });
-
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <SidebarProvider>
       <div className='flex min-h-screen w-screen'>

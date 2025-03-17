@@ -52,6 +52,8 @@ export const metadata: Metadata = {
 
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
+import AccesibilityWidget from '@/components/AccessibilityWidget';
+import ImplementWidget from '@/components/accessiblity-widget/ImplementWidget';
 import { ReactQueryClientProvider } from '@/components/layout/query-provider';
 
 export default function RootLayout({
@@ -63,8 +65,13 @@ export default function RootLayout({
     <ReactQueryClientProvider>
       <html>
         <body>
+          <ImplementWidget />
           <ToastContainer />
           <NuqsAdapter>{children}</NuqsAdapter>
+          <div className='fixed bottom-4 right-4 z-50'>
+            {/* <AccessibilityPanel /> */}
+            <AccesibilityWidget />
+          </div>
         </body>
       </html>
     </ReactQueryClientProvider>
