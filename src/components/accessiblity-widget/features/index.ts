@@ -3,7 +3,10 @@ import { useMonochrome } from '@/components/accessiblity-widget/features/color/u
 import { useSaturation } from '@/components/accessiblity-widget/features/color/useSaturation';
 import { useTextAlignment } from '@/components/accessiblity-widget/features/content/useAlignment';
 import { useContentScaling } from '@/components/accessiblity-widget/features/content/useContentScaling';
+import { useHighlightHover } from '@/components/accessiblity-widget/features/content/useHighlightHover';
 import { useLinkHighlight } from '@/components/accessiblity-widget/features/content/useHighlightLink';
+import { useHighlightTitles } from '@/components/accessiblity-widget/features/content/useHighlightTitles';
+import { useReadableFont } from '@/components/accessiblity-widget/features/content/useReadableFont';
 import { useCursor } from '@/components/accessiblity-widget/features/orientation/useCursor';
 import { useHideImages } from '@/components/accessiblity-widget/features/orientation/useHideImage';
 import { useMuteSound } from '@/components/accessiblity-widget/features/orientation/useMuteSounds';
@@ -21,4 +24,7 @@ export const useAccesibilityEffects = () => {
   useLinkHighlight();
   useMonochrome();
   useSaturation();
+  useHighlightTitles();
+  useHighlightHover();
+  useReadableFont();
 };
