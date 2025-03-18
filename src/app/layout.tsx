@@ -65,13 +65,13 @@ export default function RootLayout({
     <ReactQueryClientProvider>
       <html>
         <body>
-          <ImplementWidget />
-          <ToastContainer />
-          <NuqsAdapter>{children}</NuqsAdapter>
           <div className='fixed bottom-4 right-4 z-50'>
             {/* <AccessibilityPanel /> */}
             <AccesibilityWidget />
           </div>
+          <ImplementWidget />
+          <ToastContainer />
+          <NuqsAdapter>{children}</NuqsAdapter>
         </body>
       </html>
     </ReactQueryClientProvider>

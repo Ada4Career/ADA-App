@@ -2,6 +2,8 @@
 import { AlertCircle, Download, FileText, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
+import api from '@/lib/axios';
+
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -55,12 +57,12 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
     try {
       setIsLoading(true);
       console.log(defaultResume, 'ini result');
-      const response = await fetch(defaultResume);
+      const response = await api.get(defaultResume);
       console.log('ini result 2');
-      if (!response.ok) throw new Error('Failed to fetch default resume');
+      if (!response.data) throw new Error('Failed to fetch default resume');
       console.log('ini result 3');
 
-      const blob = await response.json();
+      const blob = await response.data;
       // Extract filename from URL or use a default name
       const fileName = defaultResume.split('/').pop() || 'default-resume.pdf';
 

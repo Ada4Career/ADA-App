@@ -33,6 +33,7 @@ const HomePage = () => {
       const response = await api.get<ApiReturn<JobPostingData[]>>(
         `${API_BASE_URL}/job-vacancies`
       );
+      console.log(response.data.data);
       return response.data.data.map((j) => {
         const exp = getRandomExperience();
         const cmp = getRandomCompany();

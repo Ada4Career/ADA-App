@@ -49,10 +49,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       label: 'Make Offering',
       url: '/app/hr/make-offering',
     },
+    {
+      label: 'AIDA Chat',
+      url: '/app/hr/chat',
+    },
   ];
 
   return (
-    <div className='flex flex-col gap-y-4'>
+    <div className='flex flex-col gap-y-4 min-h-screen'>
       <header className='sticky top-0 z-20 h-16 border-b flex items-center justify-center bg-white px-4 md:px-6'>
         <div className='items-center w-full flex justify-between mx-auto container'>
           <div className='flex items-center gap-4'>
@@ -71,6 +75,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   {l.label}
                 </Link>
               ))}
+
               {/* <Link href='/' className='text-sm font-medium text-primary'>
                 Home
               </Link>
@@ -87,7 +92,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
       </header>
-      <div className='p-5'>{children}</div>
+      <div className='p-5 flex-1 h-full'>{children}</div>
     </div>
   );
 }
