@@ -34,9 +34,21 @@ const routeRoleMap = {
 // Create the internationalization middleware
 const intlMiddleware = createIntlMiddleware(routing);
 
-// Check if a path is a localized path
+// Check if a path is a localized path - FIXED to handle paths like /id (without trailing slash)
 function isLocalizedPath(path: string, locales: string[]) {
-  return locales.some((locale) => path.startsWith(`/${locale}/`));
+  return locales.some(
+    (locale) => path === `/${locale}` || path.startsWith(`/${locale}/`)
+  );
+}
+
+// Helper to get the current locale from path
+function getLocaleFromPath(path: string, locales: string[]): string | null {
+  for (const locale of locales) {
+    if (path === `/${locale}` || path.startsWith(`/${locale}/`)) {
+      return locale;
+    }
+  }
+  return null;
 }
 
 async function authMiddleware(request: NextRequest) {
@@ -45,9 +57,20 @@ async function authMiddleware(request: NextRequest) {
   const token = request.cookies.get('ada4career-token')?.value;
   let routeRole = 'authenticated';
 
-  // Determine the route role
+  // Get the current locale, if any
+  const currentLocale = getLocaleFromPath(path, [...routing.locales]);
+  const localePrefix = currentLocale ? `/${currentLocale}` : '';
+
+  // Determine the route role - strip locale for matching
+  const pathWithoutLocale = currentLocale
+    ? path.substring(currentLocale.length + 1) || '/'
+    : path;
+
   for (const [pattern, role] of Object.entries(routeRoleMap)) {
-    if (path === pattern || path.startsWith(`${pattern}/`)) {
+    if (
+      pathWithoutLocale === pattern ||
+      pathWithoutLocale.startsWith(`${pattern}/`)
+    ) {
       routeRole = role;
       break;
     }
@@ -59,8 +82,8 @@ async function authMiddleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Redirect to login page
-    const loginUrl = new URL(LOGIN_ROUTE, request.url);
+    // Redirect to login page with locale preserved
+    const loginUrl = new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url);
     if (redirectParam) {
       loginUrl.searchParams.set('redirect', redirectParam);
     } else if (path !== LOGIN_ROUTE) {
@@ -76,7 +99,9 @@ async function authMiddleware(request: NextRequest) {
 
     // Invalid token
     if (!userResponse.ok) {
-      const response = NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
+      const response = NextResponse.redirect(
+        new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url)
+      );
       response.cookies.delete('ada4career-token');
       response.cookies.delete('ada4career-email');
       return response;
@@ -87,7 +112,9 @@ async function authMiddleware(request: NextRequest) {
     const userRole = user?.role?.[0];
 
     if (!userRole) {
-      const response = NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
+      const response = NextResponse.redirect(
+        new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url)
+      );
       response.cookies.delete('ada4career-token');
       response.cookies.delete('ada4career-email');
       return response;
@@ -110,12 +137,16 @@ async function authMiddleware(request: NextRequest) {
         user.gender != 'female' &&
         user.gender != 'other'
       ) {
-        return NextResponse.redirect(new URL('/onboarding', request.url));
+        return NextResponse.redirect(
+          new URL(`${localePrefix}/onboarding`, request.url)
+        );
       } else {
-        // Redirect to appropriate dashboard
+        // Redirect to appropriate dashboard with locale preserved
         return NextResponse.redirect(
           new URL(
-            userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE,
+            `${localePrefix}${
+              userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE
+            }`,
             request.url
           )
         );
@@ -136,10 +167,14 @@ async function authMiddleware(request: NextRequest) {
       ) {
         if (userRole === 'jobseeker') {
           if (user.job_seeker_data?.resume_url != '') {
-            return NextResponse.redirect(new URL(JOBSEEKER_ROUTE, request.url));
+            return NextResponse.redirect(
+              new URL(`${localePrefix}${JOBSEEKER_ROUTE}`, request.url)
+            );
           }
         } else {
-          return NextResponse.redirect(new URL(HR_ROUTE, request.url));
+          return NextResponse.redirect(
+            new URL(`${localePrefix}${HR_ROUTE}`, request.url)
+          );
         }
       }
     }
@@ -154,11 +189,15 @@ async function authMiddleware(request: NextRequest) {
         user.gender != 'female' &&
         user.gender != 'other'
       ) {
-        return NextResponse.redirect(new URL('/onboarding', request.url));
+        return NextResponse.redirect(
+          new URL(`${localePrefix}/onboarding`, request.url)
+        );
       } else {
         return NextResponse.redirect(
           new URL(
-            userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE,
+            `${localePrefix}${
+              userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE
+            }`,
             request.url
           )
         );
@@ -168,7 +207,9 @@ async function authMiddleware(request: NextRequest) {
     return response;
   } catch (error) {
     console.error('Auth middleware error:', error);
-    const response = NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
+    const response = NextResponse.redirect(
+      new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url)
+    );
     response.cookies.delete('ada4career-token');
     response.cookies.delete('ada4career-email');
     return response;

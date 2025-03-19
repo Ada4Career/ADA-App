@@ -10,6 +10,7 @@ import {
   MapPin,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
 import { Badge } from '@/components/ui/badge';
@@ -24,24 +25,29 @@ interface JobCardProps {
 }
 
 export default function JobCard({ job, onClick }: JobCardProps) {
+  const t = useTranslations('Jobs.Card'); // Add translation hook
+
+  // Use translations for job type labels
   const jobTypeLabels = {
-    full_time: 'Full-time',
-    part_time: 'Part-time',
-    contract: 'Contract',
-    fixed_term: 'Fixed-term',
-    casual: 'Casual',
+    full_time: t('jobTypes.full_time'),
+    part_time: t('jobTypes.part_time'),
+    contract: t('jobTypes.contract'),
+    fixed_term: t('jobTypes.fixed_term'),
+    casual: t('jobTypes.casual'),
   };
 
+  // Use translations for workplace type labels
   const workplaceTypeLabels = {
-    remote: 'Remote',
-    hybrid: 'Hybrid',
-    on_site: 'On-site',
+    remote: t('workplaceTypes.remote'),
+    hybrid: t('workplaceTypes.hybrid'),
+    on_site: t('workplaceTypes.on_site'),
   };
 
+  // Use translations for accessibility level labels
   const accessibilityLevelLabels = {
-    high: 'High Accessibility',
-    medium: 'Medium Accessibility',
-    standard: 'Standard Accessibility',
+    high: t('accessibilityLevels.high'),
+    medium: t('accessibilityLevels.medium'),
+    standard: t('accessibilityLevels.standard'),
   };
 
   // Calculate days since posting (dummy data)
@@ -68,13 +74,15 @@ export default function JobCard({ job, onClick }: JobCardProps) {
           <div className='flex justify-between items-start mb-4'>
             <div className='flex gap-2'>
               <Badge variant='outline' className='text-xs font-normal'>
-                {daysAgo} {daysAgo === 1 ? 'Hour' : 'Hours'} Ago
+                {daysAgo}{' '}
+                {daysAgo === 1 ? t('timeLabels.hour') : t('timeLabels.hours')}{' '}
+                {t('timeLabels.ago')}
               </Badge>
               <Badge
                 variant='outline'
                 className='text-xs font-normal text-blue-500 border-blue-200 bg-blue-50'
               >
-                Be an early applicant
+                {t('earlyApplicant')}
               </Badge>
             </div>
             <button className='text-gray-400 hover:text-gray-600'>
@@ -123,12 +131,12 @@ export default function JobCard({ job, onClick }: JobCardProps) {
               <span className='font-medium text-green-600'>
                 {job.accessibility_level
                   ? accessibilityLevelLabels[job.accessibility_level]
-                  : 'Disability-Friendly'}
+                  : t('disabilityFriendly')}
               </span>
             </div>
             {accommodations.length > 0 && (
               <div className='text-sm text-gray-600'>
-                <p className='mb-1'>Accommodations include:</p>
+                <p className='mb-1'>{t('accommodationsInclude')}</p>
                 <ul className='list-disc pl-5 space-y-1'>
                   {accommodations.map((accommodation, index) => (
                     <li key={index}>{accommodation.description}</li>
@@ -149,7 +157,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
             />
           </div>
 
-          <h4 className='font-medium mb-3'>Required</h4>
+          <h4 className='font-medium mb-3'>{t('required')}</h4>
           <ul className='space-y-2 mb-6 flex-1'>
             {qualifications.map((qualification, index) => (
               <li key={index} className='flex items-start gap-2 text-sm'>
@@ -164,7 +172,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
               onClick={onClick}
               className='w-full justify-between bg-blue-500 hover:bg-blue-600'
             >
-              See Detail
+              {t('seeDetail')}
               <ArrowRight className='h-4 w-4' />
             </Button>
           </Link>

@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import api from '@/lib/axios';
@@ -23,6 +24,7 @@ import { API_BASE_URL } from '@/constant/config';
 
 const UserProfileDropdown = () => {
   const { user, logout } = useAuthStore();
+  const t = useTranslations('Dashboard.UserProfile'); // Add translation hook
 
   const router = useRouter();
 
@@ -64,12 +66,12 @@ const UserProfileDropdown = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-56'>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('myAccount')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <User className='mr-2 h-4 w-4' />
-            <span>Profile</span>
+            <span>{t('profile')}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -79,7 +81,7 @@ const UserProfileDropdown = () => {
           className='cursor-pointer !hover:bg-red-500'
         >
           <LogOut className='mr-2 h-4 w-4' />
-          <span>{isLoadingLogout ? 'Logging Out...' : 'Log Out'}</span>
+          <span>{isLoadingLogout ? t('loggingOut') : t('logOut')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

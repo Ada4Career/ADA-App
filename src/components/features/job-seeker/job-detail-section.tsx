@@ -17,6 +17,7 @@ import {
   Users,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import api from '@/lib/axios';
@@ -45,36 +46,44 @@ import { API_BASE_URL } from '@/constant/config';
 import { ApiReturn } from '@/types/api.types';
 import { JobPostingData, JobPostingDataExtended } from '@/types/response/job';
 
-const jobTypeLabels = {
-  full_time: 'Full-time',
-  part_time: 'Part-time',
-  contract: 'Contract',
-  fixed_term: 'Fixed-term',
-  casual: 'Casual',
-};
-
-const workplaceTypeLabels = {
-  remote: 'Remote',
-  hybrid: 'Hybrid',
-  on_site: 'On-site',
-};
-
-const accessibilityLevelLabels = {
-  high: 'High Accessibility',
-  medium: 'Medium Accessibility',
-  standard: 'Standard Accessibility',
-};
-
-const formatBulletPoints = (text: string) => {
-  if (!text) return [];
-  return text
-    .split('\\n')
-    .map((item) => item.trim())
-    .filter(Boolean);
-};
-
 export default function JobDetailSection({ id }: { id: string }) {
-  // const [resumeUrl, setResumeUrl] = React.useState<string | null>(null);
+  // Add translation hooks for different sections
+  const t = useTranslations('JobDetail');
+  const tJobTypes = useTranslations('Jobs.Card.jobTypes');
+  const tWorkplaceTypes = useTranslations('Jobs.Card.workplaceTypes');
+  const tAccessibilityLevels = useTranslations('Jobs.Card.accessibilityLevels');
+
+  // Use translations for job type labels
+  const jobTypeLabels = {
+    full_time: tJobTypes('full_time'),
+    part_time: tJobTypes('part_time'),
+    contract: tJobTypes('contract'),
+    fixed_term: tJobTypes('fixed_term'),
+    casual: tJobTypes('casual'),
+  };
+
+  // Use translations for workplace type labels
+  const workplaceTypeLabels = {
+    remote: tWorkplaceTypes('remote'),
+    hybrid: tWorkplaceTypes('hybrid'),
+    on_site: tWorkplaceTypes('on_site'),
+  };
+
+  // Use translations for accessibility level labels
+  const accessibilityLevelLabels = {
+    high: tAccessibilityLevels('high'),
+    medium: tAccessibilityLevels('medium'),
+    standard: tAccessibilityLevels('standard'),
+  };
+
+  const formatBulletPoints = (text: string) => {
+    if (!text) return [];
+    return text
+      .split('\\n')
+      .map((item) => item.trim())
+      .filter(Boolean);
+  };
+
   const { user } = useAuthStore();
   const { data, isPending } = useQuery<JobPostingDataExtended>({
     queryKey: ['detail-job'],
@@ -102,7 +111,6 @@ export default function JobDetailSection({ id }: { id: string }) {
         stage: stg,
       };
 
-      // console.log('ini data', newData);
       return newData;
     },
   });
@@ -213,7 +221,7 @@ export default function JobDetailSection({ id }: { id: string }) {
         <Link href='/' className='inline-flex items-center  mb-6'>
           <Button>
             <ArrowLeft className='mr-2 h-4 w-4' />
-            Back to all jobs
+            {t('navigation.backToJobs')}
           </Button>
         </Link>
 
@@ -256,7 +264,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                           variant='outline'
                           className='font-normal text-blue-500 border-blue-200 bg-blue-50'
                         >
-                          New
+                          {t('badges.new')}
                         </Badge>
                         {data?.disability_friendly && (
                           <Badge
@@ -264,7 +272,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                             className='font-normal text-green-600 border-green-200 bg-green-50'
                           >
                             <Accessibility className='h-3.5 w-3.5 mr-1' />
-                            Disability-Friendly
+                            {t('badges.disabilityFriendly')}
                           </Badge>
                         )}
                       </div>
@@ -294,9 +302,13 @@ export default function JobDetailSection({ id }: { id: string }) {
               {/* Job details tabs */}
               <Tabs defaultValue='details' className='p-6'>
                 <TabsList className='mb-6'>
-                  <TabsTrigger value='details'>Job Details</TabsTrigger>
-                  <TabsTrigger value='accessibility'>Accessibility</TabsTrigger>
-                  <TabsTrigger value='company'>Company</TabsTrigger>
+                  <TabsTrigger value='details'>
+                    {t('tabs.jobDetails')}
+                  </TabsTrigger>
+                  <TabsTrigger value='accessibility'>
+                    {t('tabs.accessibility')}
+                  </TabsTrigger>
+                  <TabsTrigger value='company'>{t('tabs.company')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value='details' className='space-y-8'>
@@ -305,7 +317,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                     <div className='flex items-start gap-3'>
                       <MapPin className='h-5 w-5 text-gray-500 mt-0.5' />
                       <div>
-                        <h3 className='font-medium'>Location</h3>
+                        <h3 className='font-medium'>{t('jobInfo.location')}</h3>
                         <p className='text-gray-600'>
                           {data?.location ||
                             workplaceTypeLabels[
@@ -317,7 +329,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                     <div className='flex items-start gap-3'>
                       <Clock className='h-5 w-5 text-gray-500 mt-0.5' />
                       <div>
-                        <h3 className='font-medium'>Job Type</h3>
+                        <h3 className='font-medium'>{t('jobInfo.jobType')}</h3>
                         <p className='text-gray-600'>
                           {jobTypeLabels[data?.job_type ?? 'casual']}
                         </p>
@@ -326,16 +338,18 @@ export default function JobDetailSection({ id }: { id: string }) {
                     <div className='flex items-start gap-3'>
                       <DollarSign className='h-5 w-5 text-gray-500 mt-0.5' />
                       <div>
-                        <h3 className='font-medium'>Salary Range</h3>
+                        <h3 className='font-medium'>
+                          {t('jobInfo.salaryRange')}
+                        </h3>
                         <p className='text-gray-600'>
-                          {generateSalaryRange()} per year
+                          {generateSalaryRange()} {t('jobInfo.perYear')}
                         </p>
                       </div>
                     </div>
                     <div className='flex items-start gap-3'>
                       <Calendar className='h-5 w-5 text-gray-500 mt-0.5' />
                       <div>
-                        <h3 className='font-medium'>Duration</h3>
+                        <h3 className='font-medium'>{t('jobInfo.duration')}</h3>
                         <p className='text-gray-600'>
                           {formatDate(data?.start_date ?? '')} -{' '}
                           {formatDate(data?.end_date ?? '')}
@@ -345,16 +359,18 @@ export default function JobDetailSection({ id }: { id: string }) {
                     <div className='flex items-start gap-3'>
                       <Briefcase className='h-5 w-5 text-gray-500 mt-0.5' />
                       <div>
-                        <h3 className='font-medium'>Experience</h3>
+                        <h3 className='font-medium'>
+                          {t('jobInfo.experience')}
+                        </h3>
                         <p className='text-gray-600'>
-                          {data?.experience || 'Required'}
+                          {data?.experience || t('jobInfo.required')}
                         </p>
                       </div>
                     </div>
                     <div className='flex items-start gap-3'>
                       <Mail className='h-5 w-5 text-gray-500 mt-0.5' />
                       <div>
-                        <h3 className='font-medium'>Contact</h3>
+                        <h3 className='font-medium'>{t('jobInfo.contact')}</h3>
                         <p className='text-gray-600'>{data?.email}</p>
                       </div>
                     </div>
@@ -363,20 +379,18 @@ export default function JobDetailSection({ id }: { id: string }) {
                   {/* Job description */}
                   <div>
                     <h2 className='text-xl font-semibold mb-4'>
-                      Job Description
+                      {t('content.jobDescription')}
                     </h2>
                     <p className='text-gray-700 mb-6'>
-                      We are looking for a talented {data?.division}{' '}
-                      professional to join our team. This is an exciting
-                      opportunity to work with cutting-edge technologies and
-                      contribute to innovative projects in a collaborative
-                      environment.
+                      {t('content.lookingFor', {
+                        division: data?.division ?? '',
+                      })}
                     </p>
 
                     {responsibilities.length > 0 && (
                       <div className='mb-6'>
                         <h3 className='text-lg font-semibold mb-3'>
-                          Responsibilities
+                          {t('content.responsibilities')}
                         </h3>
                         <ul className='list-disc pl-5 space-y-2'>
                           {responsibilities.map((item, index) => (
@@ -391,7 +405,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                     {qualifications.length > 0 && (
                       <div className='mb-6'>
                         <h3 className='text-lg font-semibold mb-3'>
-                          Qualifications
+                          {t('content.qualifications')}
                         </h3>
                         <ul className='list-disc pl-5 space-y-2'>
                           {qualifications.map((item, index) => (
@@ -406,7 +420,9 @@ export default function JobDetailSection({ id }: { id: string }) {
 
                   {/* Benefits */}
                   <div>
-                    <h2 className='text-xl font-semibold mb-4'>Benefits</h2>
+                    <h2 className='text-xl font-semibold mb-4'>
+                      {t('content.benefits')}
+                    </h2>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                       {jobBenefits.map((benefit, index) => (
                         <div key={index} className='flex items-center gap-2'>
@@ -424,32 +440,34 @@ export default function JobDetailSection({ id }: { id: string }) {
                     <div className='flex items-center gap-2 mb-4'>
                       <Accessibility className='h-6 w-6 text-green-600' />
                       <h2 className='text-xl font-semibold'>
-                        Accessibility & Accommodations
+                        {t('accessibility.title')}
                       </h2>
                     </div>
 
                     <div className='mb-6'>
                       <h3 className='text-lg font-medium mb-2'>
-                        Accessibility Level
+                        {t('accessibility.accessibilityLevel')}
                       </h3>
                       <Badge className='text-base font-normal py-1 px-3 bg-green-100 text-green-800 hover:bg-green-200'>
                         {data?.accessibility_level
                           ? accessibilityLevelLabels[data?.accessibility_level]
-                          : 'Disability-Friendly'}
+                          : t('badges.disabilityFriendly')}
                       </Badge>
                       <p className='mt-3 text-gray-700'>
-                        This position has been rated as having{' '}
-                        {data?.accessibility_level || 'standard'} accessibility,
-                        meaning we have taken steps to ensure the workplace,
-                        tools, and processes are accessible to people with
-                        disabilities.
+                        {t('accessibility.ratedAs', {
+                          level: data?.accessibility_level
+                            ? accessibilityLevelLabels[
+                                data?.accessibility_level
+                              ].toLowerCase()
+                            : 'standard',
+                        })}
                       </p>
                     </div>
                     {data?.accommodations &&
                       data?.accommodations.length > 0 && (
                         <div className='mb-6'>
                           <h3 className='text-lg font-medium mb-2'>
-                            Available Accommodations
+                            {t('accessibility.availableAccommodations')}
                           </h3>
                           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                             {data?.accommodations.map(
@@ -476,31 +494,27 @@ export default function JobDetailSection({ id }: { id: string }) {
 
                     <div className='mb-6'>
                       <h3 className='text-lg font-medium mb-2'>
-                        Inclusive Hiring Statement
+                        {t('accessibility.inclusiveHiringStatement')}
                       </h3>
                       <div className='bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-md'>
                         <p className='text-gray-700'>
                           {data?.inclusive_hiring_statement ||
-                            'We are committed to creating an inclusive workplace that promotes and values diversity. We actively seek applicants from diverse backgrounds, including those with disabilities.'}
+                            t('accessibility.defaultStatement')}
                         </p>
                       </div>
                     </div>
 
                     <div>
                       <h3 className='text-lg font-medium mb-2'>
-                        Additional Support
+                        {t('accessibility.additionalSupport')}
                       </h3>
                       <p className='text-gray-700 mb-3'>
-                        If you require any accommodations during the application
-                        or interview process, please contact our HR team at{' '}
-                        {data?.email}. We are committed to ensuring an
-                        accessible and equitable hiring process for all
-                        candidates.
+                        {t('accessibility.contactForAccommodations', {
+                          email: data?.email ?? '',
+                        })}
                       </p>
                       <p className='text-gray-700'>
-                        We also welcome suggestions on how we can make our
-                        workplace and hiring process more accessible and
-                        inclusive.
+                        {t('accessibility.welcomeSuggestions')}
                       </p>
                     </div>
                   </div>
@@ -519,34 +533,43 @@ export default function JobDetailSection({ id }: { id: string }) {
                           {data?.company || 'TechCorp'}
                         </h2>
                         <p className='text-gray-600'>
-                          {data?.stage || 'Growing'} company
+                          {t('company.growingCompany', {
+                            stage: data?.stage || 'Growing',
+                          })}
                         </p>
                       </div>
                     </div>
 
                     <p className='text-gray-700'>
-                      {data?.company || 'TechCorp'} is a{' '}
-                      {data?.stage || 'growing'} company in the
-                      {data?.department || data?.division} industry. We are
-                      dedicated to innovation, excellence, and creating a
-                      positive impact through our products and services.
+                      {t('company.description', {
+                        company: data?.company || 'TechCorp',
+                        stage: data?.stage?.toLowerCase() || 'growing',
+                        industry:
+                          (data?.department ?? '') || (data?.division ?? ''),
+                      })}
                     </p>
 
                     <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-6'>
                       <div className='flex items-start gap-3'>
                         <Users className='h-5 w-5 text-gray-500 mt-0.5' />
                         <div>
-                          <h3 className='font-medium'>Company Size</h3>
+                          <h3 className='font-medium'>
+                            {t('company.companySize')}
+                          </h3>
                           <p className='text-gray-600'>
-                            {Math.floor(Math.random() * 900) + 100}-
-                            {Math.floor(Math.random() * 900) + 1000} employees
+                            {t('company.employees', {
+                              min: Math.floor(Math.random() * 900) + 100,
+                              max: Math.floor(Math.random() * 900) + 1000,
+                            })}
                           </p>
                         </div>
                       </div>
                       <div className='flex items-start gap-3'>
                         <Globe className='h-5 w-5 text-gray-500 mt-0.5' />
                         <div>
-                          <h3 className='font-medium'>Website</h3>
+                          <h3 className='font-medium'>
+                            {t('company.website')}
+                          </h3>
                           <p className='text-gray-600'>
                             www.
                             {(data?.company || 'techcorp')
@@ -559,7 +582,9 @@ export default function JobDetailSection({ id }: { id: string }) {
                       <div className='flex items-start gap-3'>
                         <Building className='h-5 w-5 text-gray-500 mt-0.5' />
                         <div>
-                          <h3 className='font-medium'>Industry</h3>
+                          <h3 className='font-medium'>
+                            {t('company.industry')}
+                          </h3>
                           <p className='text-gray-600'>
                             {data?.department || data?.division}
                           </p>
@@ -569,75 +594,18 @@ export default function JobDetailSection({ id }: { id: string }) {
 
                     <div className='mt-6'>
                       <h3 className='font-medium mb-2'>
-                        Commitment to Accessibility
+                        {t('company.commitmentToAccessibility')}
                       </h3>
                       <p className='text-gray-700'>
-                        At {data?.company || 'TechCorp'}, we believe in creating
-                        an inclusive workplace where everyone can thrive. We
-                        have implemented various accessibility features across
-                        our offices and digital platforms, and we continuously
-                        work to improve our accessibility standards.
+                        {t('company.accessibilityStatement', {
+                          company: data?.company || 'TechCorp',
+                        })}
                       </p>
                     </div>
                   </div>
                 </TabsContent>
               </Tabs>
             </div>
-
-            {/* Similar jobs
-          {similarJobs.length > 0 && (
-            <div className='mt-8'>
-              <h2 className='text-xl font-semibold mb-4'>Similar Jobs</h2>
-              <div className='grid gap-4'>
-                {similarJobs.map((similarJob) => (
-                  <Link
-                    key={similarJob.id}
-                    href={`/jobs/${similarJob.id}`}
-                    className='block'
-                  >
-                    <Card className='hover:shadow-md transition-shadow'>
-                      <CardContent className='p-4'>
-                        <div className='flex items-center gap-3'>
-                          <div className='w-10 h-10 rounded-md bg-amber-50 flex items-center justify-center'>
-                            <span className='text-amber-600 font-semibold'>
-                              {similarJob.division.charAt(0)}
-                            </span>
-                          </div>
-                          <div className='flex-1'>
-                            <h3 className='font-medium'>
-                              {similarJob.division}
-                            </h3>
-                            <div className='flex items-center gap-4 text-sm text-gray-500 mt-1'>
-                              <span className='flex items-center gap-1'>
-                                <MapPin className='h-3 w-3' />
-                                {similarJob.location ||
-                                  workplaceTypeLabels[
-                                    similarJob.workplace_type
-                                  ]}
-                              </span>
-                              <span className='flex items-center gap-1'>
-                                <Clock className='h-3 w-3' />
-                                {jobTypeLabels[similarJob.job_type]}
-                              </span>
-                            </div>
-                          </div>
-                          {similarJob.disability_friendly && (
-                            <Badge
-                              variant='outline'
-                              className='text-xs font-normal text-green-600 border-green-200 bg-green-50'
-                            >
-                              <Accessibility className='h-3 w-3 mr-1' />
-                              Accessible
-                            </Badge>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )} */}
           </div>
 
           {/* Sidebar */}
@@ -653,7 +621,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                   />
                 </div>
 
-                <h3 className='font-medium mb-3'>Required</h3>
+                <h3 className='font-medium mb-3'>{t('jobInfo.required')}</h3>
                 <ul className='space-y-2 mb-6'>
                   {qualifications.slice(0, 3).map((qualification, index) => (
                     <li key={index} className='flex items-start gap-2 text-sm'>
@@ -669,11 +637,10 @@ export default function JobDetailSection({ id }: { id: string }) {
             <Card>
               <CardContent className='p-6'>
                 <h3 className='text-lg font-semibold mb-4'>
-                  Apply for this position
+                  {t('sidebar.applyPosition')}
                 </h3>
                 <p className='text-gray-600 mb-6'>
-                  Submit your application now to be considered for this role.
-                  The hiring process typically takes 1-2 weeks.
+                  {t('sidebar.applicationInfo')}
                 </p>
                 <Button
                   onClick={() => {
@@ -681,11 +648,10 @@ export default function JobDetailSection({ id }: { id: string }) {
                   }}
                   className='w-full bg-blue-500 hover:bg-blue-600'
                 >
-                  Apply Now
+                  {t('sidebar.applyNow')}
                 </Button>
                 <p className='text-sm text-gray-500 mt-3'>
-                  Need accommodations during the application process? Please
-                  contact us at {data?.email}.
+                  {t('sidebar.accommodationNote', { email: data?.email ?? '' })}
                 </p>
               </CardContent>
             </Card>
@@ -696,13 +662,15 @@ export default function JobDetailSection({ id }: { id: string }) {
                 <div className='flex items-center gap-2 mb-4'>
                   <Accessibility className='h-5 w-5 text-green-600' />
                   <h3 className='text-lg font-semibold'>
-                    Accessibility Highlights
+                    {t('sidebar.accessibilityHighlights')}
                   </h3>
                 </div>
 
                 <div className='space-y-3'>
                   <div className='flex justify-between items-center'>
-                    <span className='text-gray-600'>Accessibility Level</span>
+                    <span className='text-gray-600'>
+                      {t('accessibility.accessibilityLevel')}
+                    </span>
                     <Badge className='font-normal bg-green-100 text-green-800 hover:bg-green-200'>
                       {data?.accessibility_level
                         ? accessibilityLevelLabels[data?.accessibility_level]
@@ -712,7 +680,7 @@ export default function JobDetailSection({ id }: { id: string }) {
 
                   <div className='pt-2'>
                     <p className='text-gray-600 font-medium mb-2'>
-                      Key Accommodations:
+                      {t('sidebar.keyAccommodations')}
                     </p>
                     <ul className='space-y-1'>
                       {(data?.accommodations || [])
@@ -737,7 +705,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                     href='#'
                     className='text-blue-600 hover:text-blue-800 text-sm font-medium'
                   >
-                    View all accessibility features
+                    {t('sidebar.viewAll')}
                   </Link>
                 </div>
               </CardContent>
@@ -746,22 +714,30 @@ export default function JobDetailSection({ id }: { id: string }) {
             {/* Job insights */}
             <Card>
               <CardContent className='p-6'>
-                <h3 className='text-lg font-semibold mb-4'>Job Insights</h3>
+                <h3 className='text-lg font-semibold mb-4'>
+                  {t('sidebar.jobInsights')}
+                </h3>
                 <div className='space-y-4'>
                   <div className='flex justify-between items-center'>
-                    <span className='text-gray-600'>Posted</span>
+                    <span className='text-gray-600'>{t('sidebar.posted')}</span>
                     <span className='font-medium'>
-                      {Math.floor(Math.random() * 7) + 1} days ago
+                      {t('sidebar.daysAgo', {
+                        days: Math.floor(Math.random() * 7) + 1,
+                      })}
                     </span>
                   </div>
                   <div className='flex justify-between items-center'>
-                    <span className='text-gray-600'>Applications</span>
+                    <span className='text-gray-600'>
+                      {t('sidebar.applications')}
+                    </span>
                     <span className='font-medium'>
                       {Math.floor(Math.random() * 50) + 5}
                     </span>
                   </div>
                   <div className='flex justify-between items-center'>
-                    <span className='text-gray-600'>Interviews</span>
+                    <span className='text-gray-600'>
+                      {t('sidebar.interviews')}
+                    </span>
                     <span className='font-medium'>
                       {Math.floor(Math.random() * 10) + 1}
                     </span>

@@ -1,6 +1,7 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { Clock, ExternalLink, Star, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import api from '@/lib/axios';
@@ -15,6 +16,8 @@ import {
 } from '@/types/response/ai';
 
 const CoursePage = () => {
+  const t = useTranslations('Courses.page'); // Add translation hook for page content
+
   const { user } = useAuthStore();
   const { data, isPending } = useQuery({
     queryKey: ['courses'],
@@ -51,7 +54,7 @@ const CoursePage = () => {
       {/* <div className='flex items-center mb-8'>
         <GraduationCap className='w-8 h-8 text-blue-600 mr-3' />
         <h1 className='text-3xl font-bold text-gray-900'>
-          Course Recommendations
+          {t('title')}
         </h1>
       </div> */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
@@ -61,7 +64,7 @@ const CoursePage = () => {
           ))
         ) : (
           <div className='col-span-full text-center text-gray-500'>
-            No courses found
+            {t('noCoursesFound')}
           </div>
         )}
       </div>
@@ -72,6 +75,8 @@ const CoursePage = () => {
 export default CoursePage;
 
 const LevelBadge: React.FC<{ level: string }> = ({ level }) => {
+  const t = useTranslations('Courses.levels'); // Add translation hook for levels
+
   const getBadgeColor = (level: string) => {
     switch (level.toLowerCase()) {
       case 'beginner':
@@ -85,22 +90,38 @@ const LevelBadge: React.FC<{ level: string }> = ({ level }) => {
     }
   };
 
+  // Translate the level based on its value
+  const getTranslatedLevel = (level: string) => {
+    switch (level.toLowerCase()) {
+      case 'beginner':
+        return t('beginner');
+      case 'intermediate':
+        return t('intermediate');
+      case 'advanced':
+        return t('advanced');
+      default:
+        return level;
+    }
+  };
+
   return (
     <span
       className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border ${getBadgeColor(
         level
       )}`}
     >
-      {level}
+      {getTranslatedLevel(level)}
     </span>
   );
 };
 
 const CourseCard: React.FC<{ course: CourseRecommendation }> = ({ course }) => {
+  const t = useTranslations('Courses.card'); // Add translation hook for card content
+
   // Mock data for demonstration - you can replace these with actual data from your API
-  const duration = '6-8 weeks';
+  const duration = t('duration');
   const rating = 4.5;
-  const studentsEnrolled = '10.5k';
+  const studentsEnrolled = t('studentsEnrolled');
 
   return (
     <div className='bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border border-gray-100'>
@@ -143,7 +164,7 @@ const CourseCard: React.FC<{ course: CourseRecommendation }> = ({ course }) => {
             rel='noopener noreferrer'
             className='inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-300'
           >
-            View Course <ExternalLink className='ml-2 w-4 h-4' />
+            {t('viewCourse')} <ExternalLink className='ml-2 w-4 h-4' />
           </a>
         </div>
       </div>

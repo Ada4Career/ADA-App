@@ -1,6 +1,7 @@
 'use client';
 
 import { Search, X } from 'lucide-react';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import type React from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -31,6 +32,9 @@ interface JobFiltersProps {
 }
 
 export default function JobFilters({ filters, setFilters }: JobFiltersProps) {
+  const t = useTranslations('Jobs.Filters'); // Add translation hook
+  const tJobTypes = useTranslations('Jobs.Card.jobTypes'); // Add job types translation hook
+
   const resetFilters = () => {
     setFilters({
       division: '',
@@ -45,7 +49,7 @@ export default function JobFilters({ filters, setFilters }: JobFiltersProps) {
         <div className='relative'>
           <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400' />
           <Input
-            placeholder='Search by division'
+            placeholder={t('searchByDivision')}
             className='pl-9'
             value={filters.division}
             onChange={(e) =>
@@ -61,15 +65,17 @@ export default function JobFilters({ filters, setFilters }: JobFiltersProps) {
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder='Job Type' />
+            <SelectValue placeholder={t('jobType')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Job Types</SelectItem>
-            <SelectItem value='full_time'>Full-time</SelectItem>
-            <SelectItem value='part_time'>Part-time</SelectItem>
-            <SelectItem value='contract'>Contract</SelectItem>
-            <SelectItem value='fixed_term'>Fixed-term</SelectItem>
-            <SelectItem value='casual'>Casual</SelectItem>
+            <SelectItem value='all'>{t('allJobTypes')}</SelectItem>
+            <SelectItem value='full_time'>{tJobTypes('full_time')}</SelectItem>
+            <SelectItem value='part_time'>{tJobTypes('part_time')}</SelectItem>
+            <SelectItem value='contract'>{tJobTypes('contract')}</SelectItem>
+            <SelectItem value='fixed_term'>
+              {tJobTypes('fixed_term')}
+            </SelectItem>
+            <SelectItem value='casual'>{tJobTypes('casual')}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -83,13 +89,19 @@ export default function JobFilters({ filters, setFilters }: JobFiltersProps) {
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder='Workplace Type' />
+            <SelectValue placeholder={t('workplaceType')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Workplace Types</SelectItem>
-            <SelectItem value='remote'>Remote</SelectItem>
-            <SelectItem value='hybrid'>Hybrid</SelectItem>
-            <SelectItem value='on_site'>On-site</SelectItem>
+            <SelectItem value='all'>{t('allWorkplaceTypes')}</SelectItem>
+            <SelectItem value='remote'>
+              {useTranslations('Jobs.Card.workplaceTypes')('remote')}
+            </SelectItem>
+            <SelectItem value='hybrid'>
+              {useTranslations('Jobs.Card.workplaceTypes')('hybrid')}
+            </SelectItem>
+            <SelectItem value='on_site'>
+              {useTranslations('Jobs.Card.workplaceTypes')('on_site')}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -105,7 +117,7 @@ export default function JobFilters({ filters, setFilters }: JobFiltersProps) {
             className='flex items-center gap-1'
           >
             <X className='h-4 w-4' />
-            Clear Filters
+            {t('clearFilters')}
           </Button>
         </div>
       )}

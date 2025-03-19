@@ -1,5 +1,6 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import api from '@/lib/axios';
@@ -27,6 +28,8 @@ import {
 } from '@/types/response/job';
 
 const HomePage = () => {
+  const t = useTranslations('Jobs.HomePage'); // Add translation hook
+
   const { data, isPending } = useQuery<JobPostingDataExtended[]>({
     queryKey: ['jobs'],
     queryFn: async () => {
@@ -114,7 +117,7 @@ const HomePage = () => {
               ))}
             </>
           ) : (
-            <div>No Job Vacancies</div>
+            <div>{t('noJobVacancies')}</div>
           )}
         </div>
       </div>

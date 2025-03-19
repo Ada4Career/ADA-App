@@ -3,6 +3,7 @@
 import { BookOpen, Home, MessageCircle, TreeDeciduous } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 
 import AdaLogo from '@/components/ada-logo';
 import {
@@ -14,36 +15,38 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-const SIDEBAR_ITEMS = [
-  {
-    icon: <Home className='h-12 w-12' />,
-    url: '/app/home/jobs',
-    label: 'Home',
-  },
-  {
-    icon: <BookOpen className='h-12 w-12' />,
-    url: '/app/home/courses',
-    label: 'Courses',
-  },
-  // {
-  //   icon: <Briefcase className='h-12 w-12' />,
-  //   url: '/app/home/jobs',
-  //   label: 'Job Matching',
-  // },
-  {
-    icon: <MessageCircle className='h-12 w-12' />,
-    url: '/app/home/chat',
-    label: 'AIDA Chat',
-  },
-  {
-    icon: <TreeDeciduous className='h-12 w-12' />,
-    url: '/app/home/career-tree',
-    label: 'Career Tree',
-  },
-];
-
 export function AppSidebar() {
   const pathname = usePathname();
+  const t = useTranslations('Dashboard.Sidebar'); // Add translation hook
+
+  // Updated sidebar items with translation function calls
+  const SIDEBAR_ITEMS = [
+    {
+      icon: <Home className='h-12 w-12' />,
+      url: '/app/home/jobs',
+      label: t('home'),
+    },
+    {
+      icon: <BookOpen className='h-12 w-12' />,
+      url: '/app/home/courses',
+      label: t('courses'),
+    },
+    // {
+    //   icon: <Briefcase className='h-12 w-12' />,
+    //   url: '/app/home/jobs',
+    //   label: 'Job Matching',
+    // },
+    {
+      icon: <MessageCircle className='h-12 w-12' />,
+      url: '/app/home/chat',
+      label: t('aidaChat'),
+    },
+    {
+      icon: <TreeDeciduous className='h-12 w-12' />,
+      url: '/app/home/career-tree',
+      label: t('careerTree'),
+    },
+  ];
 
   return (
     <Sidebar className='border-r'>
@@ -60,7 +63,7 @@ export function AppSidebar() {
             const isActive = pathname === url || pathname.startsWith(`${url}/`);
 
             return (
-              <SidebarMenuItem key={label}>
+              <SidebarMenuItem key={url}>
                 <SidebarMenuButton asChild isActive={isActive}>
                   <Link
                     href={url}
