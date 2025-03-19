@@ -74,6 +74,51 @@
           "other": "Lainnya"
         }
       }
+    },
+    "JobSeeker": {
+      "title": "Membuat Curriculum Vitae",
+      "desc": "Kami membantu Anda membuat Curriculum Vitae",
+      "yourProgress": "Kemajuan Anda",
+      "next": "Selanjutnya",
+      "submit": "Kirim",
+      "previous": "Sebelumnya",
+      "errorMessage": "Harap isi semua kolom dengan benar.",
+      "successMessage": "Data berhasil disimpan",
+      "PersonalInfo": {
+        "fullName": "Nama Lengkap *",
+        "fullNamePlaceholder": "Masukkan nama lengkap Anda",
+        "age": "Usia *",
+        "agePlaceholder": "19",
+        "gender": "Jenis Kelamin *",
+        "genderPlaceholder": "Pilih jenis kelamin",
+        "genderMale": "Laki-laki",
+        "genderFemale": "Perempuan",
+        "genderOther": "Lainnya",
+        "address": "Lokasi Tempat Tinggal *",
+        "addressPlaceholder": "Bandung, Indonesia"
+      },
+      "SkillExperience": {
+        "skills": "Keahlian *",
+        "skillsPlaceholder": "Ketik keahlian dan tekan Enter",
+        "experience": "Pengalaman *",
+        "experiencePlaceholder": "Pengalaman Anda..."
+      },
+      "Expectation": {
+        "expectation": "Harapan (opsional)",
+        "expectationPlaceholder": "Ceritakan harapan Anda"
+      }
+    },
+    "CVResult": {
+      "title": "Resume AI-Generated Anda",
+      "subtitle": "Disesuaikan untuk pengembangan karir disabilitas dan aksesibilitas",
+      "generating": "Menghasilkan resume Anda",
+      "generatingMessage": "AI kami sedang menganalisis profil Anda dan membuat resume yang disesuaikan...",
+      "error": "Kesalahan",
+      "goBack": "Kembali dan Coba Lagi",
+      "download": "Unduh Resume",
+      "continue": "Lanjutkan ke Dashboard",
+      "careerSuggestions": "Saran Karir",
+      "bestMatch": "Cocok terbaik untuk profil Anda"
     }
   }
 }

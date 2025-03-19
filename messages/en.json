@@ -74,6 +74,51 @@
       "whatType": "What type of disability do you have?",
       "impairmentPlaceholder": "Enter your specific impairment type",
       "detailsPlaceholder": "Describe your condition and any specific needs or accommodations"
+    },
+    "JobSeeker": {
+      "title": "Making a Curriculum Vitae",
+      "desc": "We help you make a Curriculum Vitae",
+      "yourProgress": "Your Progress",
+      "next": "Next",
+      "submit": "Submit",
+      "previous": "Previous",
+      "errorMessage": "Please fill out all fields correctly.",
+      "successMessage": "Data saved successfully",
+      "PersonalInfo": {
+        "fullName": "Full Name *",
+        "fullNamePlaceholder": "Enter your full name",
+        "age": "Age *",
+        "agePlaceholder": "19",
+        "gender": "Gender *",
+        "genderPlaceholder": "Select gender",
+        "genderMale": "Male",
+        "genderFemale": "Female",
+        "genderOther": "Other",
+        "address": "Residence Location *",
+        "addressPlaceholder": "Bandung, Indonesia"
+      },
+      "SkillExperience": {
+        "skills": "Skills *",
+        "skillsPlaceholder": "Type a skill and press Enter",
+        "experience": "Experience *",
+        "experiencePlaceholder": "Your experiences..."
+      },
+      "Expectation": {
+        "expectation": "Expectation (optional)",
+        "expectationPlaceholder": "Tell us your expectations"
+      }
+    },
+    "CVResult": {
+      "title": "Your AI-Generated Resume",
+      "subtitle": "Tailored for disability career development and accessibility",
+      "generating": "Generating your resume",
+      "generatingMessage": "Our AI is analyzing your profile and creating a tailored resume...",
+      "error": "Error",
+      "goBack": "Go Back and Try Again",
+      "download": "Download Resume",
+      "continue": "Continue to Dashboard",
+      "careerSuggestions": "Career Suggestions",
+      "bestMatch": "Best match for your profile"
     }
   }
 }
