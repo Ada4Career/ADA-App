@@ -1,0 +1,79 @@
+{
+  "LandingPage": {
+    "signIn": "Sign In",
+    "register": "Register",
+    "placeholderEmail": "Enter your email",
+    "rememberMe": "Remember Me",
+    "createAccount": "Create Account",
+    "role": "Role",
+    "selectRole": "Select Role",
+    "terms": "I agree to the Terms of Service and Privacy Policy",
+    "already": "Already have an account?",
+    "notAlready": "Not already have an account?"
+  },
+  "Navbar": {
+    "home": "Home",
+    "products": "Products"
+  },
+  "General": {
+    "jobSeeker": "Job Seeker",
+    "hr": "Human Resources"
+  },
+  "Onboarding": {
+    "Disability": {
+      "Impairments": {
+        "visual": {
+          "lowVision": "Low Vision",
+          "colorBlindness": "Color Blindness",
+          "blindness": "Blindness",
+          "other": "Other"
+        },
+        "hearing": {
+          "moderateHearingLoss": "Moderate Hearing Loss",
+          "severeHearingLoss": "Severe Hearing Loss",
+          "deaf": "Deaf",
+          "other": "Other"
+        },
+        "mute": {
+          "moderateSpeechImpairment": "Moderate Speech Impairment",
+          "severeSpeechImpairment": "Severe Speech Impairment",
+          "nonVerbal": "Non-verbal",
+          "other": "Other"
+        },
+        "motoric": {
+          "limitedMobility": "Limited Mobility",
+          "fineMotorControlIssues": "Fine Motor Control Issues",
+          "coordinationIssues": "Coordination Issues",
+          "other": "Other"
+        },
+        "mental": {
+          "anxietyDepression": "Anxiety/Depression",
+          "adhdAutism": "ADHD/Autism",
+          "ptsdOcd": "PTSD/OCD",
+          "other": "Other"
+        }
+      },
+      "title": "Disability Questionnaire",
+      "desc": "Please provide information about your needs to help us serve you better.",
+      "yourProgress": "Your Progress",
+      "selectType": "Please select your disability type(s):",
+      "visual": "Visual",
+      "hearing": "Hearing",
+      "mute": "Mute",
+      "motoric": "Motoric",
+      "mental": "Mental or Intellectual",
+      "details": "Details",
+      "step": "Step {currentStep} of {totalStep}",
+      "selectImpairment": "Please select your type of impairment:",
+      "specifyImpairment": "Please specify your impairment type:",
+      "additionalDetails": "Please provide any additional details (optional):",
+      "previous": "Previous",
+      "next": "Next",
+      "submit": "Submit",
+      "haveDisability": "Do you have any disabilities?",
+      "whatType": "What type of disability do you have?",
+      "impairmentPlaceholder": "Enter your specific impairment type",
+      "detailsPlaceholder": "Describe your condition and any specific needs or accommodations"
+    }
+  }
+}

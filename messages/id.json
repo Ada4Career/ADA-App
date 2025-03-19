@@ -1,0 +1,79 @@
+{
+  "LandingPage": {
+    "signIn": "Masuk",
+    "register": "Daftar",
+    "placeholderEmail": "Masukkan email Anda",
+    "rememberMe": "Ingat Saya",
+    "createAccount": "Buat Akun",
+    "role": "Peran",
+    "selectRole": "Pilih Peran",
+    "terms": "Saya menyetujui Ketentuan Layanan dan Kebijakan Privasi",
+    "already": "Sudah memiliki akun?",
+    "notAlready": "Belum memiliki akun?"
+  },
+  "Navbar": {
+    "home": "Beranda",
+    "products": "Produk"
+  },
+  "General": {
+    "jobSeeker": "Pencari Kerja",
+    "hr": "Sumber Daya Manusia"
+  },
+  "Onboarding": {
+    "Disability": {
+      "title": "Kuesioner Disabilitas",
+      "desc": "Harap berikan informasi tentang kebutuhan Anda untuk membantu kami melayani Anda dengan lebih baik.",
+      "yourProgress": "Kemajuan Anda",
+      "selectType": "Silakan pilih jenis disabilitas Anda:",
+      "visual": "Penglihatan",
+      "hearing": "Pendengaran",
+      "mute": "Bisu",
+      "motoric": "Motorik",
+      "mental": "Mental atau Intelektual",
+      "details": "Detail",
+      "step": "Langkah {currentStep} dari {totalStep}",
+      "selectImpairment": "Silakan pilih jenis gangguan Anda:",
+      "specifyImpairment": "Silakan tentukan jenis gangguan Anda:",
+      "additionalDetails": "Silakan berikan detail tambahan (opsional):",
+      "previous": "Sebelumnya",
+      "next": "Selanjutnya",
+      "submit": "Kirim",
+      "haveDisability": "Apakah Anda memiliki disabilitas?",
+      "whatType": "Jenis disabilitas apa yang Anda miliki?",
+      "impairmentPlaceholder": "Masukkan jenis gangguan spesifik Anda",
+      "detailsPlaceholder": "Jelaskan kondisi Anda dan kebutuhan atau akomodasi khusus",
+      "Impairments": {
+        "visual": {
+          "lowVision": "Penglihatan Rendah",
+          "colorBlindness": "Buta Warna",
+          "blindness": "Kebutaan",
+          "other": "Lainnya"
+        },
+        "hearing": {
+          "moderateHearingLoss": "Gangguan Pendengaran Sedang",
+          "severeHearingLoss": "Gangguan Pendengaran Parah",
+          "deaf": "Tuli",
+          "other": "Lainnya"
+        },
+        "mute": {
+          "moderateSpeechImpairment": "Gangguan Bicara Sedang",
+          "severeSpeechImpairment": "Gangguan Bicara Parah",
+          "nonVerbal": "Non-verbal",
+          "other": "Lainnya"
+        },
+        "motoric": {
+          "limitedMobility": "Mobilitas Terbatas",
+          "fineMotorControlIssues": "Masalah Kontrol Motorik Halus",
+          "coordinationIssues": "Masalah Koordinasi",
+          "other": "Lainnya"
+        },
+        "mental": {
+          "anxietyDepression": "Kecemasan/Depresi",
+          "adhdAutism": "ADHD/Autisme",
+          "ptsdOcd": "PTSD/OCD",
+          "other": "Lainnya"
+        }
+      }
+    }
+  }
+}

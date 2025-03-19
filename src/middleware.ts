@@ -1,8 +1,11 @@
 // middleware.ts
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import createIntlMiddleware from 'next-intl/middleware';
 
 import { API_BASE_URL } from '@/constant/config';
+
+import { routing } from './i18n/routing';
 
 // Route constants
 const LOGIN_ROUTE = '/?auth=login';
@@ -28,12 +31,21 @@ const routeRoleMap = {
   '/app/profile': 'authenticated',
 };
 
-export async function middleware(request: NextRequest) {
+// Create the internationalization middleware
+const intlMiddleware = createIntlMiddleware(routing);
+
+// Check if a path is a localized path
+function isLocalizedPath(path: string, locales: string[]) {
+  return locales.some((locale) => path.startsWith(`/${locale}/`));
+}
+
+async function authMiddleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const redirectParam = request.nextUrl.searchParams.get('redirect');
   const token = request.cookies.get('ada4career-token')?.value;
   let routeRole = 'authenticated';
 
+  // Determine the route role
   for (const [pattern, role] of Object.entries(routeRoleMap)) {
     if (path === pattern || path.startsWith(`${pattern}/`)) {
       routeRole = role;
@@ -41,13 +53,19 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Check if the user is authenticated
   if (!token) {
     if (routeRole === 'public' || routeRole === 'optional') {
       return NextResponse.next();
     }
 
+    // Redirect to login page
     const loginUrl = new URL(LOGIN_ROUTE, request.url);
-    loginUrl.searchParams.set('redirect', redirectParam || path);
+    if (redirectParam) {
+      loginUrl.searchParams.set('redirect', redirectParam);
+    } else if (path !== LOGIN_ROUTE) {
+      loginUrl.searchParams.set('redirect', path);
+    }
     return NextResponse.redirect(loginUrl);
   }
 
@@ -56,7 +74,7 @@ export async function middleware(request: NextRequest) {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    // * Token Valid, Ada User
+    // Invalid token
     if (!userResponse.ok) {
       const response = NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
       response.cookies.delete('ada4career-token');
@@ -84,7 +102,9 @@ export async function middleware(request: NextRequest) {
       path: '/',
     });
 
+    // Handle public routes
     if (routeRole === 'public') {
+      // Check if user needs to complete onboarding
       if (
         user.gender != 'male' &&
         user.gender != 'female' &&
@@ -92,6 +112,7 @@ export async function middleware(request: NextRequest) {
       ) {
         return NextResponse.redirect(new URL('/onboarding', request.url));
       } else {
+        // Redirect to appropriate dashboard
         return NextResponse.redirect(
           new URL(
             userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE,
@@ -101,12 +122,12 @@ export async function middleware(request: NextRequest) {
       }
     }
 
+    // Allow access to authenticated routes
     if (routeRole === 'authenticated') {
       return response;
     }
 
-    // masuk ke onboarding, tapi udah onboarding
-    // alasan cek gender doang, karena form gender itu setelah disability, kalo gender udah, disability pasti udah
+    // Handle onboarding routes
     if (routeRole === 'onboarding') {
       if (
         user.gender == 'male' ||
@@ -123,6 +144,7 @@ export async function middleware(request: NextRequest) {
       }
     }
 
+    // Handle role-specific routes
     if (
       (routeRole === 'jobseeker' && userRole !== 'jobseeker') ||
       (routeRole === 'human_resources' && userRole !== 'human_resources')
@@ -153,6 +175,38 @@ export async function middleware(request: NextRequest) {
   }
 }
 
+// Combine both middlewares
+export default async function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+
+  // Skip certain paths from all middleware
+  if (
+    path.includes('.') || // Static files
+    path.startsWith('/_next') || // Next.js internal routes
+    path.startsWith('/api') || // API routes
+    path.startsWith('/trpc') || // tRPC routes
+    path.startsWith('/_vercel') // Vercel internal routes
+  ) {
+    return NextResponse.next();
+  }
+
+  // Handle internationalization first
+  // Only process paths that aren't already localized
+  if (!isLocalizedPath(path, [...routing.locales])) {
+    // Run the intl middleware
+    const intlResult = await intlMiddleware(request);
+
+    // If the intl middleware redirected, return that response
+    if (intlResult.status !== 200) {
+      return intlResult;
+    }
+  }
+
+  // Run the auth middleware
+  return authMiddleware(request);
+}
+
 export const config = {
+  // Match all pathnames except for ones containing a dot (e.g. favicon.ico)
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
