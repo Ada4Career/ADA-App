@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -12,7 +13,6 @@ import api from '@/lib/axios';
 import { setToken } from '@/lib/cookies';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -22,7 +22,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -96,6 +95,9 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
     },
   });
 
+  const t = useTranslations('LandingPage');
+  const tg = useTranslations('General');
+
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     await mutateAsync(values);
     // Handle registration logic here
@@ -136,18 +138,22 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
             name='role'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Role</FormLabel>
+                <FormLabel>{t('role')}</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <SelectTrigger className='w-full border-gradient-ms'>
-                      <SelectValue placeholder='Select Role' />
+                      <SelectValue placeholder={t('selectRole')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='jobseeker'>Job Seeker</SelectItem>
-                      <SelectItem value='human_resources'>HR</SelectItem>
+                      <SelectItem value='jobseeker'>
+                        {tg('jobSeeker')}
+                      </SelectItem>
+                      <SelectItem value='human_resources'>
+                        {tg('hr')}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -156,7 +162,7 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
             )}
           />
 
-          <div className='flex items-center space-x-2'>
+          {/* <div className='flex items-center space-x-2'>
             <Checkbox id='terms' required />
             <Label htmlFor='terms' className='text-sm font-normal'>
               I agree to the{' '}
@@ -176,23 +182,21 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
                 Privacy Policy
               </Button>
             </Label>
-          </div>
+          </div> */}
           <Button type='submit' className='w-full' disabled={isPending}>
-            {isPending ? 'Creating account...' : 'Create Account'}
+            {isPending ? 'Creating account...' : t('createAccount')}
           </Button>
         </form>
       </Form>
       <div className='mt-4 text-center'>
-        <p className='text-sm text-muted-foreground mb-2'>
-          Already have an account?
-        </p>
+        <p className='text-sm text-muted-foreground mb-2'>{t('already')}</p>
         <Button
           type='button'
           variant='link'
           onClick={onLoginClick}
           className='w-full'
         >
-          Sign In
+          {t('signIn')}
         </Button>
       </div>
     </div>

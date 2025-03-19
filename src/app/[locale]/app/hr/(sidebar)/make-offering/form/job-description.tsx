@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 
-import { JobPostingSectionProps } from '@/app/app/hr/(sidebar)/make-offering/form/form.types';
+import { JobPostingSectionProps } from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/form.types';
 
 const JobDescription = ({ form }: JobPostingSectionProps) => {
   return (

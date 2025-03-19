@@ -5,6 +5,8 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { JobPostingDataExtended } from '@/types/response/job';
+
 const ongoingOfferings = [
   {
     id: 3,
@@ -25,10 +27,15 @@ const ongoingOfferings = [
     applicants: 3,
   },
 ];
-const OngoingOfferSection = () => {
+
+type Props = {
+  offerings: JobPostingDataExtended[];
+};
+
+const OngoingOfferSection = ({ offerings }: Props) => {
   return (
     <div className='space-y-4'>
-      {ongoingOfferings.map((offering) => (
+      {offerings.map((offering) => (
         <div
           key={offering.id}
           className='flex flex-col gap-4 rounded-lg border bg-white p-4 shadow-sm transition-all hover:shadow md:flex-row md:items-center'
@@ -37,14 +44,14 @@ const OngoingOfferSection = () => {
             <div className='flex h-10 w-10 items-center justify-center overflow-hidden rounded-md border bg-slate-50'>
               <Image
                 src={offering.logo || '/placeholder.svg'}
-                alt={offering.company}
+                alt={offering.company ?? 'Default Image'}
                 width={40}
                 height={40}
                 className='h-10 w-10 object-contain'
               />
             </div>
             <div className='flex-1'>
-              <h4 className='font-semibold'>{offering.title}</h4>
+              <h4 className='font-semibold'>{offering.division}</h4>
               <div className='mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground'>
                 <span>{offering.company}</span>
                 <span className='text-xs'>•</span>
@@ -53,7 +60,7 @@ const OngoingOfferSection = () => {
                   {offering.stage}
                 </Badge>
               </div>
-              <Badge className='mt-2'>{offering.applicants} applied</Badge>
+              <Badge className='mt-2'>{offering.job_type} applied</Badge>
             </div>
           </div>
           <div className='flex items-center gap-2 self-end md:self-center'>

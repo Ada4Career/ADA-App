@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { JobPostingSectionProps } from '@/app/app/hr/(sidebar)/make-offering/form/form.types';
+import { JobPostingSectionProps } from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/form.types';
 
 const JobDetails = ({ form }: JobPostingSectionProps) => {
   return (

@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Progress } from '@/components/ui/progress';
 
-import BasicInfo from '@/app/app/hr/(sidebar)/make-offering/form/basic-info';
+import BasicInfo from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/basic-info';
 import {
   basicInfoSchema,
   inclusivitySchema,
@@ -22,12 +22,12 @@ import {
   JobPostingFormData,
   jobPostingSchema,
   mediaSchema,
-} from '@/app/app/hr/(sidebar)/make-offering/form/form.types';
-import Inclusivity from '@/app/app/hr/(sidebar)/make-offering/form/inclusivity';
-import JobDescription from '@/app/app/hr/(sidebar)/make-offering/form/job-description';
-import JobDetails from '@/app/app/hr/(sidebar)/make-offering/form/job-details';
-import Media from '@/app/app/hr/(sidebar)/make-offering/form/media';
-import Review from '@/app/app/hr/(sidebar)/make-offering/review';
+} from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/form.types';
+import Inclusivity from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/inclusivity';
+import JobDescription from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/job-description';
+import JobDetails from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/job-details';
+import Media from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/media';
+import Review from '@/app/[locale]/app/hr/(sidebar)/make-offering/review';
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiError } from '@/types/api.types';

@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
-import { JobPostingSectionProps } from '@/app/app/hr/(sidebar)/make-offering/form/form.types';
+import { JobPostingSectionProps } from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/form.types';
 
 const Inclusivity = ({ form }: JobPostingSectionProps) => {
   const [accommodationType, setAccommodationType] = useState('');

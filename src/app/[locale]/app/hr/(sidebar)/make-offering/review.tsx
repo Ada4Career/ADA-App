@@ -1,6 +1,6 @@
 'use client';
 
-import { JobPostingSectionProps } from '@/app/app/hr/(sidebar)/make-offering/form/form.types';
+import { JobPostingSectionProps } from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/form.types';
 
 const Review = ({ form }: JobPostingSectionProps) => {
   const formData = form.getValues();

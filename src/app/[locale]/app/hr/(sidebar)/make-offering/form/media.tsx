@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { JobPostingSectionProps } from '@/app/app/hr/(sidebar)/make-offering/form/form.types';
+import { JobPostingSectionProps } from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/form.types';
 
 const Media = ({ form }: JobPostingSectionProps) => {
   return (

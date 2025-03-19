@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -89,6 +90,8 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
     },
   });
 
+  const t = useTranslations('LandingPage');
+
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     await mutateAsync(values);
   };
@@ -126,16 +129,16 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
           <div className='flex items-center space-x-2'>
             <Checkbox id='remember' />
             <Label htmlFor='remember' className='text-sm font-normal'>
-              Remember me
+              {t('rememberMe')}
             </Label>
           </div>
           <Button type='submit' className='w-full' disabled={isPending}>
-            {isPending ? 'Signing in...' : 'Sign In'}
+            {isPending ? 'Signing in...' : t('signIn')}
           </Button>
 
           <div className='mt-4 text-center'>
             <p className='text-sm text-muted-foreground mb-2'>
-              Don't have an account?
+              {t('notAlready')}
             </p>
             <Button
               type='button'
@@ -143,7 +146,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
               onClick={onRegisterClick}
               className='w-full'
             >
-              Create Account
+              {t('createAccount')}
             </Button>
           </div>
         </form>

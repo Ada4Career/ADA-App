@@ -70,8 +70,8 @@ const JobSeekerFormPage = () => {
         expectations: data.expectation.expectation,
       };
 
-      console.log(personalData);
-      console.log(jobseekerData);
+      // console.log(personalData);
+      // console.log(jobseekerData);
 
       const response = await api.post(
         `${API_BASE_URL}/user/role/${email}`,

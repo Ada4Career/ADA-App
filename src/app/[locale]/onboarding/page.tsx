@@ -6,9 +6,9 @@ import React from 'react';
 
 import api from '@/lib/axios';
 
-import DisabilityTest from '@/app/onboarding/disability/disability-test';
-import HRFormPage from '@/app/onboarding/hr/hr-onboard';
-import JobSeekerFormPage from '@/app/onboarding/jobseeker/jobseeker-onboard';
+import DisabilityTest from '@/app/[locale]/onboarding/disability/disability-test';
+import HRFormPage from '@/app/[locale]/onboarding/hr/hr-onboard';
+import JobSeekerFormPage from '@/app/[locale]/onboarding/jobseeker/jobseeker-onboard';
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiReturn } from '@/types/api.types';
