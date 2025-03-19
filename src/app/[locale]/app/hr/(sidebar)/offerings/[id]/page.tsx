@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OfferingDetailSection from '@/components/features/human-resources/offering-detail-section';
+// import OfferingDetailSection from '@/components/features/human-resources/offering-detail-section';
 
 const OfferingDetailPage = async ({
   params,
@@ -8,7 +8,7 @@ const OfferingDetailPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  return <OfferingDetailSection id={id} />;
+  return <div>{id}</div>;
 };
 
 export default OfferingDetailPage;
