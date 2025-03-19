@@ -1,4 +1,5 @@
 import { Contrast, Droplet, Eye, Moon, Paintbrush, Sun } from 'lucide-react';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 
 import { Button } from '@/components/ui/button';
 
@@ -18,6 +19,8 @@ export function ColorAdjustments({
   settings,
   updateSettings,
 }: ColorAdjustmentsProps) {
+  const t = useTranslations('Accessibility.colors'); // Add translation hook
+
   const toggleSetting = (
     key: keyof Omit<
       typeof settings,
@@ -56,7 +59,7 @@ export function ColorAdjustments({
   return (
     <div className='space-y-4'>
       <div>
-        <h3 className='text-lg font-medium text-gray-900'>Color Adjustments</h3>
+        <h3 className='text-lg font-medium text-gray-900'>{t('title')}</h3>
       </div>
 
       <div className='grid grid-cols-2 gap-2'>
@@ -68,7 +71,7 @@ export function ColorAdjustments({
           aria-pressed={settings.contrast == 'dark'}
         >
           <Moon className='h-4 w-4' />
-          <span>Dark Contrast</span>
+          <span>{t('darkContrast')}</span>
         </Button>
 
         <Button
@@ -79,7 +82,7 @@ export function ColorAdjustments({
           aria-pressed={settings.contrast == 'light'}
         >
           <Sun className='h-4 w-4' />
-          <span>Light Contrast</span>
+          <span>{t('lightContrast')}</span>
         </Button>
 
         <Button
@@ -90,7 +93,7 @@ export function ColorAdjustments({
           aria-pressed={settings.contrast == 'high'}
         >
           <Eye className='h-4 w-4' />
-          <span>High Contrast</span>
+          <span>{t('highContrast')}</span>
         </Button>
 
         <Button
@@ -101,24 +104,8 @@ export function ColorAdjustments({
           aria-pressed={settings.saturation == 'high'}
         >
           <Droplet className='h-4 w-4' />
-          <span>High Saturation</span>
+          <span>{t('highSaturation')}</span>
         </Button>
-
-        {/* <div className='col-span-2 flex h-20 flex-col items-center justify-center rounded-md bg-umrple-500 p-2 text-white'>
-          <span className='text-xs'>Adjust Text Colors</span>
-          <div className='mt-1 flex gap-1'>
-            {colorOptions.map((color) => (
-              <button
-                key={`text-${color}`}
-                className='h-4 w-4 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-1'
-                style={{ backgroundColor: color }}
-                onClick={() => updateSettings('textColor', color)}
-                aria-label={`Set text color to ${color}`}
-                aria-pressed={settings.textColor === color}
-              />
-            ))}
-          </div>
-        </div> */}
 
         <Button
           variant={settings.monochrome ? 'default' : 'outline'}
@@ -128,24 +115,8 @@ export function ColorAdjustments({
           aria-pressed={settings.monochrome}
         >
           <Contrast className='h-4 w-4' />
-          <span>Monochrome</span>
+          <span>{t('monochrome')}</span>
         </Button>
-
-        {/* <div className='col-span-2 flex h-20 flex-col items-center justify-center rounded-md border omrder-gray-200 p-2'>
-          <span className='text-xs'>Adjust Title Colors</span>
-          <div className='mt-1 flex gap-1'>
-            {colorOptions.map((color) => (
-              <button
-                key={`title-${color}`}
-                className='h-4 w-4 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-1'
-                style={{ backgroundColor: color }}
-                onClick={() => updateSettings('titleColor', color)}
-                aria-label={`Set title color to ${color}`}
-                aria-pressed={settings.titleColor === color}
-              />
-            ))}
-          </div>
-        </div> */}
 
         <Button
           variant={settings.saturation == 'low' ? 'default' : 'outline'}
@@ -155,24 +126,8 @@ export function ColorAdjustments({
           aria-pressed={settings.saturation == 'low'}
         >
           <Paintbrush className='h-4 w-4' />
-          <span>Low Saturation</span>
+          <span>{t('lowSaturation')}</span>
         </Button>
-
-        {/* <div className='col-span-2 flex h-20 flex-col items-center justify-center rounded-md border omrder-gray-200 p-2'>
-          <span className='text-xs'>Adjust Background Colors</span>
-          <div className='mt-1 flex gap-1'>
-            {colorOptions.map((color) => (
-              <button
-                key={`bg-${color}`}
-                className='h-4 w-4 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-1'
-                style={{ backgroundColor: color }}
-                onClick={() => updateSettings('backgroundColor', color)}
-                aria-label={`Set background color to ${color}`}
-                aria-pressed={settings.backgroundColor === color}
-              />
-            ))}
-          </div>
-        </div> */}
       </div>
     </div>
   );

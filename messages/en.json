@@ -267,5 +267,50 @@
       "intermediate": "Intermediate",
       "advanced": "Advanced"
     }
+  },
+  "Accessibility": {
+    "widget": {
+      "openSettings": "Open accessibility settings",
+      "title": "Accessibility Access",
+      "reset": "Reset",
+      "readGuidelines": "Read our Accessibility Statements & Guidelines"
+    },
+    "profiles": {
+      "seizeSafe": "Seize Safe Profile",
+      "visionImpaired": "Vision Impaired Profile",
+      "adhd": "ADHD",
+      "cognitiveDisability": "Cognitive Disability Profile"
+    },
+    "orientation": {
+      "title": "Orientation Adjustments",
+      "hideImages": "Hide Images",
+      "readMode": "Read Mode",
+      "bigBlackCursor": "Big Black Cursor",
+      "bigWhiteCursor": "Big White Cursor"
+    },
+    "colors": {
+      "title": "Color Adjustments",
+      "darkContrast": "Dark Contrast",
+      "lightContrast": "Light Contrast",
+      "highContrast": "High Contrast",
+      "highSaturation": "High Saturation",
+      "monochrome": "Monochrome",
+      "lowSaturation": "Low Saturation"
+    },
+    "content": {
+      "title": "Content Adjustments",
+      "contentScaling": "Content Scaling",
+      "default": "Default",
+      "large": "Large",
+      "larger": "Larger",
+      "readableFont": "Readable Font",
+      "highlightTitles": "Highlight Titles",
+      "highlightLinks": "Highlight Links",
+      "highlightHover": "Highlight Hover",
+      "alignCenter": "Align Center",
+      "alignLeft": "Align Left",
+      "alignRight": "Align Right",
+      "alignJustify": "Align Justify"
+    }
   }
 }

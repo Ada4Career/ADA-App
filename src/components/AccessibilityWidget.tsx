@@ -1,5 +1,6 @@
 'use client';
 import { PersonStanding, RefreshCcw } from 'lucide-react';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import { AccessibilityFooter } from '@/components/accessiblity-widget/AccessibilityFooter';
@@ -188,6 +189,8 @@ const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
 };
 
 const AccesibilityWidget = () => {
+  const t = useTranslations('Accessibility.widget'); // Add translation hook
+
   const { settings, updateSettings, resetSettings } = useAccessibilityStore();
 
   // Function to handle profile changes
@@ -264,8 +267,8 @@ const AccesibilityWidget = () => {
       <PopoverTrigger
         tabIndex={0}
         aria-description='Accessibility Widget'
-        className='fixed  bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'
-        aria-label='Accessibility options'
+        className='fixed bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'
+        aria-label={t('openSettings')}
       >
         <PersonStanding className='w-8 h-8 md:w-10 md:h-10' />
       </PopoverTrigger>
@@ -274,12 +277,10 @@ const AccesibilityWidget = () => {
         side='top'
         align='end'
       >
-        {/* <div className='sticky top-0 z-10 bg-white dark:bg-gray-800 border-b'>
-        </div> */}
         <div className='px-6 py-4 border-b-2 flex items-center justify-between'>
           <AccessibilityHeader />
           <Button onClick={() => resetSettings()}>
-            Reset <RefreshCcw />
+            {t('reset')} <RefreshCcw />
           </Button>
         </div>
 

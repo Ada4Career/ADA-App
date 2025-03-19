@@ -9,6 +9,7 @@ import {
   Type,
   ZoomIn,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -33,6 +34,8 @@ export function ContentAdjustments({
   settings,
   updateSettings,
 }: ContentAdjustmentsProps) {
+  const t = useTranslations('Accessibility.content'); // Add translation hook
+
   const toggleBooleanSetting = (
     key: keyof Pick<
       typeof settings,
@@ -45,16 +48,14 @@ export function ContentAdjustments({
   return (
     <div className='space-y-4'>
       <div>
-        <h3 className='text-lg font-medium text-gray-900'>
-          Content Adjustments
-        </h3>
+        <h3 className='text-lg font-medium text-gray-900'>{t('title')}</h3>
       </div>
 
       <div className='space-y-4'>
         <div className='rounded-md border border-gray-200 p-4'>
           <div className='mb-4 flex items-center'>
             <ZoomIn className='mr-2 h-4 w-4' />
-            <span className='font-medium'>Content Scaling</span>
+            <span className='font-medium'>{t('contentScaling')}</span>
           </div>
           <RadioGroup
             value={settings.contentScaling}
@@ -70,7 +71,7 @@ export function ContentAdjustments({
                 className='text-purple-600'
               />
               <Label htmlFor='content-default' className='text-sm'>
-                Default
+                {t('default')}
               </Label>
             </div>
             <div className='flex items-center space-x-2'>
@@ -80,7 +81,7 @@ export function ContentAdjustments({
                 className='text-purple-600'
               />
               <Label htmlFor='content-large' className='text-sm'>
-                Large
+                {t('large')}
               </Label>
             </div>
             <div className='flex items-center space-x-2'>
@@ -90,7 +91,7 @@ export function ContentAdjustments({
                 className='text-purple-600'
               />
               <Label htmlFor='content-larger' className='text-sm'>
-                Larger
+                {t('larger')}
               </Label>
             </div>
           </RadioGroup>
@@ -105,7 +106,7 @@ export function ContentAdjustments({
             aria-pressed={settings.readableFont}
           >
             <Type className='h-4 w-4' />
-            <span>Readable Font</span>
+            <span>{t('readableFont')}</span>
           </Button>
 
           <Button
@@ -116,7 +117,7 @@ export function ContentAdjustments({
             aria-pressed={settings.highlightTitles}
           >
             <Heading className='h-4 w-4' />
-            <span>Highlight Titles</span>
+            <span>{t('highlightTitles')}</span>
           </Button>
 
           <Button
@@ -127,7 +128,7 @@ export function ContentAdjustments({
             aria-pressed={settings.highlightLinks}
           >
             <Link className='h-4 w-4' />
-            <span>Highlight Links</span>
+            <span>{t('highlightLinks')}</span>
           </Button>
 
           <Button
@@ -138,52 +139,9 @@ export function ContentAdjustments({
             aria-pressed={settings.highlightHover}
           >
             <MousePointerClick className='h-4 w-4' />
-            <span>Highlight Hover</span>
+            <span>{t('highlightHover')}</span>
           </Button>
         </div>
-
-        {/* <div className='rounded-md border border-gray-200 p-4'>
-          <div className='mb-4 flex items-center'>
-            <Type className='mr-2 h-4 w-4' />
-            <span className='font-medium'>Adjust Font Sizing</span>
-          </div>
-          <RadioGroup
-            value={settings.fontSize}
-            onValueChange={(value: string) => updateSettings('fontSize', value)}
-            className='flex justify-between'
-          >
-            <div className='flex items-center space-x-2'>
-              <RadioGroupItem
-                value='default'
-                id='font-default'
-                className='text-purple-600'
-              />
-              <Label htmlFor='font-default' className='text-sm'>
-                Default
-              </Label>
-            </div>
-            <div className='flex items-center space-x-2'>
-              <RadioGroupItem
-                value='large'
-                id='font-large'
-                className='text-purple-600'
-              />
-              <Label htmlFor='font-large' className='text-sm'>
-                Large
-              </Label>
-            </div>
-            <div className='flex items-center space-x-2'>
-              <RadioGroupItem
-                value='larger'
-                id='font-larger'
-                className='text-purple-600'
-              />
-              <Label htmlFor='font-larger' className='text-sm'>
-                Larger
-              </Label>
-            </div>
-          </RadioGroup>
-        </div> */}
 
         <div className='grid grid-cols-2 gap-2'>
           <Button
@@ -199,7 +157,7 @@ export function ContentAdjustments({
             aria-pressed={settings.alignment === 'center'}
           >
             <AlignCenter className='h-4 w-4' />
-            <span>Align Center</span>
+            <span>{t('alignCenter')}</span>
           </Button>
 
           <Button
@@ -215,7 +173,7 @@ export function ContentAdjustments({
             aria-pressed={settings.alignment === 'left'}
           >
             <AlignLeft className='h-4 w-4' />
-            <span>Align Left</span>
+            <span>{t('alignLeft')}</span>
           </Button>
 
           <Button
@@ -231,8 +189,9 @@ export function ContentAdjustments({
             aria-pressed={settings.alignment === 'right'}
           >
             <AlignRight className='h-4 w-4' />
-            <span>Align Right</span>
+            <span>{t('alignRight')}</span>
           </Button>
+
           <Button
             variant={settings.alignment == 'justify' ? 'default' : 'outline'}
             size='sm'
@@ -246,7 +205,7 @@ export function ContentAdjustments({
             aria-pressed={settings.alignment === 'justify'}
           >
             <AlignJustify className='h-4 w-4' />
-            <span>Align Justify</span>
+            <span>{t('alignJustify')}</span>
           </Button>
         </div>
       </div>

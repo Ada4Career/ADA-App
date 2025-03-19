@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'; // Import useTranslations
+
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
@@ -16,6 +18,8 @@ export function ProfileSettings({
   settings,
   updateSettings,
 }: ProfileSettingsProps) {
+  const t = useTranslations('Accessibility.profiles'); // Add translation hook
+
   const handleProfileChange = (profileName: string, isActive: boolean) => {
     // If activating a profile, deactivate all others
     if (isActive) {
@@ -34,7 +38,7 @@ export function ProfileSettings({
       <div className='flex items-center justify-between'>
         <div className='space-y-1'>
           <Label htmlFor='seize-safe' className='text-base font-medium'>
-            Seize Safe Profile
+            {t('seizeSafe')}
           </Label>
         </div>
         <Switch
@@ -51,7 +55,7 @@ export function ProfileSettings({
       <div className='flex items-center justify-between'>
         <div className='space-y-1'>
           <Label htmlFor='vision-impaired' className='text-base font-medium'>
-            Vision Impaired Profile
+            {t('visionImpaired')}
           </Label>
         </div>
         <Switch
@@ -68,7 +72,7 @@ export function ProfileSettings({
       <div className='flex items-center justify-between'>
         <div className='space-y-1'>
           <Label htmlFor='adhd' className='text-base font-medium '>
-            ADHD
+            {t('adhd')}
           </Label>
         </div>
         <Switch
@@ -87,7 +91,7 @@ export function ProfileSettings({
             htmlFor='cognitive-disability'
             className='text-base font-medium'
           >
-            Cognitive Disability Profile
+            {t('cognitiveDisability')}
           </Label>
         </div>
         <Switch

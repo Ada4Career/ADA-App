@@ -267,5 +267,50 @@
       "intermediate": "Menengah",
       "advanced": "Lanjutan"
     }
+  },
+  "Accessibility": {
+    "widget": {
+      "openSettings": "Buka pengaturan aksesibilitas",
+      "title": "Akses Aksesibilitas",
+      "reset": "Atur Ulang",
+      "readGuidelines": "Baca Pernyataan & Pedoman Aksesibilitas kami"
+    },
+    "profiles": {
+      "seizeSafe": "Profil Aman Kejang",
+      "visionImpaired": "Profil Gangguan Penglihatan",
+      "adhd": "ADHD",
+      "cognitiveDisability": "Profil Disabilitas Kognitif"
+    },
+    "orientation": {
+      "title": "Penyesuaian Orientasi",
+      "hideImages": "Sembunyikan Gambar",
+      "readMode": "Mode Baca",
+      "bigBlackCursor": "Kursor Hitam Besar",
+      "bigWhiteCursor": "Kursor Putih Besar"
+    },
+    "colors": {
+      "title": "Penyesuaian Warna",
+      "darkContrast": "Kontras Gelap",
+      "lightContrast": "Kontras Terang",
+      "highContrast": "Kontras Tinggi",
+      "highSaturation": "Saturasi Tinggi",
+      "monochrome": "Monokrom",
+      "lowSaturation": "Saturasi Rendah"
+    },
+    "content": {
+      "title": "Penyesuaian Konten",
+      "contentScaling": "Skala Konten",
+      "default": "Default",
+      "large": "Besar",
+      "larger": "Lebih Besar",
+      "readableFont": "Font Mudah Dibaca",
+      "highlightTitles": "Sorot Judul",
+      "highlightLinks": "Sorot Tautan",
+      "highlightHover": "Sorot Hover",
+      "alignCenter": "Rata Tengah",
+      "alignLeft": "Rata Kiri",
+      "alignRight": "Rata Kanan",
+      "alignJustify": "Rata Penuh"
+    }
   }
 }
