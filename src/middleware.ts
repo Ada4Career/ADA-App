@@ -51,7 +51,7 @@ function getLocaleFromPath(path: string, locales: string[]): string | null {
   return null;
 }
 
-async function authMiddleware(request: NextRequest) {
+async function authMid(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const redirectParam = request.nextUrl.searchParams.get('redirect');
   const token = request.cookies.get('ada4career-token')?.value;
@@ -244,7 +244,7 @@ export default async function middleware(request: NextRequest) {
   }
 
   // Run the auth middleware
-  return authMiddleware(request);
+  return authMid(request);
 }
 
 export const config = {
