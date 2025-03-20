@@ -284,7 +284,7 @@
     "orientation": {
       "title": "Penyesuaian Orientasi",
       "hideImages": "Sembunyikan Gambar",
-      "readMode": "Mode Baca",
+      "readMode": "Mode Membaca",
       "bigBlackCursor": "Kursor Hitam Besar",
       "bigWhiteCursor": "Kursor Putih Besar"
     },
@@ -306,11 +306,25 @@
       "readableFont": "Font Mudah Dibaca",
       "highlightTitles": "Sorot Judul",
       "highlightLinks": "Sorot Tautan",
-      "highlightHover": "Sorot Hover",
+      "highlightHover": "Sorot saat Hover",
       "alignCenter": "Rata Tengah",
       "alignLeft": "Rata Kiri",
       "alignRight": "Rata Kanan",
       "alignJustify": "Rata Penuh"
+    },
+    "welcome": {
+      "title": "Selamat datang! Sesuaikan Pengalaman Anda",
+      "description": "Silakan pilih profil aksesibilitas yang sesuai dengan kebutuhan Anda, atau lewati untuk menggunakan antarmuka default.",
+      "seizeSafe": "Aman Kejang",
+      "seizeSafeDesc": "Menghilangkan cahaya berkedip dan mengurangi warna",
+      "visionImpaired": "Gangguan Penglihatan",
+      "visionImpairedDesc": "Meningkatkan visual situs web",
+      "adhd": "Ramah ADHD",
+      "adhdDesc": "Mengurangi gangguan dan meningkatkan fokus",
+      "cognitiveDisability": "Disabilitas Kognitif",
+      "cognitiveDisabilityDesc": "Membantu membaca dan fokus",
+      "skipButton": "Lewati untuk saat ini",
+      "note": "Anda dapat mengubah pengaturan aksesibilitas kapan saja menggunakan widget di pojok kanan bawah layar."
     }
   }
 }

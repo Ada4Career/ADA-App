@@ -311,6 +311,20 @@
       "alignLeft": "Align Left",
       "alignRight": "Align Right",
       "alignJustify": "Align Justify"
+    },
+    "welcome": {
+      "title": "Welcome! Customize Your Experience",
+      "description": "Please select an accessibility profile that suits your needs, or skip to use the default interface.",
+      "seizeSafe": "Seizure Safe",
+      "seizeSafeDesc": "Eliminates flashes and reduces color",
+      "visionImpaired": "Vision Impaired",
+      "visionImpairedDesc": "Enhances website visuals",
+      "adhd": "ADHD Friendly",
+      "adhdDesc": "Reduces distractions and improves focus",
+      "cognitiveDisability": "Cognitive Disability",
+      "cognitiveDisabilityDesc": "Assists with reading and focusing",
+      "skipButton": "Skip for now",
+      "note": "You can change your accessibility settings anytime using the widget at the bottom right of the screen."
     }
   }
 }

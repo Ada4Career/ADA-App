@@ -3,6 +3,7 @@ import { PersonStanding, RefreshCcw } from 'lucide-react';
 import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
+import AccessibilityWelcomeModal from '@/components/accessibility-welcome-modal';
 import { AccessibilityFooter } from '@/components/accessiblity-widget/AccessibilityFooter';
 import { AccessibilityHeader } from '@/components/accessiblity-widget/AccessibilityHeader';
 import { ColorAdjustments } from '@/components/accessiblity-widget/ColorAdjustment';
@@ -57,7 +58,8 @@ export type AccessibilitySettings = {
   };
 };
 
-const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
+// Profile presets moved outside component for reusability
+export const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
   seizeSafe: {
     orientation: {
       muteSounds: false,
@@ -188,7 +190,7 @@ const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
   },
 };
 
-const AccesibilityWidget = () => {
+const AccessibilityWidget = () => {
   const t = useTranslations('Accessibility.widget'); // Add translation hook
 
   const { settings, updateSettings, resetSettings } = useAccessibilityStore();
@@ -263,63 +265,68 @@ const AccesibilityWidget = () => {
   };
 
   return (
-    <Popover>
-      <PopoverTrigger
-        tabIndex={0}
-        aria-description='Accessibility Widget'
-        className='fixed bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'
-        aria-label={t('openSettings')}
-      >
-        <PersonStanding className='w-8 h-8 md:w-10 md:h-10' />
-      </PopoverTrigger>
-      <PopoverContent
-        className='w-[90vw] max-w-md md:max-w-lg lg:max-w-xl max-h-[80vh] overflow-hidden flex flex-col p-0'
-        side='top'
-        align='end'
-      >
-        <div className='px-6 py-4 border-b-2 flex items-center justify-between'>
-          <AccessibilityHeader />
-          <Button onClick={() => resetSettings()}>
-            {t('reset')} <RefreshCcw />
-          </Button>
-        </div>
+    <>
+      {/* Welcome Modal component */}
+      <AccessibilityWelcomeModal changeProfile={handleProfileChange} />
 
-        <div className='flex-grow overflow-y-auto p-4 max-h-[calc(80vh-120px)]'>
-          <div className='space-y-6'>
-            <ProfileSettings
-              settings={settings.profiles}
-              updateSettings={handleProfileChange}
-            />
-
-            <OrientationAdjustments
-              settings={settings.orientation}
-              updateSettings={(subcategory, value) =>
-                updateSettings('orientation', subcategory, value)
-              }
-            />
-
-            <ColorAdjustments
-              settings={settings.colors}
-              updateSettings={(subcategory, value) =>
-                updateSettings('colors', subcategory, value)
-              }
-            />
-
-            <ContentAdjustments
-              settings={settings.content}
-              updateSettings={(subcategory, value) =>
-                updateSettings('content', subcategory, value)
-              }
-            />
+      <Popover>
+        <PopoverTrigger
+          tabIndex={0}
+          aria-description='Accessibility Widget'
+          className='fixed bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'
+          aria-label={t('openSettings')}
+        >
+          <PersonStanding className='w-8 h-8 md:w-10 md:h-10' />
+        </PopoverTrigger>
+        <PopoverContent
+          className='w-[90vw] max-w-md md:max-w-lg lg:max-w-xl max-h-[80vh] overflow-hidden flex flex-col p-0'
+          side='top'
+          align='end'
+        >
+          <div className='px-6 py-4 border-b-2 flex items-center justify-between'>
+            <AccessibilityHeader />
+            <Button onClick={() => resetSettings()}>
+              {t('reset')} <RefreshCcw />
+            </Button>
           </div>
-        </div>
 
-        <div className='sticky bottom-0 z-10 bg-white dark:bg-gray-800 border-t'>
-          <AccessibilityFooter />
-        </div>
-      </PopoverContent>
-    </Popover>
+          <div className='flex-grow overflow-y-auto p-4 max-h-[calc(80vh-120px)]'>
+            <div className='space-y-6'>
+              <ProfileSettings
+                settings={settings.profiles}
+                updateSettings={handleProfileChange}
+              />
+
+              <OrientationAdjustments
+                settings={settings.orientation}
+                updateSettings={(subcategory, value) =>
+                  updateSettings('orientation', subcategory, value)
+                }
+              />
+
+              <ColorAdjustments
+                settings={settings.colors}
+                updateSettings={(subcategory, value) =>
+                  updateSettings('colors', subcategory, value)
+                }
+              />
+
+              <ContentAdjustments
+                settings={settings.content}
+                updateSettings={(subcategory, value) =>
+                  updateSettings('content', subcategory, value)
+                }
+              />
+            </div>
+          </div>
+
+          <div className='sticky bottom-0 z-10 bg-white dark:bg-gray-800 border-t'>
+            <AccessibilityFooter />
+          </div>
+        </PopoverContent>
+      </Popover>
+    </>
   );
 };
 
-export default AccesibilityWidget;
+export default AccessibilityWidget;

@@ -2,7 +2,10 @@ import type React from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { AccessibilitySettings } from '@/components/AccessibilityWidget';
+import {
+  AccessibilitySettings,
+  profilePresets,
+} from '@/components/AccessibilityWidget';
 
 /**
  * Accessibility store type definition
@@ -14,8 +17,11 @@ type AccessibilityStore = {
     subcategory: string,
     value: any
   ) => void;
+  applyProfile: (profileName: keyof typeof profilePresets) => void;
   applyAccessibilityStyles: () => React.CSSProperties;
   resetSettings: () => void;
+  hasOnboarded: boolean;
+  setHasOnboarded: (value: boolean) => void;
 };
 
 /**
@@ -67,11 +73,18 @@ export const useAccessibilityStore = create<AccessibilityStore>()(
   persist(
     (set, get) => ({
       settings: defaultSettings,
+      hasOnboarded: false,
+
+      setHasOnboarded: (value) =>
+        set(() => ({
+          hasOnboarded: value,
+        })),
 
       resetSettings: () =>
         set(() => ({
           settings: defaultSettings,
         })),
+
       /**
        * Updates a specific setting in the store
        */
@@ -87,89 +100,110 @@ export const useAccessibilityStore = create<AccessibilityStore>()(
         })),
 
       /**
+       * Applies a predefined accessibility profile
+       */
+      applyProfile: (profileName) => {
+        set((state) => {
+          // First, update the profile toggle
+          const updatedProfiles = {
+            ...state.settings.profiles,
+            [profileName]: true,
+          };
+
+          // Get the preset values
+          const preset = profilePresets[profileName];
+
+          // Apply all preset settings
+          return {
+            settings: {
+              ...state.settings,
+              profiles: updatedProfiles,
+              ...(preset as Omit<AccessibilitySettings, 'profiles'>),
+            },
+          };
+        });
+      },
+
+      /**
        * Generates and applies accessibility-related CSS styles
        */
       applyAccessibilityStyles: () => {
         const { settings } = get();
         const styles: React.CSSProperties = {};
 
-        // // Font Size
-        // const fontSizeMap: Record<string, string> = {
-        //   large: '1.1rem',
-        //   larger: '1.25rem',
-        // };
-        // if (settings.content.fontSize in fontSizeMap) {
-        //   styles.fontSize = fontSizeMap[settings.content.fontSize];
-        // }
+        // Add code to apply styles based on settings
+        // Font Size
+        if (settings.content.fontSize === 'large') {
+          styles.fontSize = '1.1rem';
+        } else if (settings.content.fontSize === 'larger') {
+          styles.fontSize = '1.25rem';
+        }
 
-        // // Line Height
-        // const lineHeightMap: Record<string, string> = {
-        //   large: '1.8',
-        //   larger: '2.2',
-        // };
-        // if (settings.content.lineHeight in lineHeightMap) {
-        //   styles.lineHeight = lineHeightMap[settings.content.lineHeight];
-        // }
+        // Line Height
+        if (settings.content.lineHeight === 'large') {
+          styles.lineHeight = '1.8';
+        } else if (settings.content.lineHeight === 'larger') {
+          styles.lineHeight = '2.2';
+        }
 
-        // // Letter Spacing
-        // const letterSpacingMap: Record<string, string> = {
-        //   large: '0.05em',
-        //   larger: '0.1em',
-        // };
-        // if (settings.content.letterSpacing in letterSpacingMap) {
-        //   styles.letterSpacing =
-        //     letterSpacingMap[settings.content.letterSpacing];
-        // }
+        // Letter Spacing
+        if (settings.content.letterSpacing === 'large') {
+          styles.letterSpacing = '0.05em';
+        } else if (settings.content.letterSpacing === 'larger') {
+          styles.letterSpacing = '0.1em';
+        }
 
-        // // Text Alignment
-        // styles.textAlign = settings.content.alignment || 'left';
+        // Text Alignment
+        if (settings.content.alignment !== 'default') {
+          styles.textAlign = settings.content.alignment;
+        }
 
-        // // High Contrast Mode
-        // if (settings.colors.highContrast) {
-        //   styles.color = '#000000';
-        //   styles.backgroundColor = '#FFFFFF';
-        // }
+        // Contrast settings
+        if (settings.colors.contrast === 'high') {
+          styles.color = '#000000';
+          styles.backgroundColor = '#FFFFFF';
+        } else if (settings.colors.contrast === 'dark') {
+          styles.backgroundColor = '#000000';
+          styles.color = '#FFFFFF';
+        } else if (settings.colors.contrast === 'light') {
+          styles.backgroundColor = '#FFFFFF';
+          styles.color = '#000000';
+        }
 
-        // // Dark/Light Contrast
-        // if (settings.colors.darkContrast) {
-        //   styles.backgroundColor = '#000000';
-        //   styles.color = '#FFFFFF';
-        // } else if (settings.colors.lightContrast) {
-        //   styles.backgroundColor = '#FFFFFF';
-        //   styles.color = '#000000';
-        // }
+        // Saturation & Monochrome
+        if (settings.colors.saturation === 'high') {
+          styles.filter = 'saturate(200%)';
+        } else if (settings.colors.saturation === 'low') {
+          styles.filter = 'saturate(50%)';
+        } else if (settings.colors.monochrome) {
+          styles.filter = 'grayscale(100%)';
+        }
 
-        // // High/Low Saturation & Monochrome
-        // if (settings.colors.highSaturation) {
-        //   styles.filter = 'saturate(200%)';
-        // } else if (settings.colors.lowSaturation) {
-        //   styles.filter = 'saturate(50%)';
-        // } else if (settings.colors.monochrome) {
-        //   styles.filter = 'grayscale(100%)';
-        // }
+        // Readable Font
+        if (settings.content.readableFont) {
+          styles.fontFamily = "'Arial', 'Helvetica', sans-serif";
+        }
 
-        // // Readable Font
-        // if (settings.content.readableFont) {
-        //   styles.fontFamily = "'Arial', 'Helvetica', sans-serif";
-        // }
+        // Hide Images
+        if (settings.orientation.hideImages) {
+          styles.visibility = 'hidden';
+        }
 
-        // // Hide Images
-        // if (settings.orientation.hideImages) {
-        //   styles.visibility = 'hidden';
-        // }
-
-        // // Stop Animations
-        // if (settings.orientation.stopAnimations) {
-        //   styles.animation = 'none';
-        //   styles.transition = 'none';
-        // }
+        // Stop Animations
+        if (settings.orientation.stopAnimations) {
+          styles.animation = 'none';
+          styles.transition = 'none';
+        }
 
         return styles;
       },
     }),
     {
       name: 'accessibility-storage',
-      partialize: (state) => ({ settings: state.settings }),
+      partialize: (state) => ({
+        settings: state.settings,
+        hasOnboarded: state.hasOnboarded,
+      }),
     }
   )
 );
