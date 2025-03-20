@@ -50,7 +50,6 @@ import Footer from '@/components/layout/footer';
 
 import mainGif from '~/gif/people-gif.gif';
 import aida from '~/images/aidalogo.png';
-import aidamockup from '~/images/aidamockup.png';
 import btp from '~/images/btplogo.png';
 import cv from '~/images/cvimg.png';
 import telyu from '~/images/telyulogo.png';
@@ -215,12 +214,21 @@ export default function HomePage() {
                     </p>
                   </div>
                 </div>
-                <Image
+                {/* <Image
                   src={aidamockup}
                   alt='AIDA Mockup'
                   width={480}
                   height={280}
-                />
+                /> */}
+                <video
+                  src='/vid/aida.webm'
+                  width={480}
+                  height={240}
+                  controls
+                  playsInline
+                  muted
+                  autoPlay
+                ></video>{' '}
               </div>
             </div>
           </div>
