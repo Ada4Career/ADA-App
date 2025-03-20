@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
+import { toast } from 'react-toastify';
 
 import api from '@/lib/axios';
 import {
@@ -43,7 +44,7 @@ import useAuthStore from '@/store/useAuthStore';
 
 import { API_BASE_URL } from '@/constant/config';
 
-import { ApiReturn } from '@/types/api.types';
+import { ApiError, ApiReturn } from '@/types/api.types';
 import { JobPostingData, JobPostingDataExtended } from '@/types/response/job';
 
 export default function JobDetailSection({ id }: { id: string }) {
@@ -116,32 +117,87 @@ export default function JobDetailSection({ id }: { id: string }) {
   });
   const [open, setOpen] = React.useState(false);
 
+  const { mutateAsync: applyWithUrl, isPending: isPendingUrl } = useMutation<
+    void,
+    ApiError,
+    {
+      cover_letter: string;
+      url: string;
+    }
+  >({
+    mutationFn: async (data) => {
+      const formData = new FormData();
+      formData.append('job_vacancy_id', id);
+      formData.append('job_seeker_email', user?.email ?? '');
+      formData.append('resume_url', data.url);
+      formData.append('cover_letter', data.cover_letter);
+      const response = await api.post(
+        `${API_BASE_URL}/job-application`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      console.log(response.data);
+      return;
+    },
+    onSuccess: () => {
+      toast.success('Success Applied');
+    },
+  });
+
+  const { mutateAsync: applyWithFile, isPending: isPendingFile } = useMutation<
+    void,
+    ApiError,
+    {
+      cover_letter: string;
+      file: File;
+    }
+  >({
+    mutationFn: async (data) => {
+      const formData = new FormData();
+      formData.append('job_vacancy_id', id);
+      formData.append('job_seeker_email', user?.email ?? '');
+      formData.append('file', data.file);
+      formData.append('cover_letter', data.cover_letter);
+      const response = await api.post(
+        `${API_BASE_URL}/job-application`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      console.log(response.data);
+
+      return;
+    },
+    onSuccess: () => {
+      toast.success('Success Applied');
+    },
+  });
+
   const handleSubmit = (data: {
-    resume: File | null;
+    resume: File | string | null;
     coverLetter: string;
     usingDefault: boolean;
   }) => {
-    // Create a FormData object to send to your API
-    const formData = new FormData();
-
-    // Add the resume file (either custom uploaded or default)
-    if (data.resume) {
-      formData.append('resume', data.resume);
+    console.log('masuk sini');
+    console.log(data);
+    if (data.usingDefault) {
+      applyWithUrl({
+        cover_letter: data.coverLetter,
+        url: data.resume as string,
+      });
+    } else {
+      applyWithFile({
+        cover_letter: data.coverLetter,
+        file: data.resume as File,
+      });
     }
-
-    // Add a flag indicating if they're using the default resume
-    formData.append('usingDefault', String(data.usingDefault));
-
-    // Add the cover letter
-    formData.append('coverLetter', data.coverLetter);
-
-    // Log what's being submitted
-    console.log('Using default resume:', data.usingDefault);
-    console.log('Resume file name:', data.resume?.name);
-    console.log('Cover Letter:', data.coverLetter);
-
-    // Here you would send the formData to your backend
-    // fetch('/api/apply', { method: 'POST', body: formData });
   };
 
   const responsibilities = formatBulletPoints(data?.responsibilities ?? '');
@@ -190,16 +246,6 @@ export default function JobDetailSection({ id }: { id: string }) {
 
   const jobBenefits = selectedBenefits();
 
-  const { mutateAsync, isPending: isApplying } = useMutation({
-    mutationFn: async () => {
-      const form = new FormData();
-      form.append('job_vacancy_id', id);
-      form.append('job_seeker_email', user?.email ?? '');
-
-      await api.post(`${API_BASE_URL}/job-application`);
-    },
-  });
-
   if (isPending) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
@@ -212,6 +258,7 @@ export default function JobDetailSection({ id }: { id: string }) {
     <>
       <JobApplicationModal
         onOpenChange={setOpen}
+        loading={isPendingFile || isPendingUrl}
         defaultResume={user?.job_seeker_data?.resume_url ?? ''}
         open={open}
         onSubmit={handleSubmit}

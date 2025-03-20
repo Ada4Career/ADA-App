@@ -1,8 +1,6 @@
 // JobApplicationModal.tsx
 import { AlertCircle, Download, FileText, Upload } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-
-import api from '@/lib/axios';
+import React, { useState } from 'react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -22,8 +20,9 @@ interface JobApplicationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   defaultResume: string;
+  loading: boolean;
   onSubmit: (data: {
-    resume: File | null;
+    resume: File | string | null;
     coverLetter: string;
     usingDefault: boolean;
   }) => void;
@@ -33,6 +32,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
   open,
   onOpenChange,
   defaultResume,
+  loading,
   onSubmit,
 }) => {
   const [resume, setResume] = useState<File | null>(null);
@@ -43,40 +43,40 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Fetch the default resume and convert it to a File object
-  useEffect(() => {
-    console.log('flagged');
-    console.log(defaultResume);
-    console.log(open);
-    if (defaultResume && open) {
-      console.log('fetched');
-      fetchDefaultResume();
-    }
-  }, [defaultResume, open]);
+  // useEffect(() => {
+  //   console.log('flagged');
+  //   console.log(defaultResume);
+  //   console.log(open);
+  //   if (defaultResume && open) {
+  //     console.log('fetched');
+  //     fetchDefaultResume();
+  //   }
+  // }, [defaultResume, open]);
 
-  const fetchDefaultResume = async () => {
-    try {
-      setIsLoading(true);
-      console.log(defaultResume, 'ini result');
-      const response = await api.get(defaultResume);
-      console.log('ini result 2');
-      if (!response.data) throw new Error('Failed to fetch default resume');
-      console.log('ini result 3');
+  // const fetchDefaultResume = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     console.log(defaultResume, 'ini result');
+  //     const response = await api.get(defaultResume);
+  //     console.log('ini result 2');
+  //     if (!response.data) throw new Error('Failed to fetch default resume');
+  //     console.log('ini result 3');
 
-      const blob = await response.data;
-      // Extract filename from URL or use a default name
-      const fileName = defaultResume.split('/').pop() || 'default-resume.pdf';
+  //     const blob = await response.data;
+  //     // Extract filename from URL or use a default name
+  //     const fileName = defaultResume.split('/').pop() || 'default-resume.pdf';
 
-      console.log('ini result 4');
-      // Create a File object from the blob
-      const file = new File([blob], fileName, { type: 'application/pdf' });
-      setDefaultResumeFile(file);
-    } catch (err) {
-      setError('Could not load default resume');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     console.log('ini result 4');
+  //     // Create a File object from the blob
+  //     const file = new File([blob], fileName, { type: 'application/pdf' });
+  //     setDefaultResumeFile(file);
+  //   } catch (err) {
+  //     setError('Could not load default resume');
+  //     console.error(err);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -117,10 +117,16 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
     }
 
     onSubmit({
-      resume: usingDefault ? defaultResumeFile : resume,
+      resume: usingDefault ? defaultResume : resume,
       coverLetter,
       usingDefault,
     });
+
+    // if (usingDefault) {
+
+    // } else {
+
+    // }
 
     // Reset form after submission
     setCoverLetter('');
@@ -240,10 +246,10 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
         </div>
 
         <DialogFooter>
-          <Button variant='outline' onClick={handleCancel}>
+          <Button disabled={loading} variant='outline' onClick={handleCancel}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isLoading}>
+          <Button onClick={handleSubmit} disabled={isLoading || loading}>
             Submit Application
           </Button>
         </DialogFooter>

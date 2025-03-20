@@ -199,6 +199,14 @@ const ApplicantDetailSection = ({ id }: Props) => {
           </div>
         </div>
       </div>
+      <div className='mt-6 flex items-center justify-end gap-4'>
+        <Button size='lg' variant='destructive'>
+          Reject
+        </Button>
+        <Button size='lg' variant='default'>
+          Accept
+        </Button>
+      </div>
     </div>
   );
 };

@@ -48,7 +48,7 @@ export type JobApplicant = {
   job_vacancy_id: string;
   job_seeker_email: string;
   job_score_id: string;
-  status: 'applied' | 'pending' | 'rejected' | 'accepted'; // Add more statuses if needed
+  status: 'applied' | 'reviewing' | 'rejected' | 'accepted'; // Add more statuses if needed
   applied_date: string; // Consider using Date if you want to handle it as a date object
   cover_letter: string;
   resume_url: string;
