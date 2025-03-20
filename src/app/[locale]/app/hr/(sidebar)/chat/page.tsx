@@ -45,7 +45,7 @@ const AidaChatPage = () => {
   };
 
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col h-screen  flex-grow flex-1 '>
       <div className='flex-1 overflow-hidden relative'>
         <ScrollArea className='h-full w-full pb-4'>
           <div className='px-4'>
