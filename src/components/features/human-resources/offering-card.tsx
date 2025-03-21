@@ -6,10 +6,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-import { JobPostingDataExtended } from '@/types/response/job';
+import { JobPostingWithApplicants } from '@/types/response/job';
 
 type OfferingCardProps = {
-  offering: JobPostingDataExtended;
+  offering: JobPostingWithApplicants;
   onViewApplicants?: () => void;
   onDelete?: () => void;
 };
@@ -46,7 +46,17 @@ const OfferingCard = ({
               {offering.stage}
             </Badge>
           </div>
-          <Badge className='mt-2'>{offering.job_type} applied</Badge>
+          <div className='flex items-center gap-2'>
+            <Badge className='mt-2'>
+              {offering.applicants?.length ?? '0'} applied
+            </Badge>
+            <Badge className='mt-2'>
+              {offering.appliedApplicant?.length ?? '0'} need to review
+            </Badge>
+            <Badge className='mt-2'>
+              {offering.rejectedApplicant?.length ?? '0'} rejected
+            </Badge>
+          </div>
         </div>
       </div>
       <div className='flex items-center gap-2 self-end md:self-center'>

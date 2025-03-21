@@ -39,8 +39,10 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
       const response = await api.get<ApiReturn<JobApplicant[]>>(
         `${API_BASE_URL}/job-applications/job-vacancy/${id}`
       );
-      console.log(response.data.data);
       return response.data.data;
+    },
+    select: (data) => {
+      return data.filter((applicant) => applicant.status === 'applied');
     },
   });
 

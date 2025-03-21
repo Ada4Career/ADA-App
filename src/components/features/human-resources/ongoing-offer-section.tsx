@@ -2,10 +2,10 @@ import React from 'react';
 
 import OfferingCard from '@/components/features/human-resources/offering-card';
 
-import { JobPostingDataExtended } from '@/types/response/job';
+import { JobPostingWithApplicants } from '@/types/response/job';
 
 type Props = {
-  offerings: JobPostingDataExtended[];
+  offerings: JobPostingWithApplicants[];
   onViewApplicants?: (offeringId: string) => void;
   onDelete?: (offeringId: string) => void;
 };

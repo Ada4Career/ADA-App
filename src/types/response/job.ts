@@ -43,6 +43,13 @@ export interface JobPostingDataExtended extends JobPostingData {
   inclusive_hiring_statement?: string;
 }
 
+export interface JobPostingWithApplicants extends JobPostingDataExtended {
+  applicants?: JobApplicant[]; // Store all applicants for the job
+  acceptedApplicants?: JobApplicant[]; // Store only accepted applicants
+  rejectedApplicant?: JobApplicant[]; // Store only rejected applicants
+  appliedApplicant?: JobApplicant[]; // Store only applied applicants
+}
+
 export type JobApplicant = {
   id: string;
   job_vacancy_id: string;

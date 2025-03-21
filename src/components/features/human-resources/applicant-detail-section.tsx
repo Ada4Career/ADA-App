@@ -62,6 +62,9 @@ const resumeData: SkillSectionItem[] = [
 ];
 
 const ApplicantDetailSection = ({ id }: Props) => {
+  const { acceptApplicant, rejectApplicant, isProcessing } =
+    useApplicantStatus();
+
   const { data: applicant, isPending } = useQuery({
     queryKey: ['applicant-detail'],
     queryFn: async () => {
@@ -201,10 +204,23 @@ const ApplicantDetailSection = ({ id }: Props) => {
         </div>
       </div>
       <div className='mt-6 flex items-center justify-end gap-4'>
-        <Button size='lg' variant='destructive'>
+        <Button
+          onClick={async () => {
+            await rejectApplicant({ applicantId: id });
+          }}
+          size='lg'
+          variant='destructive'
+        >
           Reject
         </Button>
-        <Button size='lg' variant='default'>
+        <Button
+          className='bg-green-500 hover:bg-green-600'
+          onClick={async () => {
+            await acceptApplicant({ applicantId: id });
+          }}
+          size='lg'
+          variant='default'
+        >
           Accept
         </Button>
       </div>
@@ -219,6 +235,7 @@ import { Check, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
+import { useApplicantStatus } from '@/hooks/hr/use-process-applicant';
 
 // Define types for our component
 export interface SkillSectionItem {

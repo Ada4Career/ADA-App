@@ -13,19 +13,85 @@ import useAuthStore from '@/store/useAuthStore';
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiReturn } from '@/types/api.types';
-import { JobPostingDataExtended } from '@/types/response/job';
+import { JobApplicant, JobPostingDataExtended } from '@/types/response/job';
 
 const HROfferingsPage = () => {
   const { user } = useAuthStore();
+
   const { data } = useQuery({
     queryKey: ['offerings'],
     queryFn: async () => {
+      // Fetch job offerings
       const response = await api.get<ApiReturn<JobPostingDataExtended[]>>(
         `${API_BASE_URL}/job-vacancies/${user?.email}`
       );
-      return response.data.data;
+
+      const offerings = response.data.data;
+
+      // Fetch applicants for each job offering
+      const offeringsWithApplicants = await Promise.all(
+        offerings.map(async (offering) => {
+          try {
+            const applicantsResponse = await api.get<ApiReturn<JobApplicant[]>>(
+              `${API_BASE_URL}/job-applications/job-vacancy/${offering.id}`
+            );
+            const allApplicants = applicantsResponse.data.data;
+            // Filter out accepted applicants
+            const acceptedApplicants = allApplicants.filter(
+              (applicant) => applicant.status === 'accepted'
+            );
+            const rejectedApplicant = allApplicants.filter(
+              (applicant) => applicant.status === 'rejected'
+            );
+            const appliedApplicant = allApplicants.filter(
+              (applicant) => applicant.status === 'applied'
+            );
+            return {
+              ...offering,
+              applicants: allApplicants,
+              acceptedApplicants: acceptedApplicants,
+              rejectedApplicant: rejectedApplicant,
+              appliedApplicant: appliedApplicant,
+            };
+          } catch (error) {
+            console.error(
+              `Failed to fetch applicants for job ${offering.id}:`,
+              error
+            );
+            return {
+              ...offering,
+              applicants: [],
+              acceptedApplicants: [],
+              rejectedApplicant: [],
+              appliedApplicant: [],
+            };
+          }
+        })
+      );
+
+      console.log(offeringsWithApplicants);
+
+      return offeringsWithApplicants;
+    },
+    select: (data) => {
+      return data.filter((offering) => offering.applicants.length > 0);
     },
   });
+
+  // const { data: applicants, isPending: isPendingApplicants } = useQuery({
+  //   queryKey: ['offering-detail-list-applicants'],
+  //   queryFn: async () => {
+  //     const response = await api.get<ApiReturn<JobApplicant[]>>(
+  //       `${API_BASE_URL}/job-applications/job-vacancy/${id}`
+  //     );
+  //     return response.data.data;
+  //   },
+  //   enab
+  //   select: (data) => {
+  //     return data.filter((applicant) => applicant.status === 'applied');
+  //   },
+  // });
+
   return (
     <div className='container mx-auto flex flex-col gap-y-12'>
       <div className='flex flex-col gap-y-4'>
