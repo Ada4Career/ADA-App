@@ -137,7 +137,7 @@ type PropsAplicant = {
   onReject: (id: string) => void;
 };
 
-const ApplicantCard = ({
+export const ApplicantCard = ({
   apl,
   offering,
   onAccept,

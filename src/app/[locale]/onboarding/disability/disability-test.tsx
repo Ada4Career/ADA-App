@@ -233,7 +233,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
         answers: data,
       };
 
-      console.log(dataToSend);
+      // console.log(dataToSend);
 
       const response = await api.post(
         `${API_BASE_URL}/questionnaire`,

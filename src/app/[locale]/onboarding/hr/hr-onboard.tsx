@@ -82,7 +82,7 @@ const HRFormPage = () => {
 
   const onSubmit = async (values: HRFormData) => {
     await mutateAsyncUptData(values);
-    console.log(values);
+    // console.log(values);
   };
 
   // Function to validate current step before proceeding

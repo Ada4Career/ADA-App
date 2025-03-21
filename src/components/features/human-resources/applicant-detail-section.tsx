@@ -126,9 +126,9 @@ const ApplicantDetailSection = ({ id }: Props) => {
             </div>
           </div>
         </div>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col items-end gap-2'>
           <Badge className='p-2' variant='outline'>
-            {offering?.stage} Stage
+            Applicant Status: {applicant?.status}
           </Badge>
           <p>{offering?.start_date}</p>
         </div>
@@ -207,16 +207,24 @@ const ApplicantDetailSection = ({ id }: Props) => {
         <Button
           onClick={async () => {
             await rejectApplicant({ applicantId: id });
+            router.back();
           }}
+          disabled={
+            applicant?.status == 'accepted' || applicant?.status == 'rejected'
+          }
           size='lg'
           variant='destructive'
         >
           Reject
         </Button>
         <Button
+          disabled={
+            applicant?.status == 'accepted' || applicant?.status == 'rejected'
+          }
           className='bg-green-500 hover:bg-green-600'
           onClick={async () => {
             await acceptApplicant({ applicantId: id });
+            router.back();
           }}
           size='lg'
           variant='default'

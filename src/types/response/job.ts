@@ -60,3 +60,7 @@ export type JobApplicant = {
   cover_letter: string;
   resume_url: string;
 };
+
+export interface ApplicantWithJobDetails extends JobApplicant {
+  jobDetails?: JobPostingDataExtended;
+}

@@ -85,7 +85,7 @@ export const useJobOfferings = (userEmail: string | undefined) => {
         (job) => job.acceptedApplicant && job.acceptedApplicant.length > 0
       );
 
-      console.log(offeringsWithApplicants);
+      // console.log(offeringsWithApplicants);
       return {
         ongoingJobs,
         completedJobs,

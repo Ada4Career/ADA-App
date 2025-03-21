@@ -140,7 +140,6 @@ export default function JobDetailSection({ id }: { id: string }) {
           },
         }
       );
-      console.log(response.data);
       return;
     },
     onSuccess: () => {
@@ -171,7 +170,6 @@ export default function JobDetailSection({ id }: { id: string }) {
           },
         }
       );
-      console.log(response.data);
 
       return;
     },
@@ -185,8 +183,6 @@ export default function JobDetailSection({ id }: { id: string }) {
     coverLetter: string;
     usingDefault: boolean;
   }) => {
-    console.log('masuk sini');
-    console.log(data);
     if (data.usingDefault) {
       applyWithUrl({
         cover_letter: data.coverLetter,

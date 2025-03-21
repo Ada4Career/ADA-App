@@ -1,6 +1,6 @@
 'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { ClipboardList, FileText, MessageSquareWarning } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -79,26 +79,27 @@ const HRDashboardPage = () => {
         <div className='grid grid-cols-4 gap-x-6'>
           <Card className='md:col-span-1'>
             <CardContent className='flex !py-6 flex-row items-center justify-center gap-4 pb-2'>
-              <div className='h-12 w-12 overflow-hidden rounded-md border bg-muted'>
-                <Image
-                  src={
-                    companyInfo.logo || '/placeholder.svg?height=48&width=48'
-                  }
-                  alt={companyInfo.name}
-                  width={48}
-                  height={48}
-                  className='h-full w-full object-cover'
+              <Avatar className='h-12 w-12'>
+                <AvatarImage
+                  src='/placeholder.svg?height=48&width=48'
+                  alt={user?.human_resource_data?.company ?? 'Company logo'}
                 />
-              </div>
+                <AvatarFallback className='bg-slate-100'>
+                  {user?.human_resource_data?.company
+                    .substring(0, 2)
+                    .toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
               <div>
-                <h5 className='text-lg'>{companyInfo.name}</h5>
+                <h5 className='text-lg'>
+                  {user?.human_resource_data?.company ?? 'Your Company'}
+                </h5>
                 <p className='text-sm text-muted-foreground'>
-                  {companyInfo.subtitle}
+                  {user?.human_resource_data?.position ?? 'Human Resources'}
                 </p>
               </div>
             </CardContent>
           </Card>
-
           <StatsCard
             title='Total Applicants'
             value={stats.totalRegistrants}

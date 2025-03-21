@@ -81,8 +81,8 @@ const CVResult = () => {
       if (!pdfBlob) return;
       // console.log('masuk ini bos');
       const fileBlob = blobToFile(pdfBlob, 'my-accessible-resume.pdf');
-      console.log(pdfBlob);
-      console.log(fileBlob);
+      // console.log(pdfBlob);
+      // console.log(fileBlob);
       const formData = new FormData();
       formData.append('file', fileBlob);
 
