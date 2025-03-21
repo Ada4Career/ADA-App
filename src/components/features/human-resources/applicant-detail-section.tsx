@@ -78,6 +78,7 @@ const ApplicantDetailSection = ({ id }: Props) => {
       const response = await api.get<ApiReturn<JobPostingDataExtended>>(
         `${API_BASE_URL}/job-vacancy/${applicant?.job_vacancy_id}`
       );
+
       return response.data.data;
     },
     enabled: !isPending,

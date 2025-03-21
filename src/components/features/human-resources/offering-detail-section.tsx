@@ -10,6 +10,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import api from '@/lib/axios';
+import { useApplicantStatus } from '@/hooks/hr/use-process-applicant';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -38,9 +39,21 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
       const response = await api.get<ApiReturn<JobApplicant[]>>(
         `${API_BASE_URL}/job-applications/job-vacancy/${id}`
       );
+      console.log(response.data.data);
       return response.data.data;
     },
   });
+
+  const { acceptApplicant, rejectApplicant, isProcessing } =
+    useApplicantStatus();
+
+  const handleAccept = async (id: string) => {
+    await acceptApplicant({ applicantId: id });
+  };
+
+  const handleReject = async (id: string) => {
+    await rejectApplicant({ applicantId: id });
+  };
 
   if (isPending || isPendingApplicants) {
     return <div>Loading...</div>;
@@ -117,10 +130,18 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
                   </Button>
                 </Link>
                 <div className='flex items-center gap-2 col-span-1 justify-center'>
-                  <Button size='icon' className='bg-green-500'>
+                  <Button
+                    onClick={() => handleAccept(apl.id)}
+                    size='icon'
+                    className='bg-green-500'
+                  >
                     <CheckCircle2Icon />
                   </Button>
-                  <Button size='icon' className='bg-red-500'>
+                  <Button
+                    onClick={() => handleReject(apl.id)}
+                    size='icon'
+                    className='bg-red-500'
+                  >
                     <XCircleIcon />
                   </Button>
                 </div>

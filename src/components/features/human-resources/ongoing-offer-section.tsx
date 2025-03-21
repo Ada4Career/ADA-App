@@ -15,7 +15,6 @@ const OngoingOfferSection = ({
   onViewApplicants,
   onDelete,
 }: Props) => {
-  console.log(offerings);
   return (
     <div className='space-y-4'>
       {offerings.map((offering) => (
