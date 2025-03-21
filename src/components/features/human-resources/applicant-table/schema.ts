@@ -9,10 +9,13 @@ export const applicantSchema = z.object({
   endDate: z.string(),
   cvLink: z.string(),
   status: z.enum(['pending', 'approved', 'rejected']),
+  // Store the original data for reference
+  originalData: z.any().optional(),
 });
 
 export type Applicant = z.infer<typeof applicantSchema>;
 
+// Sample data for fallback
 export const applicants: Applicant[] = [
   {
     id: '1',
