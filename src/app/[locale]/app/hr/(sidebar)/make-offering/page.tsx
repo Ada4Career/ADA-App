@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Progress } from '@/components/ui/progress';
 
+import useAuthStore from '@/store/useAuthStore';
+
 import BasicInfo from '@/app/[locale]/app/hr/(sidebar)/make-offering/form/basic-info';
 import {
   basicInfoSchema,
@@ -33,6 +35,7 @@ import { API_BASE_URL } from '@/constant/config';
 import { ApiError } from '@/types/api.types';
 
 const MakeOfferingPage = () => {
+  const { user } = useAuthStore();
   const [step, setStep] = React.useState(1);
   const [isValidating, setIsValidating] = React.useState(false);
 
@@ -41,8 +44,8 @@ const MakeOfferingPage = () => {
     mode: 'onTouched',
     defaultValues: {
       basicInfo: {
-        email: '',
-        company: '',
+        // email: '',
+        // company: '',
         division: '',
         department: '',
         location: '',
@@ -85,7 +88,7 @@ const MakeOfferingPage = () => {
     mutationFn: async (data) => {
       // Transform form data to match API expectations
       const jobPostingData = {
-        email: data.basicInfo.email,
+        email: user?.email ?? '',
         division: data.basicInfo.division,
         job_type: data.jobDetails.job_type,
         workplace_type: data.jobDetails.workplace_type,
@@ -96,7 +99,7 @@ const MakeOfferingPage = () => {
         additionalImageUrl: data.media.additionalImageUrl || '',
 
         // Extended fields
-        company: data.basicInfo.company,
+        company: user?.human_resource_data?.company ?? '',
         department: data.basicInfo.department,
         stage: data.jobDetails.stage,
         location: data.basicInfo.location,
@@ -116,8 +119,6 @@ const MakeOfferingPage = () => {
           formData.append(key, value.toString());
         }
       });
-
-      console.log(formData);
 
       const response = await api.post(`${API_BASE_URL}/job-vacancy`, formData, {
         headers: {

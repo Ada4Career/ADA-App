@@ -16,7 +16,7 @@ const BasicInfo = ({ form }: JobPostingSectionProps) => {
     <>
       <h2 className='text-2xl font-semibold mb-6'>Basic Information</h2>
 
-      <FormField
+      {/* <FormField
         control={form.control}
         name='basicInfo.email'
         render={({ field }) => (
@@ -28,10 +28,10 @@ const BasicInfo = ({ form }: JobPostingSectionProps) => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-full'>
-        <FormField
+        {/* <FormField
           control={form.control}
           name='basicInfo.company'
           render={({ field }) => (
@@ -43,7 +43,7 @@ const BasicInfo = ({ form }: JobPostingSectionProps) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <FormField
           control={form.control}
@@ -52,15 +52,12 @@ const BasicInfo = ({ form }: JobPostingSectionProps) => {
             <FormItem>
               <FormLabel>Division*</FormLabel>
               <FormControl>
-                <Input placeholder='e.g. Engineering' {...field} />
+                <Input placeholder='e.g. Software Engineering' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-      </div>
-
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-full'>
         <FormField
           control={form.control}
           name='basicInfo.department'
@@ -74,7 +71,9 @@ const BasicInfo = ({ form }: JobPostingSectionProps) => {
             </FormItem>
           )}
         />
+      </div>
 
+      <div className='grid grid-cols-1  gap-4 w-full'>
         <FormField
           control={form.control}
           name='basicInfo.location'

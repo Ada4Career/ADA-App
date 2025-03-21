@@ -18,8 +18,8 @@ export interface Accommodation {
 
 // Individual section schemas
 export const basicInfoSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  company: z.string().min(2, 'Company name must be at least 2 characters'),
+  // email: z.string().email('Please enter a valid email address'),
+  // company: z.string().min(2, 'Company name must be at least 2 characters'),
   division: z.string().min(1, 'Division is required'),
   department: z.string().optional(),
   location: z.string().optional(),
