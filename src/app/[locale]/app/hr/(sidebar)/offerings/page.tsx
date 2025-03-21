@@ -1,82 +1,17 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
-import api from '@/lib/axios';
+import { useJobOfferings } from '@/hooks/hr/use-job-offerings';
 
-import AcceptedOfferSection from '@/components/features/human-resources/accepted-offer-section';
 import OngoingOfferSection from '@/components/features/human-resources/ongoing-offer-section';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import useAuthStore from '@/store/useAuthStore';
 
-import { API_BASE_URL } from '@/constant/config';
-
-import { ApiReturn } from '@/types/api.types';
-import { JobApplicant, JobPostingDataExtended } from '@/types/response/job';
-
 const HROfferingsPage = () => {
   const { user } = useAuthStore();
 
-  const { data } = useQuery({
-    queryKey: ['offerings'],
-    queryFn: async () => {
-      // Fetch job offerings
-      const response = await api.get<ApiReturn<JobPostingDataExtended[]>>(
-        `${API_BASE_URL}/job-vacancies/${user?.email}`
-      );
-
-      const offerings = response.data.data;
-
-      // Fetch applicants for each job offering
-      const offeringsWithApplicants = await Promise.all(
-        offerings.map(async (offering) => {
-          try {
-            const applicantsResponse = await api.get<ApiReturn<JobApplicant[]>>(
-              `${API_BASE_URL}/job-applications/job-vacancy/${offering.id}`
-            );
-            const allApplicants = applicantsResponse.data.data;
-            // Filter out accepted applicants
-            const acceptedApplicants = allApplicants.filter(
-              (applicant) => applicant.status === 'accepted'
-            );
-            const rejectedApplicant = allApplicants.filter(
-              (applicant) => applicant.status === 'rejected'
-            );
-            const appliedApplicant = allApplicants.filter(
-              (applicant) => applicant.status === 'applied'
-            );
-            return {
-              ...offering,
-              applicants: allApplicants,
-              acceptedApplicants: acceptedApplicants,
-              rejectedApplicant: rejectedApplicant,
-              appliedApplicant: appliedApplicant,
-            };
-          } catch (error) {
-            console.error(
-              `Failed to fetch applicants for job ${offering.id}:`,
-              error
-            );
-            return {
-              ...offering,
-              applicants: [],
-              acceptedApplicants: [],
-              rejectedApplicant: [],
-              appliedApplicant: [],
-            };
-          }
-        })
-      );
-
-      console.log(offeringsWithApplicants);
-
-      return offeringsWithApplicants;
-    },
-    select: (data) => {
-      return data.filter((offering) => offering.applicants.length > 0);
-    },
-  });
+  const { data, isLoading, error } = useJobOfferings(user?.email);
 
   // const { data: applicants, isPending: isPendingApplicants } = useQuery({
   //   queryKey: ['offering-detail-list-applicants'],
@@ -91,6 +26,8 @@ const HROfferingsPage = () => {
   //     return data.filter((applicant) => applicant.status === 'applied');
   //   },
   // });
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className='container mx-auto flex flex-col gap-y-12'>
@@ -112,7 +49,7 @@ const HROfferingsPage = () => {
             <div className='p-4 rounded bg-card border shadow flex flex-col gap-y-4'>
               <h3 className='text-xl'>Ongoing Offer</h3>
               {data ? (
-                <OngoingOfferSection offerings={data} />
+                <OngoingOfferSection offerings={data.ongoingJobs} />
               ) : (
                 <div className='flex items-center text-xl'>
                   <h4>There is no ongoing offerings</h4>
@@ -124,7 +61,13 @@ const HROfferingsPage = () => {
           <TabsContent value='accepted'>
             <div className='p-4 rounded bg-card border shadow flex flex-col gap-y-4'>
               <h3 className='text-xl'>Accepted Offer</h3>
-              <AcceptedOfferSection />
+              {data ? (
+                <OngoingOfferSection offerings={data.completedJobs} />
+              ) : (
+                <div className='flex items-center text-xl'>
+                  <h4>There is no accepted offer</h4>
+                </div>
+              )}
             </div>
           </TabsContent>
         </Tabs>

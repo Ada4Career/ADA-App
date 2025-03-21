@@ -31,6 +31,7 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
       );
       return response.data.data;
     },
+    refetchOnMount: true,
   });
 
   const { data: applicants, isPending: isPendingApplicants } = useQuery({
