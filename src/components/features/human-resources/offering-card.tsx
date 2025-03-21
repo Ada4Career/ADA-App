@@ -46,14 +46,17 @@ const OfferingCard = ({
               {offering.stage}
             </Badge>
           </div>
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center gap-2 mt-3'>
             <Badge className='mt-2'>
               {offering.applicants?.length ?? '0'} applied
             </Badge>
-            <Badge className='mt-2'>
+            <Badge className='mt-2 bg-indigo-600'>
               {offering.appliedApplicant?.length ?? '0'} need to review
             </Badge>
-            <Badge className='mt-2'>
+            <Badge className='mt-2 bg-green-500'>
+              {offering.acceptedApplicant?.length ?? '0'} accepted
+            </Badge>
+            <Badge className='mt-2 bg-red-500'>
               {offering.rejectedApplicant?.length ?? '0'} rejected
             </Badge>
           </div>

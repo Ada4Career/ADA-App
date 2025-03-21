@@ -34,7 +34,11 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
     refetchOnMount: true,
   });
 
-  const { data: applicants, isPending: isPendingApplicants } = useQuery({
+  const {
+    data: applicants,
+    isPending: isPendingApplicants,
+    refetch,
+  } = useQuery({
     queryKey: ['offering-detail-list-applicants'],
     queryFn: async () => {
       const response = await api.get<ApiReturn<JobApplicant[]>>(
@@ -52,10 +56,12 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
 
   const handleAccept = async (id: string) => {
     await acceptApplicant({ applicantId: id });
+    refetch();
   };
 
   const handleReject = async (id: string) => {
     await rejectApplicant({ applicantId: id });
+    refetch();
   };
 
   if (isPending || isPendingApplicants) {
@@ -103,57 +109,19 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
         {applicants?.length ? (
           applicants.map((apl, idx) => (
             <>
-              <div key={apl.id} className='grid grid-cols-7 justify-center'>
-                <div className='flex items-center gap-2 col-span-2'>
-                  <Avatar className='h-10 w-10'>
-                    <AvatarImage
-                      src={apl.id || '/placeholder.svg'}
-                      alt={apl.id ?? 'Company logo'}
-                      className='object-contain'
-                    />
-                    <AvatarFallback className='text-xs'>
-                      {apl.job_seeker_email
-                        ? apl?.job_seeker_email.substring(0, 2).toUpperCase()
-                        : 'CO'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h5>{apl.job_seeker_email}</h5>
-                </div>
-                <div>{offering?.department}</div>
-                <div>{offering?.start_date}</div>
-                <Link href={apl.resume_url}>
-                  <Button variant='link' className='underline'>
-                    Resume URL
-                  </Button>
-                </Link>
-                <Link href={`/app/hr/offerings/applicant/${apl.id}`}>
-                  <Button>
-                    Detail Applicant
-                    <ArrowRight />
-                  </Button>
-                </Link>
-                <div className='flex items-center gap-2 col-span-1 justify-center'>
-                  <Button
-                    onClick={() => handleAccept(apl.id)}
-                    size='icon'
-                    className='bg-green-500'
-                  >
-                    <CheckCircle2Icon />
-                  </Button>
-                  <Button
-                    onClick={() => handleReject(apl.id)}
-                    size='icon'
-                    className='bg-red-500'
-                  >
-                    <XCircleIcon />
-                  </Button>
-                </div>
-              </div>
+              <ApplicantCard
+                apl={apl}
+                offering={offering}
+                onAccept={handleAccept}
+                onReject={handleReject}
+              />
               {idx != applicants.length - 1 && <Separator className='my-2' />}
             </>
           ))
         ) : (
-          <div>No Applicant</div>
+          <div className='flex items-center justify-center text-xl text-gray-600 font-medium my-8'>
+            No Applicant yet
+          </div>
         )}
       </div>
     </div>
@@ -161,3 +129,66 @@ const OfferingDetailSection = ({ id }: { id: string }) => {
 };
 
 export default OfferingDetailSection;
+
+type PropsAplicant = {
+  apl: JobApplicant;
+  offering: JobPostingDataExtended | undefined;
+  onAccept: (id: string) => void;
+  onReject: (id: string) => void;
+};
+
+const ApplicantCard = ({
+  apl,
+  offering,
+  onAccept,
+  onReject,
+}: PropsAplicant) => {
+  return (
+    <div key={apl.id} className='grid grid-cols-7 justify-center'>
+      <div className='flex items-center gap-2 col-span-2'>
+        <Avatar className='h-10 w-10'>
+          <AvatarImage
+            src={apl.id || '/placeholder.svg'}
+            alt={apl.id ?? 'Company logo'}
+            className='object-contain'
+          />
+          <AvatarFallback className='text-xs'>
+            {apl.job_seeker_email
+              ? apl?.job_seeker_email.substring(0, 2).toUpperCase()
+              : 'CO'}
+          </AvatarFallback>
+        </Avatar>
+        <h5>{apl.job_seeker_email}</h5>
+      </div>
+      <div>{offering?.department}</div>
+      <div>{offering?.start_date}</div>
+      <Link href={apl.resume_url}>
+        <Button variant='link' className='underline'>
+          Resume URL
+        </Button>
+      </Link>
+      <Link href={`/app/hr/offerings/applicant/${apl.id}`}>
+        <Button>
+          Detail Applicant
+          <ArrowRight />
+        </Button>
+      </Link>
+      <div className='flex items-center gap-2 col-span-1 justify-center'>
+        <Button
+          onClick={() => onAccept(apl.id)}
+          size='icon'
+          className='bg-green-500'
+        >
+          <CheckCircle2Icon />
+        </Button>
+        <Button
+          onClick={() => onReject(apl.id)}
+          size='icon'
+          className='bg-red-500'
+        >
+          <XCircleIcon />
+        </Button>
+      </div>
+    </div>
+  );
+};

@@ -1,6 +1,8 @@
 'use client';
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
+import api from '@/lib/axios';
 import { useJobOfferings } from '@/hooks/hr/use-job-offerings';
 
 import OngoingOfferSection from '@/components/features/human-resources/ongoing-offer-section';
@@ -8,24 +10,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import useAuthStore from '@/store/useAuthStore';
 
+import { API_BASE_URL } from '@/constant/config';
+
 const HROfferingsPage = () => {
   const { user } = useAuthStore();
 
   const { data, isLoading, error } = useJobOfferings(user?.email);
 
-  // const { data: applicants, isPending: isPendingApplicants } = useQuery({
-  //   queryKey: ['offering-detail-list-applicants'],
-  //   queryFn: async () => {
-  //     const response = await api.get<ApiReturn<JobApplicant[]>>(
-  //       `${API_BASE_URL}/job-applications/job-vacancy/${id}`
-  //     );
-  //     return response.data.data;
-  //   },
-  //   enab
-  //   select: (data) => {
-  //     return data.filter((applicant) => applicant.status === 'applied');
-  //   },
-  // });
+  const { data: acceptedApplicant } = useQuery({
+    queryKey: ['accepted-applicants'],
+    queryFn: async () => {
+      const response = await api.get(`${API_BASE_URL}/`);
+    },
+  });
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -49,7 +46,7 @@ const HROfferingsPage = () => {
             <div className='p-4 rounded bg-card border shadow flex flex-col gap-y-4'>
               <h3 className='text-xl'>Ongoing Offer</h3>
               {data ? (
-                <OngoingOfferSection offerings={data.ongoingJobs} />
+                <OngoingOfferSection offerings={data.allJobs} />
               ) : (
                 <div className='flex items-center text-xl'>
                   <h4>There is no ongoing offerings</h4>

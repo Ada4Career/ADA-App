@@ -16,6 +16,7 @@ export const useJobOfferings = (userEmail: string | undefined) => {
     {
       ongoingJobs: JobPostingWithApplicants[];
       completedJobs: JobPostingWithApplicants[];
+      allJobs: JobPostingWithApplicants[];
     },
     Error
   >({
@@ -45,6 +46,9 @@ export const useJobOfferings = (userEmail: string | undefined) => {
             const acceptedApplicants = allApplicants.filter(
               (applicant) => applicant.status === 'accepted'
             );
+            const appliedApplicant = allApplicants.filter(
+              (applicant) => applicant.status === 'applied'
+            );
             const rejectedApplicants = allApplicants.filter(
               (applicant) => applicant.status === 'rejected'
             );
@@ -54,6 +58,7 @@ export const useJobOfferings = (userEmail: string | undefined) => {
               applicants: allApplicants,
               acceptedApplicant: acceptedApplicants,
               rejectedApplicant: rejectedApplicants,
+              appliedApplicant: appliedApplicant,
             };
           } catch (error) {
             console.error(
@@ -65,6 +70,7 @@ export const useJobOfferings = (userEmail: string | undefined) => {
               applicants: [],
               acceptedApplicant: [],
               rejectedApplicant: [],
+              appliedApplicant: [],
             };
           }
         })
@@ -79,9 +85,11 @@ export const useJobOfferings = (userEmail: string | undefined) => {
         (job) => job.acceptedApplicant && job.acceptedApplicant.length > 0
       );
 
+      console.log(offeringsWithApplicants);
       return {
         ongoingJobs,
         completedJobs,
+        allJobs: offeringsWithApplicants,
       };
     },
     enabled: !!userEmail, // Only run the query if userEmail exists

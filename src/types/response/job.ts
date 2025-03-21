@@ -45,7 +45,7 @@ export interface JobPostingDataExtended extends JobPostingData {
 
 export interface JobPostingWithApplicants extends JobPostingDataExtended {
   applicants?: JobApplicant[]; // Store all applicants for the job
-  acceptedApplicants?: JobApplicant[]; // Store only accepted applicants
+  acceptedApplicant?: JobApplicant[]; // Store only accepted applicants
   rejectedApplicant?: JobApplicant[]; // Store only rejected applicants
   appliedApplicant?: JobApplicant[]; // Store only applied applicants
 }
