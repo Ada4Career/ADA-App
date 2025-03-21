@@ -29,6 +29,10 @@ export const useJobApplicants = (
 
       const applicants = applicantsResponse.data.data;
 
+      if (applicants === null) {
+        return [];
+      }
+
       // 2. Extract unique job vacancy IDs
       const jobVacancyIds = Array.from(
         new Set(applicants.map((app) => app.job_vacancy_id))
@@ -78,6 +82,8 @@ export const useJobApplicants = (
         ...applicant,
         jobDetails: jobDetailsMap[applicant.job_vacancy_id],
       }));
+
+      // console.log(applicantsWithJobDetails);
 
       return applicantsWithJobDetails;
     },
