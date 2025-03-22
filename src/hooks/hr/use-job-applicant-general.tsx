@@ -143,10 +143,10 @@ export const useApplicants = (
     enabled: !!userEmail,
     ...(options.noCache
       ? {
-          cacheTime: 0,
-          staleTime: 0,
-          refetchOnMount: true,
-          refetchOnWindowFocus: true,
+          // cacheTime: 0,
+          // staleTime: 0,
+          // refetchOnMount: true,
+          // refetchOnWindowFocus: true,
         }
       : {}),
   });

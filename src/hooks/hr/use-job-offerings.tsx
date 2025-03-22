@@ -92,9 +92,7 @@ export const useJobOfferings = (userEmail: string | undefined) => {
         allJobs: offeringsWithApplicants,
       };
     },
-    enabled: !!userEmail, // Only run the query if userEmail exists
-    staleTime: 0,
-    // refetchOnMount: true,
-    // refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
+    // enabled: !!userEmail, // Only run the query if userEmail exists
   });
 };

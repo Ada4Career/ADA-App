@@ -121,7 +121,7 @@ const HRDashboardPage = () => {
         <div className='bg-card p-6 w-full border rounded-md shadow'>
           <div className='flex items-center justify-between'>
             <h4>All Applicants</h4>
-            <Link href='all'>
+            <Link href='/app/hr/offerings'>
               <Button variant='link' className='text-blue-500 underline'>
                 See All
               </Button>
