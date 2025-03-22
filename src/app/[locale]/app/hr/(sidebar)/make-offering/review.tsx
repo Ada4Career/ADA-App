@@ -13,14 +13,14 @@ const Review = ({ form }: JobPostingSectionProps) => {
         <section className='border rounded-lg p-4'>
           <h3 className='text-xl font-medium mb-2'>Basic Information</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div>
+            {/* <div>
               <p className='text-sm text-gray-500'>Email</p>
               <p className='font-medium'>{formData.basicInfo.email}</p>
             </div>
             <div>
               <p className='text-sm text-gray-500'>Company</p>
               <p className='font-medium'>{formData.basicInfo.company}</p>
-            </div>
+            </div> */}
             <div>
               <p className='text-sm text-gray-500'>Division</p>
               <p className='font-medium'>{formData.basicInfo.division}</p>
