@@ -20,19 +20,6 @@ const routeRoleMap = {
   '/app/profile': 'authenticated',
 };
 
-// Create the intl middleware
-const handleI18nRouting = createMiddleware(routing);
-
-// Helper to get the current locale from path
-function getLocaleFromPath(path: string, locales: string[]): string | null {
-  for (const locale of locales) {
-    if (path === `/${locale}` || path.startsWith(`/${locale}/`)) {
-      return locale;
-    }
-  }
-  return null;
-}
-
 // Skip middleware for these paths
 function shouldSkipMiddleware(path: string) {
   return (
@@ -44,22 +31,48 @@ function shouldSkipMiddleware(path: string) {
   );
 }
 
-// Authentication middleware function
-async function authMiddleware(request: NextRequest) {
+// Helper to get the current locale from path
+function getLocaleFromPath(path: string, locales: string[]): string | null {
+  for (const locale of locales) {
+    if (path === `/${locale}` || path.startsWith(`/${locale}/`)) {
+      return locale;
+    }
+  }
+  return null;
+}
+
+// Helper to add locale prefix to URL if needed
+function getLocalizedUrl(url: string, locale: string | null): string {
+  if (!locale) return url;
+
+  // If URL already starts with locale, don't add it again
+  if (url.startsWith(`/${locale}/`) || url === `/${locale}`) {
+    return url;
+  }
+
+  // Add locale to URL (handling root path specially)
+  return url === '/' ? `/${locale}` : `/${locale}${url}`;
+}
+
+// The main middleware function that combines both internationalization and auth
+export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const redirectParam = request.nextUrl.searchParams.get('redirect');
-  const token = request.cookies.get('ada4career-token')?.value;
-  let routeRole = 'authenticated';
 
-  // Get the current locale, if any
+  // Skip processing for certain paths
+  if (shouldSkipMiddleware(path)) {
+    return NextResponse.next();
+  }
+
+  // Get current locale from the path or default to null
   const currentLocale = getLocaleFromPath(path, [...routing.locales]);
-  const localePrefix = currentLocale ? `/${currentLocale}` : '';
 
-  // Determine the route role - strip locale for matching
+  // Get the path without locale prefix for role determination
   const pathWithoutLocale = currentLocale
     ? path.substring(currentLocale.length + 1) || '/'
     : path;
 
+  // Determine route role based on path without locale
+  let routeRole = 'authenticated';
   for (const [pattern, role] of Object.entries(routeRoleMap)) {
     if (
       pathWithoutLocale === pattern ||
@@ -70,19 +83,29 @@ async function authMiddleware(request: NextRequest) {
     }
   }
 
+  // Auth check
+  const redirectParam = request.nextUrl.searchParams.get('redirect');
+  const token = request.cookies.get('ada4career-token')?.value;
+
   // Check if the user is authenticated
   if (!token) {
     if (routeRole === 'public' || routeRole === 'optional') {
-      return NextResponse.next();
+      // Apply i18n routing for public routes
+      const i18nMiddleware = createMiddleware(routing);
+      return i18nMiddleware(request);
     }
 
-    // Redirect to login page with locale preserved
-    const loginUrl = new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url);
+    // For protected routes, redirect to login but preserve locale
+    const loginPath = LOGIN_ROUTE;
+    const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
+
+    const loginUrl = new URL(localizedLoginPath, request.url);
     if (redirectParam) {
       loginUrl.searchParams.set('redirect', redirectParam);
-    } else if (path !== LOGIN_ROUTE) {
+    } else if (path !== loginPath) {
       loginUrl.searchParams.set('redirect', path);
     }
+
     return NextResponse.redirect(loginUrl);
   }
 
@@ -93,8 +116,11 @@ async function authMiddleware(request: NextRequest) {
 
     // Invalid token
     if (!userResponse.ok) {
+      const loginPath = LOGIN_ROUTE;
+      const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
+
       const response = NextResponse.redirect(
-        new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url)
+        new URL(localizedLoginPath, request.url)
       );
       response.cookies.delete('ada4career-token');
       response.cookies.delete('ada4career-email');
@@ -106,69 +132,78 @@ async function authMiddleware(request: NextRequest) {
     const userRole = user?.role?.[0];
 
     if (!userRole) {
+      const loginPath = LOGIN_ROUTE;
+      const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
+
       const response = NextResponse.redirect(
-        new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url)
+        new URL(localizedLoginPath, request.url)
       );
       response.cookies.delete('ada4career-token');
       response.cookies.delete('ada4career-email');
       return response;
     }
 
+    // Prepare the next response (but don't return it yet)
     const response = NextResponse.next();
 
-    // Store only email in cookies
+    // Store email in cookies
     response.cookies.set('ada4career-email', user.email, {
       httpOnly: true,
       secure: true,
       path: '/',
     });
 
+    // Check if user has completed gender selection
+    const hasCompletedGenderSelection =
+      user.gender === 'male' ||
+      user.gender === 'female' ||
+      user.gender === 'other';
+
     // Handle public routes
     if (routeRole === 'public') {
-      // Check if user needs to complete onboarding
-      if (
-        user.gender != 'male' &&
-        user.gender != 'female' &&
-        user.gender != 'other'
-      ) {
+      // Check if user needs onboarding
+      if (!hasCompletedGenderSelection) {
+        const onboardingPath = '/onboarding';
+        const localizedOnboardingPath = getLocalizedUrl(
+          onboardingPath,
+          currentLocale
+        );
         return NextResponse.redirect(
-          new URL(`${localePrefix}/onboarding`, request.url)
+          new URL(localizedOnboardingPath, request.url)
         );
       } else {
-        // Redirect to appropriate dashboard with locale preserved
+        // Redirect to appropriate dashboard
+        const dashboardPath =
+          userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE;
+        const localizedDashboardPath = getLocalizedUrl(
+          dashboardPath,
+          currentLocale
+        );
         return NextResponse.redirect(
-          new URL(
-            `${localePrefix}${
-              userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE
-            }`,
-            request.url
-          )
+          new URL(localizedDashboardPath, request.url)
         );
       }
     }
 
-    // Allow access to authenticated routes
-    if (routeRole === 'authenticated') {
-      return response;
-    }
-
     // Handle onboarding routes
     if (routeRole === 'onboarding') {
-      if (
-        user.gender == 'male' ||
-        user.gender == 'female' ||
-        user.gender == 'other'
-      ) {
+      if (hasCompletedGenderSelection) {
         if (userRole === 'jobseeker') {
-          if (user.job_seeker_data?.resume_url != '') {
+          // Check if resume is uploaded
+          if (user.job_seeker_data?.resume_url) {
+            const jobseekerPath = JOBSEEKER_ROUTE;
+            const localizedJobseekerPath = getLocalizedUrl(
+              jobseekerPath,
+              currentLocale
+            );
             return NextResponse.redirect(
-              new URL(`${localePrefix}${JOBSEEKER_ROUTE}`, request.url)
+              new URL(localizedJobseekerPath, request.url)
             );
           }
         } else {
-          return NextResponse.redirect(
-            new URL(`${localePrefix}${HR_ROUTE}`, request.url)
-          );
+          const hrPath = HR_ROUTE;
+          const localizedHrPath = getLocalizedUrl(hrPath, currentLocale);
+          return NextResponse.redirect(new URL(localizedHrPath, request.url));
         }
       }
     }
@@ -178,57 +213,44 @@ async function authMiddleware(request: NextRequest) {
       (routeRole === 'jobseeker' && userRole !== 'jobseeker') ||
       (routeRole === 'human_resources' && userRole !== 'human_resources')
     ) {
-      if (
-        user.gender != 'male' &&
-        user.gender != 'female' &&
-        user.gender != 'other'
-      ) {
+      if (!hasCompletedGenderSelection) {
+        const onboardingPath = '/onboarding';
+        const localizedOnboardingPath = getLocalizedUrl(
+          onboardingPath,
+          currentLocale
+        );
         return NextResponse.redirect(
-          new URL(`${localePrefix}/onboarding`, request.url)
+          new URL(localizedOnboardingPath, request.url)
         );
       } else {
+        const dashboardPath =
+          userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE;
+        const localizedDashboardPath = getLocalizedUrl(
+          dashboardPath,
+          currentLocale
+        );
         return NextResponse.redirect(
-          new URL(
-            `${localePrefix}${
-              userRole === 'jobseeker' ? JOBSEEKER_ROUTE : HR_ROUTE
-            }`,
-            request.url
-          )
+          new URL(localizedDashboardPath, request.url)
         );
       }
     }
 
-    return response;
+    // Apply i18n routing for authenticated routes that don't require redirect
+    const i18nMiddleware = createMiddleware(routing);
+    return i18nMiddleware(request);
   } catch (error) {
     console.error('Auth middleware error:', error);
+
+    const loginPath = LOGIN_ROUTE;
+    const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
+
     const response = NextResponse.redirect(
-      new URL(`${localePrefix}${LOGIN_ROUTE}`, request.url)
+      new URL(localizedLoginPath, request.url)
     );
     response.cookies.delete('ada4career-token');
     response.cookies.delete('ada4career-email');
     return response;
   }
-}
-
-// The main middleware function that combines both internationalization and auth
-export default async function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
-
-  // Skip processing for certain paths
-  if (shouldSkipMiddleware(path)) {
-    return NextResponse.next();
-  }
-  // Step 3: Apply auth middleware on the original request
-  // This ensures auth logic runs with the locale information preserved
-  authMiddleware(request);
-  // Step 1: Apply the intl middleware
-  const response = handleI18nRouting(request);
-
-  // Step 2: If intl middleware redirected (e.g., locale detection), return immediately
-  if (response.status !== 200) {
-    return response;
-  }
-  return response;
 }
 
 export const config = {

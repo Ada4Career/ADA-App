@@ -59,7 +59,6 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  console.log('localess', locale);
 
   return (
     <ReactQueryClientProvider>
