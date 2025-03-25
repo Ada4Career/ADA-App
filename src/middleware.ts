@@ -1,7 +1,6 @@
 // middleware.ts
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
-import createIntlMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
 
 import { API_BASE_URL } from '@/constant/config';
 
@@ -12,16 +11,6 @@ const LOGIN_ROUTE = '/?auth=login';
 const JOBSEEKER_ROUTE = '/app/home/jobs';
 const HR_ROUTE = '/app/hr/dashboard';
 
-// Define route roles
-export enum RouteRole {
-  public,
-  optional,
-  authenticated, // Requires login (any role)
-  onboarding,
-  jobseeker,
-  human_resources,
-}
-
 // Map paths to roles
 const routeRoleMap = {
   '/': 'public',
@@ -31,15 +20,8 @@ const routeRoleMap = {
   '/app/profile': 'authenticated',
 };
 
-// Create the internationalization middleware
-const intlMiddleware = createIntlMiddleware(routing);
-
-// Check if a path is a localized path - FIXED to handle paths like /id (without trailing slash)
-function isLocalizedPath(path: string, locales: string[]) {
-  return locales.some(
-    (locale) => path === `/${locale}` || path.startsWith(`/${locale}/`)
-  );
-}
+// Create the intl middleware
+const handleI18nRouting = createMiddleware(routing);
 
 // Helper to get the current locale from path
 function getLocaleFromPath(path: string, locales: string[]): string | null {
@@ -51,7 +33,19 @@ function getLocaleFromPath(path: string, locales: string[]): string | null {
   return null;
 }
 
-async function authMid(request: NextRequest) {
+// Skip middleware for these paths
+function shouldSkipMiddleware(path: string) {
+  return (
+    path.includes('.') || // Static files
+    path.startsWith('/_next') || // Next.js internal routes
+    path.startsWith('/api') || // API routes
+    path.startsWith('/trpc') || // tRPC routes
+    path.startsWith('/_vercel') // Vercel internal routes
+  );
+}
+
+// Authentication middleware function
+async function authMiddleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const redirectParam = request.nextUrl.searchParams.get('redirect');
   const token = request.cookies.get('ada4career-token')?.value;
@@ -216,35 +210,25 @@ async function authMid(request: NextRequest) {
   }
 }
 
-// Combine both middlewares
+// The main middleware function that combines both internationalization and auth
 export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  // Skip certain paths from all middleware
-  if (
-    path.includes('.') || // Static files
-    path.startsWith('/_next') || // Next.js internal routes
-    path.startsWith('/api') || // API routes
-    path.startsWith('/trpc') || // tRPC routes
-    path.startsWith('/_vercel') // Vercel internal routes
-  ) {
+  // Skip processing for certain paths
+  if (shouldSkipMiddleware(path)) {
     return NextResponse.next();
   }
+  // Step 3: Apply auth middleware on the original request
+  // This ensures auth logic runs with the locale information preserved
+  authMiddleware(request);
+  // Step 1: Apply the intl middleware
+  const response = handleI18nRouting(request);
 
-  // Handle internationalization first
-  // Only process paths that aren't already localized
-  if (!isLocalizedPath(path, [...routing.locales])) {
-    // Run the intl middleware
-    const intlResult = await intlMiddleware(request);
-
-    // If the intl middleware redirected, return that response
-    if (intlResult.status !== 200) {
-      return intlResult;
-    }
+  // Step 2: If intl middleware redirected (e.g., locale detection), return immediately
+  if (response.status !== 200) {
+    return response;
   }
-
-  // Run the auth middleware
-  return authMid(request);
+  return response;
 }
 
 export const config = {
