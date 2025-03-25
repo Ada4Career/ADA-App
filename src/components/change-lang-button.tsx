@@ -1,5 +1,6 @@
 'use client';
 import { Globe } from 'lucide-react';
+import { usePathname as usePathnameDef } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
@@ -14,7 +15,10 @@ import {
 import { usePathname, useRouter } from '@/i18n/navigation';
 
 const ChangeLangButton = () => {
-  const [language, setLanguage] = React.useState('en');
+  const defaultPathname = usePathnameDef();
+  const [language, setLanguage] = React.useState(
+    defaultPathname.split('/')[1] ?? 'en'
+  );
   const pathname = usePathname();
   const router = useRouter();
 
