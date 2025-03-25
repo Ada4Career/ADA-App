@@ -47,6 +47,8 @@ const OnboardingPage = () => {
   });
 
   const renderOnboard = () => {
+    console.log(data?.data.data);
+    console.log(disabilityData?.data);
     if (data?.data.data.role[0] == 'jobseeker') {
       if (disabilityData?.data == undefined) {
         return <DisabilityTest refetch={refetch} />;

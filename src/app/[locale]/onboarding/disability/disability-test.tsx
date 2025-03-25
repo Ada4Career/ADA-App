@@ -233,7 +233,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
         answers: data,
       };
 
-      // console.log(dataToSend);
+      console.log(dataToSend, 'ini dikirim');
 
       const response = await api.post(
         `${API_BASE_URL}/questionnaire`,
@@ -285,13 +285,18 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
     }
 
     const currentAnswer = answers[currentDisability];
-    if (!currentAnswer?.impairmentType) return false;
+    // console.log('f1');
+    if (!currentAnswer?.impairmentType) {
+      console.log('f1');
+      return false;
+    }
 
     // If "Other" is selected, custom type must be provided
     if (
       currentAnswer.impairmentType === 'Other' &&
       !currentAnswer.customImpairmentType
     ) {
+      console.log(currentAnswer);
       return false;
     }
 

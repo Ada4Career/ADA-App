@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import api from '@/lib/axios';
-import { setToken } from '@/lib/cookies';
+import { setToken, setTokenEmail } from '@/lib/cookies';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -72,6 +72,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
 
       const token = loginResponse.data.data.token;
       setToken(token);
+      setTokenEmail(loginResponse.data.data.email);
       const meResponse = await api.get<ApiReturn<UserInterface>>(
         `${API_BASE_URL}/me`
       );
