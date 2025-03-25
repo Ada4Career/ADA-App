@@ -326,5 +326,10 @@
       "skipButton": "Skip for now",
       "note": "You can change your accessibility settings anytime using the widget at the bottom right of the screen."
     }
+  },
+  "SwitchLanguage": {
+    "switchLanguage": "Language",
+    "english": "English",
+    "indonesian": "Indonesian"
   }
 }

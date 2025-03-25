@@ -147,7 +147,10 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className='mt-10 grid grid-cols-7 gap-y-5 gap-x-6 text-start'>
+            <div
+              id='product'
+              className='mt-10 grid grid-cols-7 gap-y-5 gap-x-6 text-start'
+            >
               <div className='col-span-5 rounded-md border-gradient-ms flex items-center justify-center'>
                 <div className='grid grid-cols-7 p-10 justify-center'>
                   <div className='w-14 h-14 flex-1 flex-grow rounded-full bg-ms-rainbow text-white border-[1px] border-indigo-500 flex items-center justify-center'>
@@ -224,10 +227,10 @@ export default function HomePage() {
                   src='/vid/aida.webm'
                   width={480}
                   height={240}
-                  controls
+                  autoPlay
                   playsInline
                   muted
-                  autoPlay
+                  loop
                 ></video>{' '}
               </div>
             </div>

@@ -326,5 +326,10 @@
       "skipButton": "Lewati untuk saat ini",
       "note": "Anda dapat mengubah pengaturan aksesibilitas kapan saja menggunakan widget di pojok kanan bawah layar."
     }
+  },
+  "SwitchLanguage": {
+    "switchLanguage": "Bahasa",
+    "english": "Inggris",
+    "indonesian": "Indonesia"
   }
 }

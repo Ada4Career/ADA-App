@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+import ChangeLangButton from '@/components/change-lang-button';
 import AuthDialog from '@/components/features/auth/auth-dialog';
 
 import logo from '~/images/ADALogo.png';
@@ -14,7 +15,7 @@ const NAV_LINKS = [
   },
   {
     name: 'Products',
-    url: '/',
+    url: '#product',
   },
 ];
 
@@ -51,6 +52,7 @@ const Navbar = () => {
           </Link>
         ) : (
         )} */}
+        <ChangeLangButton />
         <QueryClientProvider client={queryClient}>
           <AuthDialog />
         </QueryClientProvider>
