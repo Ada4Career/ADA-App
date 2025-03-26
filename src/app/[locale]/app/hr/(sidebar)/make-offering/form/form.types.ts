@@ -65,7 +65,7 @@ export const inclusivitySchema = z.object({
 
 export const mediaSchema = z.object({
   logo: z.string().optional(),
-  additionalImageUrl: z.string().optional(),
+  additional_image_url: z.string().optional(),
 });
 
 // Combined schema for the entire form

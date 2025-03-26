@@ -32,7 +32,7 @@ const Media = ({ form }: JobPostingSectionProps) => {
 
       <FormField
         control={form.control}
-        name='media.additionalImageUrl'
+        name='media.additional_image_url'
         render={({ field }) => (
           <FormItem className='w-full'>
             <FormLabel>Additional Image URL (optional)</FormLabel>

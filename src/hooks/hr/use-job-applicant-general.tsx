@@ -121,7 +121,7 @@ export const useApplicants = (
               end_date: '',
               responsibilities: '',
               qualification: '',
-              additionalImageUrl: '',
+              additional_image_url: '',
               company: 'Unknown Company',
               department: 'Unknown Department',
             };

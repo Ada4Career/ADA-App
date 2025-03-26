@@ -155,7 +155,7 @@ const Review = ({ form }: JobPostingSectionProps) => {
             <div>
               <p className='text-sm text-gray-500'>Additional Image URL</p>
               <p className='font-medium truncate'>
-                {formData.media.additionalImageUrl || 'N/A'}
+                {formData.media.additional_image_url || 'N/A'}
               </p>
             </div>
           </div>

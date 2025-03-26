@@ -70,7 +70,7 @@ const MakeOfferingPage = () => {
       },
       media: {
         logo: '',
-        additionalImageUrl: '',
+        additional_image_url: '',
       },
     },
   });
@@ -96,7 +96,7 @@ const MakeOfferingPage = () => {
         end_date: data.jobDetails.end_date || '',
         responsibilities: data.jobDescription.responsibilities,
         qualification: data.jobDescription.qualification,
-        additionalImageUrl: data.media.additionalImageUrl || '',
+        additional_image_url: data.media.additional_image_url || '',
 
         // Extended fields
         company: user?.human_resource_data?.company ?? '',

@@ -61,7 +61,7 @@ export const useJobApplicants = (
               division: '-',
               department: '-',
               location: '-',
-              additionalImageUrl: '-',
+              additional_image_url: '-',
               email: '-',
               end_date: '-',
               job_type: 'casual',
