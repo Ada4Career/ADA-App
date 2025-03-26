@@ -4,24 +4,17 @@ import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import api from '@/lib/axios';
-import {
-  getRandomAccessibilityLevel,
-  getRandomAccommodations,
-  getRandomCompany,
-  getRandomExperience,
-  getRandomInclusiveStatement,
-  getRandomLocation,
-  getRandomStage,
-} from '@/lib/utils';
 
 import JobCard from '@/components/features/job-seeker/job-card';
 import JobFilters from '@/components/features/job-seeker/job-filter';
 
+import useAuthStore from '@/store/useAuthStore';
+
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiReturn } from '@/types/api.types';
+import { PaginatedResponse } from '@/types/pagination.types';
 import {
-  JobPostingData,
   JobPostingDataExtended,
   JobType,
   WorkplaceType,
@@ -29,34 +22,35 @@ import {
 
 const HomePage = () => {
   const t = useTranslations('Jobs.HomePage'); // Add translation hook
+  const { user } = useAuthStore();
 
   const { data, isPending } = useQuery<JobPostingDataExtended[]>({
     queryKey: ['jobs'],
     queryFn: async () => {
-      const response = await api.get<ApiReturn<JobPostingData[]>>(
-        `${API_BASE_URL}/job-vacancies`
-      );
-      // console.log(response.data.data);
-      return response.data.data.map((j) => {
-        const exp = getRandomExperience();
-        const cmp = getRandomCompany();
-        const stg = getRandomStage();
-        const loc = getRandomLocation();
-        const sta = getRandomInclusiveStatement();
-        const lvl = getRandomAccessibilityLevel();
-        const aco = getRandomAccommodations();
-        return {
-          ...j,
-          company: cmp,
-          accommodations: aco,
-          accessibility_level: lvl,
-          inclusive_hiring_statement: sta,
-          disability_friendly: true,
-          experience: exp,
-          location: loc,
-          stage: stg,
-        };
-      });
+      const response = await api.get<
+        ApiReturn<PaginatedResponse<JobPostingDataExtended>>
+      >(`${API_BASE_URL}/job-vacancies/match/${user?.email}`);
+      return response.data.data.items;
+      // return response.data.data.map((j) => {
+      //   const exp = getRandomExperience();
+      //   const cmp = getRandomCompany();
+      //   const stg = getRandomStage();
+      //   const loc = getRandomLocation();
+      //   const sta = getRandomInclusiveStatement();
+      //   const lvl = getRandomAccessibilityLevel();
+      //   const aco = getRandomAccommodations();
+      //   return {
+      //     ...j,
+      //     company: cmp,
+      //     accommodations: aco,
+      //     accessibility_level: lvl,
+      //     inclusive_hiring_statement: sta,
+      //     disability_friendly: true,
+      //     experience: exp,
+      //     location: loc,
+      //     stage: stg,
+      //   };
+      // });
     },
   });
 

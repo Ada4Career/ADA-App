@@ -32,15 +32,15 @@
       "mental": "Mental atau Intelektual",
       "details": "Detail",
       "step": "Langkah {currentStep} dari {totalStep}",
-      "selectImpairment": "Silakan pilih jenis gangguan Anda:",
-      "specifyImpairment": "Silakan tentukan jenis gangguan Anda:",
+      "selectImpairment": "Silakan pilih jenis disabilitas Anda:",
+      "specifyImpairment": "Silakan tentukan jenis disabilitas Anda:",
       "additionalDetails": "Silakan berikan detail tambahan (opsional):",
       "previous": "Sebelumnya",
       "next": "Selanjutnya",
       "submit": "Kirim",
       "haveDisability": "Apakah Anda memiliki disabilitas?",
       "whatType": "Jenis disabilitas apa yang Anda miliki?",
-      "impairmentPlaceholder": "Masukkan jenis gangguan spesifik Anda",
+      "impairmentPlaceholder": "Masukkan jenis disabilitas spesifik Anda",
       "detailsPlaceholder": "Jelaskan kondisi Anda dan kebutuhan atau akomodasi khusus",
       "Impairments": {
         "visual": {

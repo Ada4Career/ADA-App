@@ -12,6 +12,8 @@ import {
 import Link from 'next/link';
 import { useTranslations } from 'next-intl'; // Import useTranslations
 
+import { isRecent, smartTimeFormat } from '@/lib/luxon';
+
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -54,7 +56,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
   const daysAgo = Math.floor(Math.random() * 7) + 1;
 
   // Generate random match percentage between 65% and 95%
-  const matchPercentage = Math.floor(Math.random() * 31) + 65;
+  const randMatchPercentage = Math.floor(Math.random() * 31) + 65;
 
   // Get first few qualification points
   const qualifications = job.qualification
@@ -74,16 +76,18 @@ export default function JobCard({ job, onClick }: JobCardProps) {
           <div className='flex justify-between items-start mb-4'>
             <div className='flex gap-2'>
               <Badge variant='outline' className='text-xs font-normal'>
-                {daysAgo}{' '}
-                {daysAgo === 1 ? t('timeLabels.hour') : t('timeLabels.hours')}{' '}
-                {t('timeLabels.ago')}
+                {smartTimeFormat(job.created_at ?? '')}{' '}
+                {/* {daysAgo === 1 ? t('timeLabels.hour') : t('timeLabels.hours')}{' '}
+                {t('timeLabels.ago')} */}
               </Badge>
-              <Badge
-                variant='outline'
-                className='text-xs font-normal text-blue-500 border-blue-200 bg-blue-50'
-              >
-                {t('earlyApplicant')}
-              </Badge>
+              {isRecent(job.created_at ?? '') ? (
+                <Badge
+                  variant='outline'
+                  className='text-xs font-normal text-blue-500 border-blue-200 bg-blue-50'
+                >
+                  {t('earlyApplicant')}
+                </Badge>
+              ) : null}
             </div>
             <button className='text-gray-400 hover:text-gray-600'>
               <Bookmark className='h-5 w-5' />
@@ -134,14 +138,18 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                   : t('disabilityFriendly')}
               </span>
             </div>
-            {accommodations.length > 0 && (
+            {accommodations.length > 0 ? (
               <div className='text-sm text-gray-600'>
-                <p className='mb-1'>{t('accommodationsInclude')}</p>
-                <ul className='list-disc pl-5 space-y-1'>
+                <p className='mb-2'>{t('accommodationsInclude')}</p>
+                <ul className='list-disc pl-5 space-y-2'>
                   {accommodations.map((accommodation, index) => (
                     <li key={index}>{accommodation.description}</li>
                   ))}
                 </ul>
+              </div>
+            ) : (
+              <div className='text-sm text-gray-600'>
+                No Accomodation Got Listed
               </div>
             )}
           </div>
@@ -151,7 +159,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
         <div className='w-full md:w-96 bg-gray-900 text-white p-6 flex flex-col'>
           <div className='flex flex-col items-center mb-6'>
             <CircularProgressIndicator
-              percentage={matchPercentage}
+              percentage={job.match_percentage ?? 0}
               size={120}
               strokeWidth={12}
             />
