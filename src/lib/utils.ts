@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { AccessibilityLevel, Accommodation } from '@/types/response/job';
+import { AccessibilityLevel } from '@/types/response/job';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -82,38 +82,38 @@ export function getRandomAccessibilityLevel(): AccessibilityLevel {
 }
 
 // Helper function to generate random accommodations
-export function getRandomAccommodations(): Accommodation[] {
-  const allAccommodations: Accommodation[] = [
-    { type: 'Physical', description: 'Wheelchair accessible workplace' },
-    { type: 'Physical', description: 'Adjustable height desks' },
-    { type: 'Physical', description: 'Ergonomic equipment available' },
-    { type: 'Visual', description: 'Screen reader compatible software' },
-    { type: 'Visual', description: 'Braille signage throughout office' },
-    {
-      type: 'Visual',
-      description: 'High contrast mode for all internal software',
-    },
-    { type: 'Auditory', description: 'Sign language interpreters available' },
-    { type: 'Auditory', description: 'Captioning for all meetings' },
-    { type: 'Auditory', description: 'Sound-dampened work areas' },
-    { type: 'Cognitive', description: 'Flexible deadlines when needed' },
-    {
-      type: 'Cognitive',
-      description: 'Written instructions provided for all tasks',
-    },
-    { type: 'Cognitive', description: 'Quiet spaces for focused work' },
-    { type: 'Schedule', description: 'Flexible working hours' },
-    { type: 'Schedule', description: 'Part-time options available' },
-    { type: 'Schedule', description: 'Extended breaks as needed' },
-    { type: 'Remote', description: 'Full remote work option' },
-    { type: 'Remote', description: 'Hybrid schedule available' },
-    { type: 'Remote', description: 'Home office equipment provided' },
-  ];
+// export function getRandomAccommodations(): Accommodation[] {
+//   const allAccommodations: Accommodation[] = [
+//     { type: 'Physical', description: 'Wheelchair accessible workplace' },
+//     { type: 'Physical', description: 'Adjustable height desks' },
+//     { type: 'Physical', description: 'Ergonomic equipment available' },
+//     { type: 'Visual', description: 'Screen reader compatible software' },
+//     { type: 'Visual', description: 'Braille signage throughout office' },
+//     {
+//       type: 'Visual',
+//       description: 'High contrast mode for all internal software',
+//     },
+//     { type: 'Auditory', description: 'Sign language interpreters available' },
+//     { type: 'Auditory', description: 'Captioning for all meetings' },
+//     { type: 'Auditory', description: 'Sound-dampened work areas' },
+//     { type: 'Cognitive', description: 'Flexible deadlines when needed' },
+//     {
+//       type: 'Cognitive',
+//       description: 'Written instructions provided for all tasks',
+//     },
+//     { type: 'Cognitive', description: 'Quiet spaces for focused work' },
+//     { type: 'Schedule', description: 'Flexible working hours' },
+//     { type: 'Schedule', description: 'Part-time options available' },
+//     { type: 'Schedule', description: 'Extended breaks as needed' },
+//     { type: 'Remote', description: 'Full remote work option' },
+//     { type: 'Remote', description: 'Hybrid schedule available' },
+//     { type: 'Remote', description: 'Home office equipment provided' },
+//   ];
 
-  // Shuffle and select 3-6 random accommodations
-  const shuffled = [...allAccommodations].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, Math.floor(Math.random() * 4) + 3);
-}
+//   // Shuffle and select 3-6 random accommodations
+//   const shuffled = [...allAccommodations].sort(() => 0.5 - Math.random());
+//   return shuffled.slice(0, Math.floor(Math.random() * 4) + 3);
+// }
 
 // Helper function to generate inclusive hiring statements
 export function getRandomInclusiveStatement(): string {
