@@ -150,10 +150,30 @@ const getLevelCounts = (data: RoleMapResponse[]) => {
 // Function to build the tree structure from flat data
 const buildTree = (data: RoleMapResponse[]): TreeNode => {
   // Find the root node (with empty ParentRole)
-  const rootRole = data.find((role) => role.ParentRole === '');
+  let rootRole = data.find((role) => role.ParentRole === '');
 
+  // If no root role is found, create a virtual root node
   if (!rootRole) {
-    throw new Error('No root role found');
+    // Find all roles that don't have a parent within the dataset
+    const potentialRoots = data.filter(
+      (role) => !data.some((r) => r.Role === role.ParentRole)
+    );
+
+    // If we have potential roots, use the first one as the main root
+    // or find the one with most children
+    if (potentialRoots.length > 0) {
+      // Optional: Find the potential root with the most children
+      const rootsWithChildrenCount = potentialRoots.map((role) => ({
+        role,
+        childCount: data.filter((r) => r.ParentRole === role.Role).length,
+      }));
+
+      rootsWithChildrenCount.sort((a, b) => b.childCount - a.childCount);
+      rootRole = rootsWithChildrenCount[0].role;
+    } else {
+      // If we still can't find a good root, use the first role as root
+      rootRole = data[0];
+    }
   }
 
   // Recursive function to build the tree
@@ -178,9 +198,60 @@ const buildTree = (data: RoleMapResponse[]): TreeNode => {
   return buildNode(rootRole);
 };
 
+const buildForest = (data: RoleMapResponse[]): TreeNode => {
+  // Find the roots - roles that don't have a parent within the dataset
+  const rootRoles = data.filter(
+    (role) => !data.some((r) => r.Role === role.ParentRole)
+  );
+
+  // Create a virtual root to contain all trees
+  const virtualRoot: TreeNode = {
+    name: 'Career Paths',
+    id: 'virtual-root',
+    level: 'root',
+    timeline: '',
+    skills: [],
+    children: [],
+    attributes: {
+      level: 'root',
+    },
+  };
+
+  // Build each tree in the forest
+  for (const rootRole of rootRoles) {
+    // Recursive function to build each node
+    const buildNode = (role: RoleMapResponse): TreeNode => {
+      const children = data
+        .filter((r) => r.ParentRole === role.Role)
+        .map((childRole) => buildNode(childRole));
+
+      return {
+        name: role.Role,
+        id: role.ID,
+        level: role.Level,
+        timeline: role.Timeline,
+        skills: JSON.parse(role.SkillsNeeded),
+        children,
+        attributes: {
+          level: role.Level,
+        },
+      };
+    };
+
+    // Add this tree to the virtual root
+    virtualRoot.children.push(buildNode(rootRole));
+  }
+
+  return virtualRoot;
+};
+
 export default function CareerTreePage() {
-  // const { getAICareerTree } = useAIServicesStore();
   const { user } = useAuthStore();
+  const [selectedNode, setSelectedNode] = useState<TreeNode | null>(null);
+  const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
+    'vertical'
+  );
+  const [viewMode, setViewMode] = useState<'single' | 'forest'>('forest');
 
   const { data, isPending } = useQuery<RoleMapResponse[]>({
     queryKey: ['careerTree'],
@@ -192,23 +263,34 @@ export default function CareerTreePage() {
     },
   });
 
-  // useEffect(() => {
-  //   const fetchContent = async () => {
-  //     const resp = await getAICareerTree();
-  //     setCareerTree(resp);
-  //     const treeData = buildTree(resp);
-  //     const levelCounts = getLevelCounts(resp);
-  //     setTreeData(treeData);
-  //     setLevelCounts(levelCounts);
-  //     setLoading(false);
-  //   };
-  //   fetchContent();
-  // }, []);
+  // Get level counts for the legend
+  const getLevelCounts = (data: RoleMapResponse[] | undefined) => {
+    if (!data) return { entry: 0, mid: 0, senior: 0, expert: 0 };
 
-  const [selectedNode, setSelectedNode] = useState<TreeNode | null>(null);
-  const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
-    'vertical'
-  );
+    const counts: Record<string, number> = {
+      entry: 0,
+      mid: 0,
+      senior: 0,
+      expert: 0,
+    };
+
+    data.forEach((role) => {
+      if (counts[role.Level] !== undefined) {
+        counts[role.Level]++;
+      }
+    });
+
+    return counts;
+  };
+
+  const levelCounts = getLevelCounts(data);
+
+  // Get tree data based on the mode
+  const getTreeData = () => {
+    if (!data || data.length === 0) return null;
+
+    return viewMode === 'single' ? buildTree(data) : buildForest(data);
+  };
 
   // Custom node component for the tree
   const renderCustomNodeElement = ({ nodeDatum, toggleNode }: any) => {
@@ -217,11 +299,23 @@ export default function CareerTreePage() {
       mid: 'bg-green-100 text-green-800 border-green-300',
       senior: 'bg-amber-100 text-amber-800 border-amber-300',
       expert: 'bg-purple-100 text-purple-800 border-purple-300',
+      root: 'bg-gray-100 text-gray-800 border-gray-300 opacity-80', // For virtual root
     };
 
     const colorClass =
       levelColors[nodeDatum.level as keyof typeof levelColors] ||
       'bg-gray-100 text-gray-800 border-gray-300';
+
+    // Hide the virtual root or make it small and discrete
+    if (nodeDatum.id === 'virtual-root') {
+      return (
+        <g>
+          <foreignObject width={0} height={0} x={0} y={0}>
+            <div></div>
+          </foreignObject>
+        </g>
+      );
+    }
 
     return (
       <g>
@@ -259,8 +353,13 @@ export default function CareerTreePage() {
     return <div>Loading...</div>;
   }
 
+  const treeData = getTreeData();
+  if (!treeData) {
+    return <div>No career path data available</div>;
+  }
+
   return (
-    <main className='min-h-screen '>
+    <main className='min-h-screen'>
       <div className='max-w-7xl mx-auto'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
           <div className='lg:col-span-2 bg-white rounded-lg border shadow-sm'>
@@ -293,11 +392,37 @@ export default function CareerTreePage() {
                     </TabsTrigger>
                   </TabsList>
                 </Tabs>
+                <Tabs className='ml-4'>
+                  <TabsList>
+                    <TabsTrigger
+                      value='single'
+                      onClick={() => setViewMode('single')}
+                      className={
+                        viewMode === 'single'
+                          ? 'bg-primary text-primary-foreground'
+                          : ''
+                      }
+                    >
+                      Single Tree
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value='forest'
+                      onClick={() => setViewMode('forest')}
+                      className={
+                        viewMode === 'forest'
+                          ? 'bg-primary text-primary-foreground'
+                          : ''
+                      }
+                    >
+                      Multiple Trees
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
             </div>
             <div className='h-[600px] w-full'>
               <Tree
-                data={buildTree(data!)}
+                data={treeData}
                 orientation={orientation}
                 renderCustomNodeElement={renderCustomNodeElement}
                 pathFunc='step'
@@ -391,7 +516,7 @@ export default function CareerTreePage() {
               </CardContent>
             </Card>
 
-            {/* <Card>
+            <Card>
               <CardHeader>
                 <CardTitle>Career Level Distribution</CardTitle>
                 <CardDescription>
@@ -415,9 +540,7 @@ export default function CareerTreePage() {
                               : 'bg-purple-500'
                           }`}
                           style={{
-                            width: `${
-                              (count / apiResponse.data.length) * 100
-                            }%`,
+                            width: `${data ? (count / data.length) * 100 : 0}%`,
                           }}
                         />
                       </div>
@@ -428,7 +551,7 @@ export default function CareerTreePage() {
                   ))}
                 </div>
               </CardContent>
-            </Card> */}
+            </Card>
 
             <Card>
               <CardHeader>
