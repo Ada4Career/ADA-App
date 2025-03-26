@@ -3,7 +3,6 @@
 import {
   Accessibility,
   ArrowRight,
-  Bookmark,
   Building,
   Calendar,
   Clock,
@@ -89,9 +88,9 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                 </Badge>
               ) : null}
             </div>
-            <button className='text-gray-400 hover:text-gray-600'>
+            {/* <button className='text-gray-400 hover:text-gray-600'>
               <Bookmark className='h-5 w-5' />
-            </button>
+            </button> */}
           </div>
 
           <div className='flex gap-3 mb-4'>

@@ -113,29 +113,33 @@ export function CircularProgressIndicator({
           strokeWidth={strokeWidth}
         />
 
-        {/* Segment circles */}
-        {normalizedSegments.map((segment, index) => {
-          const offset = index > 0 ? segmentOffsets[index - 1] : 0;
-          const segmentProgress =
-            Math.min(segment, Math.max(0, progress / 100 - offset)) / segment;
+        {/* Only render segment circles if there's actual progress */}
+        {progress > 0 &&
+          normalizedSegments.map((segment, index) => {
+            const offset = index > 0 ? segmentOffsets[index - 1] : 0;
+            const segmentProgress =
+              Math.min(segment, Math.max(0, progress / 100 - offset)) / segment;
 
-          return (
-            <circle
-              key={index}
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill='transparent'
-              stroke={extendedColors[index]}
-              strokeWidth={strokeWidth}
-              strokeDasharray={`${
-                circumference * segment * segmentProgress
-              } ${circumference}`}
-              strokeDashoffset={-circumference * offset}
-              strokeLinecap='round'
-            />
-          );
-        })}
+            // Only render if this segment has some progress
+            if (segmentProgress <= 0) return null;
+
+            return (
+              <circle
+                key={index}
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill='transparent'
+                stroke={extendedColors[index]}
+                strokeWidth={strokeWidth}
+                strokeDasharray={`${
+                  circumference * segment * segmentProgress
+                } ${circumference}`}
+                strokeDashoffset={-circumference * offset}
+                strokeLinecap='round'
+              />
+            );
+          })}
       </svg>
 
       <div className='absolute flex flex-col items-center justify-center text-white'>

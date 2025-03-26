@@ -22,16 +22,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 import api from '@/lib/axios';
-import {
-  formatDate,
-  getRandomAccessibilityLevel,
-  getRandomAccommodations,
-  getRandomCompany,
-  getRandomExperience,
-  getRandomInclusiveStatement,
-  getRandomLocation,
-  getRandomStage,
-} from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
 import JobApplicationModal from '@/components/features/job-seeker/job-application-modal';
@@ -90,26 +81,26 @@ export default function JobDetailSection({ id }: { id: string }) {
     queryKey: ['detail-job'],
     queryFn: async () => {
       const response = await api.get<ApiReturn<JobPostingData>>(
-        `${API_BASE_URL}/job-vacancy/${id}`
+        `${API_BASE_URL}/job-vacancy/${id}?email=${user?.email}`
       );
-
-      const exp = getRandomExperience();
-      const cmp = getRandomCompany();
-      const stg = getRandomStage();
-      const loc = getRandomLocation();
-      const sta = getRandomInclusiveStatement();
-      const lvl = getRandomAccessibilityLevel();
-      const aco = getRandomAccommodations();
+      // console.log(response);
+      // const exp = getRandomExperience();
+      // const cmp = getRandomCompany();
+      // const stg = getRandomStage();
+      // const loc = getRandomLocation();
+      // const sta = getRandomInclusiveStatement();
+      // const lvl = getRandomAccessibilityLevel();
+      // const aco = getRandomAccommodations();
       const newData = {
         ...response.data.data,
-        company: cmp,
-        accommodations: aco,
-        accessibility_level: lvl,
-        inclusive_hiring_statement: sta,
-        disability_friendly: true,
-        experience: exp,
-        location: loc,
-        stage: stg,
+        // company: cmp,
+        // accommodations: aco,
+        // accessibility_level: lvl,
+        // inclusive_hiring_statement: sta,
+        // disability_friendly: true,
+        // experience: exp,
+        // location: loc,
+        // stage: stg,
       };
 
       return newData;
