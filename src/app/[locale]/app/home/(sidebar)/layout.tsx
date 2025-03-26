@@ -6,6 +6,7 @@ import { useQueryState } from 'nuqs';
 import type { ReactNode } from 'react';
 import { Suspense } from 'react';
 
+import ChangeLangButton from '@/components/change-lang-button';
 import { AppSidebar } from '@/components/features/job-seeker/sidebar';
 import UserProfileDropdown from '@/components/features/user-profile-dropdown';
 import {
@@ -53,7 +54,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <HeaderLabel />
             </Suspense>
 
-            <div className='ml-auto'>
+            <div className='ml-auto flex items-center gap-3'>
+              <ChangeLangButton />
               <UserProfileDropdown />
             </div>
           </header>

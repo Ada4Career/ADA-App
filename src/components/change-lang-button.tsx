@@ -32,7 +32,7 @@ const ChangeLangButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' size='sm' className='flex items-center gap-2'>
+        <Button variant='outline' className='flex items-center gap-2'>
           <Globe size={16} />
           {t('switchLanguage')}
         </Button>

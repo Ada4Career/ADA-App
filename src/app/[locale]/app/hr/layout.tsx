@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 import api from '@/lib/axios';
 
 import AdaLogo from '@/components/ada-logo';
+import ChangeLangButton from '@/components/change-lang-button';
 import UserProfileDropdown from '@/components/features/user-profile-dropdown';
 
 import useAuthStore from '@/store/useAuthStore';
@@ -88,6 +89,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </nav>
           </div>
           <div className='flex items-center gap-4'>
+            <ChangeLangButton />
             <UserProfileDropdown />
           </div>
         </div>
