@@ -62,22 +62,16 @@ export interface JobPostingDataExtended extends JobPostingData {
   inclusive_hiring_statement?: string;
 }
 
-export interface JobPostingDataExtended extends JobPostingData {
-  // Added dummy data fields
-  company?: string;
-  department?: string;
-  stage?: string;
-  location?: string;
-  experience?: string;
-  logo?: string;
-  match_percentage?: number;
-  posted_time?: string;
-
-  // Accessibility and inclusivity fields
-  accessibility_level?: AccessibilityLevel;
-  accommodations?: Accommodation[];
-  disability_friendly?: boolean;
-  inclusive_hiring_statement?: string;
+export interface HRRawJobApplicantData
+  extends Omit<JobPostingDataExtended, 'score_breakdown'> {
+  skills_score: number;
+  skills_reasoning: string;
+  experience_score: number;
+  experience_reasoning: string;
+  expectations_score: number;
+  expectations_reasoning: string;
+  accessibility_score: number;
+  accessibility_reasoning: string;
 }
 
 export interface JobPostingWithApplicants extends JobPostingDataExtended {
@@ -96,6 +90,19 @@ export type JobApplicant = {
   applied_date: string; // Consider using Date if you want to handle it as a date object
   cover_letter: string;
   resume_url: string;
+
+  // Additional fields
+  match_percentage?: number;
+  matching_skills?: string[]; // New field
+  missing_skills?: string[]; // New field
+  skills_score: number;
+  skills_reasoning: string;
+  experience_score: number;
+  experience_reasoning: string;
+  expectations_score: number;
+  expectations_reasoning: string;
+  accessibility_score: number;
+  accessibility_reasoning: string;
 };
 
 export interface ApplicantWithJobDetails extends JobApplicant {

@@ -106,7 +106,6 @@ export default function JobDetailSection({ id }: { id: string }) {
       const response = await api.get<ApiReturn<JobPostingDataExtended>>(
         `${API_BASE_URL}/job-vacancy/${id}?email=${user?.email}`
       );
-      // console.log(response.data.data);
       const newData = {
         ...response.data.data,
       };

@@ -143,51 +143,105 @@ export const ApplicantCard = ({
   onAccept,
   onReject,
 }: PropsAplicant) => {
+  const [showScoreDetails, setShowScoreDetails] = React.useState(false);
+
+  // Calculate total score
+  const totalScore =
+    apl.skills_score +
+    apl.experience_score +
+    apl.expectations_score +
+    apl.accessibility_score;
+
+  // Max possible score (assuming these are the maximums)
+  const maxScore = 100; // Adjust if your max score is different
+
+  // Helper function to determine badge color based on score percentage
+  const getScoreBadgeColor = (score: number, max: number) => {
+    const percentage = (score / max) * 100;
+    if (percentage >= 80) return 'bg-green-500 hover:bg-green-600';
+    if (percentage >= 60) return 'bg-blue-500 hover:bg-blue-600';
+    if (percentage >= 40) return 'bg-yellow-500 hover:bg-yellow-600';
+    return 'bg-red-500 hover:bg-red-600';
+  };
+
   return (
-    <div key={apl.id} className='grid grid-cols-7 justify-center'>
-      <div className='flex items-center gap-2 col-span-2'>
-        <Avatar className='h-10 w-10'>
-          <AvatarImage
-            src={apl.id || '/placeholder.svg'}
-            alt={apl.id ?? 'Company logo'}
-            className='object-contain'
-          />
-          <AvatarFallback className='text-xs'>
-            {apl.job_seeker_email
-              ? apl?.job_seeker_email.substring(0, 2).toUpperCase()
-              : 'CO'}
-          </AvatarFallback>
-        </Avatar>
-        <h5>{apl.job_seeker_email}</h5>
+    <div className='flex flex-col gap-3 w-full'>
+      {/* Main card content - keep your existing layout */}
+      <div key={apl.id} className='grid grid-cols-7 justify-center'>
+        <div className='flex items-center gap-2 col-span-2'>
+          <Avatar className='h-10 w-10'>
+            <AvatarImage
+              src={apl.id || '/placeholder.svg'}
+              alt={apl.id ?? 'Company logo'}
+              className='object-contain'
+            />
+            <AvatarFallback className='text-xs'>
+              {apl.job_seeker_email
+                ? apl?.job_seeker_email.substring(0, 2).toUpperCase()
+                : 'CO'}
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col'>
+            <h5>{apl.job_seeker_email}</h5>
+          </div>
+        </div>
+        <div>{offering?.department}</div>
+        <div>{offering?.start_date}</div>
+        <Link href={apl.resume_url}>
+          <Button variant='link' className='underline'>
+            Resume URL
+          </Button>
+        </Link>
+        <Link href={`/app/hr/offerings/applicant/${apl.id}`}>
+          <Button>
+            Detail Applicant
+            <ArrowRight />
+          </Button>
+        </Link>
+        <div className='flex items-center gap-2 col-span-1 justify-center'>
+          <Button
+            onClick={() => onAccept(apl.id)}
+            size='icon'
+            className='bg-green-500'
+          >
+            <CheckCircle2Icon />
+          </Button>
+          <Button
+            onClick={() => onReject(apl.id)}
+            size='icon'
+            className='bg-red-500'
+          >
+            <XCircleIcon />
+          </Button>
+        </div>
       </div>
-      <div>{offering?.department}</div>
-      <div>{offering?.start_date}</div>
-      <Link href={apl.resume_url}>
-        <Button variant='link' className='underline'>
-          Resume URL
-        </Button>
-      </Link>
-      <Link href={`/app/hr/offerings/applicant/${apl.id}`}>
-        <Button>
-          Detail Applicant
-          <ArrowRight />
-        </Button>
-      </Link>
-      <div className='flex items-center gap-2 col-span-1 justify-center'>
-        <Button
-          onClick={() => onAccept(apl.id)}
-          size='icon'
-          className='bg-green-500'
-        >
-          <CheckCircle2Icon />
-        </Button>
-        <Button
-          onClick={() => onReject(apl.id)}
-          size='icon'
-          className='bg-red-500'
-        >
-          <XCircleIcon />
-        </Button>
+
+      {/* Score overview section */}
+      <div className='ml-12 flex items-center gap-2'>
+        <div className='flex items-center gap-1'>
+          {apl.match_percentage ? (
+            <Badge
+              className={`${getScoreBadgeColor(
+                apl.match_percentage,
+                100
+              )} text-white`}
+            >
+              {apl.match_percentage}% Match
+            </Badge>
+          ) : null}
+          <Badge variant='outline' className='bg-blue-50'>
+            Skills: {apl.skills_score}
+          </Badge>
+          <Badge variant='outline' className='bg-blue-50'>
+            Experience: {apl.experience_score}
+          </Badge>
+          <Badge variant='outline' className='bg-blue-50'>
+            Expectations: {apl.expectations_score}
+          </Badge>
+          <Badge variant='outline' className='bg-blue-50'>
+            Accessibility: {apl.accessibility_score}
+          </Badge>
+        </div>
       </div>
     </div>
   );

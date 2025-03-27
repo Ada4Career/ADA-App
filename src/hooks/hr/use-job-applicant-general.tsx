@@ -65,7 +65,7 @@ export const useApplicants = (
     },
     Error
   >({
-    queryKey: [`${options.status || 'all'}-applicants-with-details`, userEmail],
+    queryKey: [`all-applicants-with-details`],
     queryFn: async () => {
       if (!userEmail) {
         throw new Error('User email is required');
@@ -140,15 +140,28 @@ export const useApplicants = (
         jobVacancyDetails,
       };
     },
-    enabled: !!userEmail,
     ...(options.noCache
       ? {
-          // cacheTime: 0,
-          // staleTime: 0,
-          // refetchOnMount: true,
-          // refetchOnWindowFocus: true,
+          gcTime: 0,
+          staleTime: 0,
+          refetchOnMount: true,
+          refetchOnWindowFocus: true,
         }
-      : {}),
+      : {
+          gcTime: 5 * 60 * 1000, // 5 minutes
+          staleTime: 60 * 1000, // 1 minute
+          refetchOnMount: false,
+          refetchOnWindowFocus: false,
+        }),
+    enabled: !!userEmail,
+    // ...(options.noCache
+    //   ? {
+    //       // cacheTime: 0,
+    //       // staleTime: 0,
+    //       // refetchOnMount: true,
+    //       // refetchOnWindowFocus: true,
+    //     }
+    //   : {}),
   });
 
   return {

@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import { useAcceptedApplicants } from '@/hooks/hr/use-job-applicant-general';
+import { useApplicants } from '@/hooks/hr/use-job-applicant-general';
 import { useJobOfferings } from '@/hooks/hr/use-job-offerings';
 
 import AcceptedOfferSection from '@/components/features/human-resources/accepted-offer-section';
@@ -15,10 +15,12 @@ const HROfferingsPage = () => {
 
   const { data, isLoading, error } = useJobOfferings(user?.email);
 
-  const { applicants, isLoading: isLoadingAccepted } = useAcceptedApplicants(
+  const { applicants, isLoading: isLoadingAccepted } = useApplicants(
     user?.email,
     {
+      status: 'accepted',
       includeJobDetails: true,
+      noCache: false,
     }
   );
 
@@ -29,10 +31,6 @@ const HROfferingsPage = () => {
       <div className='flex flex-col gap-y-4'>
         <div className='flex items-center justify-between'>
           <h1 className='text-3xl font-bold tracking-tight'>List Offerings</h1>
-          {/* <Button className='gap-1'>
-            <Plus className='h-4 w-4' />
-            New Offering
-          </Button> */}
         </div>
 
         <Tabs defaultValue='ongoing'>

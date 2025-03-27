@@ -31,6 +31,8 @@ export const useJobOfferings = (userEmail: string | undefined) => {
         `${API_BASE_URL}/job-vacancies/${userEmail}`
       );
 
+      // console.log('pokenatt');
+
       const offerings = response.data.data;
 
       // Fetch applicants for each job offering
@@ -76,6 +78,8 @@ export const useJobOfferings = (userEmail: string | undefined) => {
         })
       );
 
+      console.log(offeringsWithApplicants);
+
       // Separate jobs into ongoing and completed categories
       const ongoingJobs = offeringsWithApplicants.filter(
         (job) => job.acceptedApplicant?.length === 0
@@ -92,7 +96,5 @@ export const useJobOfferings = (userEmail: string | undefined) => {
         allJobs: offeringsWithApplicants,
       };
     },
-    refetchOnWindowFocus: false,
-    // enabled: !!userEmail, // Only run the query if userEmail exists
   });
 };

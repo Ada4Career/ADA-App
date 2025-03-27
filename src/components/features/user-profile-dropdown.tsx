@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'; // Import useTranslations
 import React from 'react';
 
 import api from '@/lib/axios';
+import { removeToken, removeTokenEmail } from '@/lib/cookies';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -39,6 +40,8 @@ const UserProfileDropdown = () => {
   const handleLogout = async () => {
     await logoutMutation();
     logout();
+    removeToken();
+    removeTokenEmail();
     router.replace('/');
   };
 
