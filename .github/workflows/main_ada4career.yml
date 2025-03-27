@@ -60,9 +60,12 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1EC8AF04D8924AF6910A9934D8091B43 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2767D9AC6EE4417CB767B8F8D32FD3D4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4FA018D3364C4E4AB1850495BA4A78F2 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_373A26AE59E34A828B4B808D238EFCA3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7001E203FF27485D9821EC7E8AEFE077 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3E9B62AD62144B75940856AC5EA83753 }}
+      
+      - name: Wait for SCM container to stabilize
+        run: sleep 60
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
