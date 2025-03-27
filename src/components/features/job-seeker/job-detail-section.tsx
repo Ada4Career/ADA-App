@@ -6,7 +6,9 @@ import {
   Briefcase,
   Building,
   Calendar,
+  Check,
   CheckCircle2,
+  ChevronsUpDown,
   Clock,
   DollarSign,
   Globe,
@@ -15,6 +17,7 @@ import {
   MapPin,
   Share2,
   Users,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl'; // Import useTranslations
@@ -29,7 +32,18 @@ import JobApplicationModal from '@/components/features/job-seeker/job-applicatio
 import { SegmentedProgressBar } from '@/components/segmented-progress-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import useAuthStore from '@/store/useAuthStore';
@@ -38,6 +52,14 @@ import { API_BASE_URL } from '@/constant/config';
 
 import { ApiError, ApiReturn } from '@/types/api.types';
 import { JobPostingDataExtended } from '@/types/response/job';
+
+const formatReasoning = (text: string) => {
+  if (!text) return '';
+  return text
+    .replace(/^Semantic analysis of skill relevance:\n-/g, '')
+    .replace(/^- /gm, '')
+    .trim();
+};
 
 export default function JobDetailSection({ id }: { id: string }) {
   // Add translation hooks for different sections
@@ -344,6 +366,9 @@ export default function JobDetailSection({ id }: { id: string }) {
                     {t('tabs.accessibility')}
                   </TabsTrigger>
                   <TabsTrigger value='company'>{t('tabs.company')}</TabsTrigger>
+                  <TabsTrigger value='breakdown'>
+                    {t('tabs.breakdown')}
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value='details' className='space-y-8'>
@@ -637,6 +662,156 @@ export default function JobDetailSection({ id }: { id: string }) {
                         })}
                       </p>
                     </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value='breakdown'>
+                  <div className='mt-2'>
+                    <h3 className='font-semibold text-lg mb-3'>Skills Match</h3>
+                    <div className='flex flex-wrap gap-2 mb-4'>
+                      {data?.matching_skills?.map((skill, index) => (
+                        <Badge
+                          key={index}
+                          variant='outline'
+                          className='bg-green-50 text-green-700 border-green-200 flex items-center gap-1'
+                        >
+                          <Check className='h-3 w-3' /> {skill}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {data?.missing_skills &&
+                      data.missing_skills[0] !== 'None' && (
+                        <>
+                          <h3 className='font-medium text-lg mb-3 mt-4'>
+                            Missing Skills
+                          </h3>
+                          <div className='flex flex-wrap gap-2'>
+                            {data?.missing_skills?.map((skill, index) => (
+                              <Badge
+                                key={index}
+                                variant='outline'
+                                className='bg-red-50 text-red-700 border-red-200 flex items-center gap-1'
+                              >
+                                <X className='h-3 w-3' /> {skill}
+                              </Badge>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  <div>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className='text-xl font-semibold'>
+                          Score Breakdown
+                        </CardTitle>
+                        <CardDescription>
+                          Detailed analysis of your match scores
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className='space-y-4'>
+                        {/* Skills Score */}
+                        <Collapsible
+                          // onOpenChange={() => toggleSection('skills')}
+                          className='border rounded-lg overflow-hidden'
+                        >
+                          <CollapsibleTrigger className='flex justify-between items-center w-full p-4 text-left'>
+                            <div className='flex items-center gap-2'>
+                              <span className='font-medium'>Skills Match</span>
+                              <Badge
+                                variant='outline'
+                                className='ml-2 bg-gray-100'
+                              >
+                                {data?.score_breakdown?.skills_score}/40
+                              </Badge>
+                            </div>
+                            <ChevronsUpDown className='h-5 w-5 text-gray-500' />
+                            {/* {true ? (
+                              <ChevronUp className='h-5 w-5 text-gray-500' />
+                            ) : (
+                              <ChevronDown className='h-5 w-5 text-gray-500' />
+                            )} */}
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className='px-4 pb-4 border-t pt-3'>
+                            <p className='text-gray-700 whitespace-pre-line'>
+                              {formatReasoning(
+                                data?.score_breakdown?.skills_reasoning ?? ''
+                              )}
+                            </p>
+                          </CollapsibleContent>
+                        </Collapsible>
+
+                        {/* Experience Score */}
+                        <Collapsible className='border rounded-lg overflow-hidden'>
+                          <CollapsibleTrigger className='flex justify-between items-center w-full p-4 text-left'>
+                            <div className='flex items-center gap-2'>
+                              <span className='font-medium'>
+                                Experience Match
+                              </span>
+                              <Badge
+                                variant='outline'
+                                className='ml-2 bg-gray-100'
+                              >
+                                {data?.score_breakdown?.experience_score}/30
+                              </Badge>
+                            </div>
+                            <ChevronsUpDown className='h-5 w-5 text-gray-500' />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className='px-4 pb-4 border-t pt-3'>
+                            <p className='text-gray-700'>
+                              {data?.score_breakdown?.experience_reasoning}
+                            </p>
+                          </CollapsibleContent>
+                        </Collapsible>
+
+                        {/* Expectations Score */}
+                        <Collapsible className='border rounded-lg overflow-hidden'>
+                          <CollapsibleTrigger className='flex justify-between items-center w-full p-4 text-left'>
+                            <div className='flex items-center gap-2'>
+                              <span className='font-medium'>
+                                Expectations Match
+                              </span>
+                              <Badge
+                                variant='outline'
+                                className='ml-2 bg-gray-100'
+                              >
+                                {data?.score_breakdown?.expectations_score}/20
+                              </Badge>
+                            </div>
+                            <ChevronsUpDown className='h-5 w-5 text-gray-500' />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className='px-4 pb-4 border-t pt-3'>
+                            <p className='text-gray-700'>
+                              {data?.score_breakdown?.expectations_reasoning}
+                            </p>
+                          </CollapsibleContent>
+                        </Collapsible>
+
+                        {/* Accessibility Score */}
+                        <Collapsible className='border rounded-lg overflow-hidden'>
+                          <CollapsibleTrigger className='flex justify-between items-center w-full p-4 text-left'>
+                            <div className='flex items-center gap-2'>
+                              <span className='font-medium'>
+                                Accessibility Match
+                              </span>
+                              <Badge
+                                variant='outline'
+                                className='ml-2 bg-gray-100'
+                              >
+                                {data?.score_breakdown?.accessibility_score}/10
+                              </Badge>
+                            </div>
+                            <ChevronsUpDown className='h-5 w-5 text-gray-500' />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className='px-4 pb-4 border-t pt-3'>
+                            <p className='text-gray-700'>
+                              {data?.score_breakdown?.accessibility_reasoning}
+                            </p>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </CardContent>
+                    </Card>
                   </div>
                 </TabsContent>
               </Tabs>

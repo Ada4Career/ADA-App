@@ -196,7 +196,8 @@
     "tabs": {
       "jobDetails": "Detail Pekerjaan",
       "accessibility": "Aksesibilitas",
-      "company": "Perusahaan"
+      "company": "Perusahaan",
+      "breakdown": "Kecocokan"
     },
     "jobInfo": {
       "location": "Lokasi",

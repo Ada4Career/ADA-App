@@ -196,7 +196,8 @@
     "tabs": {
       "jobDetails": "Job Details",
       "accessibility": "Accessibility",
-      "company": "Company"
+      "company": "Company",
+      "breakdown": "Breakdown"
     },
     "jobInfo": {
       "location": "Location",
