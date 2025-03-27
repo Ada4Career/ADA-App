@@ -15,12 +15,14 @@ export function useHighlightTitles() {
     // Reset all heading styles before applying new ones
     headingElements.forEach((el) => {
       el.style.backgroundColor = '';
-      el.style.transition = 'background-color 0.3s ease';
+      el.style.color = ''; // Reset text color as well
+      el.style.transition = 'background-color 0.3s ease, color 0.3s ease';
     });
 
     if (highlightTitles) {
       headingElements.forEach((el) => {
         el.style.backgroundColor = '#FFFF00'; // Yellow background
+        el.style.color = '#000000'; // Force black text for contrast
       });
     }
   }, [highlightTitles]);
