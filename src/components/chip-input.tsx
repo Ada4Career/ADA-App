@@ -3,6 +3,8 @@
 import { X } from 'lucide-react';
 import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+
 type ChipInputProps = {
   placeholder?: string;
   label?: string;
@@ -106,6 +108,13 @@ const ChipInput = ({
           className='flex-grow outline-none border-none focus:border-none  min-w-[120px] p-1'
           placeholder={chips.length === 0 ? placeholder : ''}
         />
+        <Button
+          type='button'
+          className='ml-2'
+          onClick={() => addChip(inputValue)}
+        >
+          Add Skill
+        </Button>
       </div>
 
       {suggestions.length > 0 && (
