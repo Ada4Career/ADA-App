@@ -3,18 +3,21 @@
 import {
   Accessibility,
   ArrowRight,
+  Award,
+  Briefcase,
   Building,
   Calendar,
   Clock,
   MapPin,
+  Target,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl'; // Import useTranslations
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { isRecent, smartTimeFormat } from '@/lib/luxon';
 
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
-import { SegmentedProgressBar } from '@/components/segmented-progress-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -27,7 +30,8 @@ interface JobCardProps {
 }
 
 export default function JobCard({ job, onClick }: JobCardProps) {
-  const t = useTranslations('Jobs.Card'); // Add translation hook
+  const t = useTranslations('Jobs.Card');
+  const [showBreakdown, setShowBreakdown] = useState(false);
 
   // Use translations for job type labels
   const jobTypeLabels = {
@@ -52,12 +56,6 @@ export default function JobCard({ job, onClick }: JobCardProps) {
     standard: t('accessibilityLevels.standard'),
   };
 
-  // Calculate days since posting (dummy data)
-  const daysAgo = Math.floor(Math.random() * 7) + 1;
-
-  // Generate random match percentage between 65% and 95%
-  const randMatchPercentage = Math.floor(Math.random() * 31) + 65;
-
   // Get first few qualification points
   const qualifications = job.qualification
     .split('\\n')
@@ -68,17 +66,23 @@ export default function JobCard({ job, onClick }: JobCardProps) {
   // Get first few accommodations (if available)
   const accommodations = job.accommodations?.slice(0, 2) || [];
 
+  // Score breakdown data
+  const scoreBreakdown = job.score_breakdown || {
+    skills_score: 0,
+    experience_score: 0,
+    expectations_score: 0,
+    accessibility_score: 0,
+  };
+
   return (
     <Card className='overflow-hidden border-0 shadow-md'>
-      <div className='flex flex-col md:flex-row'>
+      <div className='flex flex-col md:flex-row relative'>
         {/* Left section */}
-        <div className='flex-1 p-6 bg-white'>
+        <div className='flex-1 p-6 bg-white relative'>
           <div className='flex justify-between items-start mb-4'>
             <div className='flex gap-2'>
               <Badge variant='outline' className='text-xs font-normal'>
-                {smartTimeFormat(job.created_at ?? '')}{' '}
-                {/* {daysAgo === 1 ? t('timeLabels.hour') : t('timeLabels.hours')}{' '}
-                {t('timeLabels.ago')} */}
+                {smartTimeFormat(job.created_at ?? '')}
               </Badge>
               {isRecent(job.created_at ?? '') ? (
                 <Badge
@@ -89,9 +93,6 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                 </Badge>
               ) : null}
             </div>
-            {/* <button className='text-gray-400 hover:text-gray-600'>
-              <Bookmark className='h-5 w-5' />
-            </button> */}
           </div>
 
           <div className='flex gap-3 mb-4'>
@@ -149,25 +150,114 @@ export default function JobCard({ job, onClick }: JobCardProps) {
               </div>
             ) : (
               <div className='text-sm text-gray-600'>
-                No Accomodation Got Listed
+                No Accommodation Got Listed
               </div>
             )}
           </div>
+
+          {/* Score Breakdown Overlay */}
+          {showBreakdown && (
+            <div className='absolute inset-0 items-stretch justify-center bg-black/80 text-white p-6 flex flex-col transition-all duration-300 overflow-y-auto'>
+              {/* <h3 className='text-xl font-semibold mb-6 text-center'>
+                Score Breakdown
+              </h3> */}
+
+              <div className='grid grid-cols-4 gap-6'>
+                {/* Skills Score */}
+                <div className='flex flex-col items-center'>
+                  <CircularProgressIndicator
+                    percentage={scoreBreakdown.skills_score || 0}
+                    size={90}
+                    strokeWidth={8}
+                    text='Skills'
+                    colors={['#10b981']}
+                    segments={[1]}
+                  />
+                  <div className='mt-2 flex items-center gap-1'>
+                    <Award className='h-4 w-4 text-green-400' />
+                    <span className='text-xs text-green-400'>Skills Match</span>
+                  </div>
+                </div>
+
+                {/* Experience Score */}
+                <div className='flex flex-col items-center'>
+                  <CircularProgressIndicator
+                    percentage={scoreBreakdown.experience_score || 0}
+                    size={90}
+                    strokeWidth={8}
+                    text='Experience'
+                    colors={['#3b82f6']}
+                    segments={[1]}
+                  />
+                  <div className='mt-2 flex items-center gap-1'>
+                    <Briefcase className='h-4 w-4 text-blue-400' />
+                    <span className='text-xs text-blue-400'>
+                      Experience Match
+                    </span>
+                  </div>
+                </div>
+
+                {/* Expectations Score */}
+                <div className='flex flex-col items-center'>
+                  <CircularProgressIndicator
+                    percentage={scoreBreakdown.expectations_score || 0}
+                    size={90}
+                    strokeWidth={8}
+                    text='Expectations'
+                    colors={['#f59e0b']}
+                    segments={[1]}
+                  />
+                  <div className='mt-2 flex items-center gap-1'>
+                    <Target className='h-4 w-4 text-amber-400' />
+                    <span className='text-xs text-amber-400'>
+                      Expectations Match
+                    </span>
+                  </div>
+                </div>
+
+                {/* Accessibility Score */}
+                <div className='flex flex-col items-center'>
+                  <CircularProgressIndicator
+                    percentage={scoreBreakdown.accessibility_score || 0}
+                    size={90}
+                    strokeWidth={8}
+                    text='Accessibility'
+                    colors={['#ec4899']}
+                    segments={[1]}
+                  />
+                  <div className='mt-2 flex items-center gap-1'>
+                    <Accessibility className='h-4 w-4 text-pink-400' />
+                    <span className='text-xs text-pink-400'>
+                      Accessibility Match
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className='mt-auto'>
+                <p className='text-sm text-gray-300 mt-4'>
+                  <span className='font-medium text-white'>Overall Match:</span>{' '}
+                  {job.match_percentage}%
+                </p>
+                <div className='mt-2 text-xs text-gray-400'>
+                  <p>Hover outside this area to close</p>
+                </div>
+              </div> */}
+            </div>
+          )}
         </div>
 
         {/* Right section */}
-        <div className='w-full md:w-96 bg-gray-900 text-white p-6 flex flex-col'>
+        <div
+          className='w-full md:w-96 bg-gray-900 text-white p-6 flex flex-col relative'
+          onMouseEnter={() => setShowBreakdown(true)}
+          onMouseLeave={() => setShowBreakdown(false)}
+        >
           <div className='flex flex-col items-center mb-6'>
             <CircularProgressIndicator
               percentage={job.match_percentage ?? 0}
               size={120}
               strokeWidth={12}
-            />
-          </div>
-          <div className='mb-4'>
-            <SegmentedProgressBar
-              height={2}
-              scoreBreakdown={job.score_breakdown}
             />
           </div>
 

@@ -122,12 +122,6 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
       usingDefault,
     });
 
-    // if (usingDefault) {
-
-    // } else {
-
-    // }
-
     // Reset form after submission
     setCoverLetter('');
     setResume(null);

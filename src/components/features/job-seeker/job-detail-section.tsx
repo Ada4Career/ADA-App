@@ -106,24 +106,9 @@ export default function JobDetailSection({ id }: { id: string }) {
       const response = await api.get<ApiReturn<JobPostingDataExtended>>(
         `${API_BASE_URL}/job-vacancy/${id}?email=${user?.email}`
       );
-      console.log(response.data.data);
-      // const exp = getRandomExperience();
-      // const cmp = getRandomCompany();
-      // const stg = getRandomStage();
-      // const loc = getRandomLocation();
-      // const sta = getRandomInclusiveStatement();
-      // const lvl = getRandomAccessibilityLevel();
-      // const aco = getRandomAccommodations();
+      // console.log(response.data.data);
       const newData = {
         ...response.data.data,
-        // company: cmp,
-        // accommodations: aco,
-        // accessibility_level: lvl,
-        // inclusive_hiring_statement: sta,
-        // disability_friendly: true,
-        // experience: exp,
-        // location: loc,
-        // stage: stg,
       };
 
       return newData;
@@ -137,17 +122,14 @@ export default function JobDetailSection({ id }: { id: string }) {
     {
       cover_letter: string;
       url: string;
+      defaultForm: FormData;
     }
   >({
     mutationFn: async (data) => {
-      const formData = new FormData();
-      formData.append('job_vacancy_id', id);
-      formData.append('job_seeker_email', user?.email ?? '');
-      formData.append('resume_url', data.url);
-      formData.append('cover_letter', data.cover_letter);
+      data.defaultForm.append('resume_url', data.url);
       const response = await api.post(
         `${API_BASE_URL}/job-application`,
-        formData,
+        data.defaultForm,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -167,17 +149,14 @@ export default function JobDetailSection({ id }: { id: string }) {
     {
       cover_letter: string;
       file: File;
+      defaultForm: FormData;
     }
   >({
     mutationFn: async (data) => {
-      const formData = new FormData();
-      formData.append('job_vacancy_id', id);
-      formData.append('job_seeker_email', user?.email ?? '');
-      formData.append('file', data.file);
-      formData.append('cover_letter', data.cover_letter);
+      data.defaultForm.append('file', data.file);
       const response = await api.post(
         `${API_BASE_URL}/job-application`,
-        formData,
+        data.defaultForm,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -192,24 +171,66 @@ export default function JobDetailSection({ id }: { id: string }) {
     },
   });
 
-  const handleSubmit = (data: {
+  const handleSubmit = (dataLoc: {
     resume: File | string | null;
     coverLetter: string;
     usingDefault: boolean;
   }) => {
-    if (data.usingDefault) {
+    const defaultForm = new FormData();
+    defaultForm.append('job_vacancy_id', id);
+    defaultForm.append('job_seeker_email', user?.email ?? '');
+    defaultForm.append('cover_letter', dataLoc.coverLetter);
+    defaultForm.append(
+      'match_percentage',
+      String(data?.match_percentage ?? '0')
+    );
+    defaultForm.append(
+      'skills_score',
+      String(data?.score_breakdown?.skills_score ?? '0')
+    );
+    defaultForm.append(
+      'experience_score',
+      String(data?.score_breakdown?.experience_score ?? '0')
+    );
+    defaultForm.append(
+      'expectations_score',
+      String(data?.score_breakdown?.expectations_score ?? '0')
+    );
+    defaultForm.append(
+      'accessibility_score',
+      String(data?.score_breakdown?.accessibility_score ?? '0')
+    );
+    defaultForm.append(
+      'skills_reasoning',
+      String(data?.score_breakdown?.skills_reasoning ?? '')
+    );
+    defaultForm.append(
+      'experience_reasoning',
+      String(data?.score_breakdown?.experience_reasoning ?? '')
+    );
+    defaultForm.append(
+      'expectations_reasoning',
+      String(data?.score_breakdown?.expectations_reasoning ?? '')
+    );
+    defaultForm.append(
+      'accessibility_reasoning',
+      String(data?.score_breakdown?.accessibility_reasoning ?? '')
+    );
+
+    if (dataLoc.usingDefault) {
       applyWithUrl({
-        cover_letter: data.coverLetter,
-        url: data.resume as string,
+        defaultForm,
+        cover_letter: dataLoc.coverLetter,
+        url: dataLoc.resume as string,
       });
     } else {
       applyWithFile({
-        cover_letter: data.coverLetter,
-        file: data.resume as File,
+        defaultForm,
+        cover_letter: dataLoc.coverLetter,
+        file: dataLoc.resume as File,
       });
     }
   };
-
   const responsibilities = formatBulletPoints(data?.responsibilities ?? '');
   const qualifications = formatBulletPoints(data?.qualification ?? '');
 
@@ -275,7 +296,7 @@ export default function JobDetailSection({ id }: { id: string }) {
       />
       <div className='container mx-auto px-4 py-8'>
         {/* Back button */}
-        <Link href='/' className='inline-flex items-center  mb-6'>
+        <Link href='/app/home/jobs' className='inline-flex items-center  mb-6'>
           <Button>
             <ArrowLeft className='mr-2 h-4 w-4' />
             {t('navigation.backToJobs')}
@@ -700,7 +721,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                       )}
                   </div>
 
-                  <div>
+                  <div className='mt-6'>
                     <Card>
                       <CardHeader>
                         <CardTitle className='text-xl font-semibold'>
