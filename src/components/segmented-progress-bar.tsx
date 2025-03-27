@@ -5,7 +5,7 @@ import React from 'react';
 import { SkillScore } from '@/types/response/job';
 
 interface SegmentedProgressBarProps {
-  scoreBreakdown: SkillScore;
+  scoreBreakdown: SkillScore | undefined;
   height?: number;
   barClassName?: string;
   showLabels?: boolean;
@@ -28,7 +28,7 @@ export function SegmentedProgressBar({
   };
 
   // Calculate total score
-  const totalScore = Object.values(scoreBreakdown).reduce(
+  const totalScore = Object.values(scoreBreakdown ?? []).reduce(
     (sum, score) => sum + score,
     0
   );
@@ -38,38 +38,41 @@ export function SegmentedProgressBar({
   const segments = [
     {
       name: 'Skills',
-      score: scoreBreakdown.skills_score,
+      score: scoreBreakdown?.skills_score,
       color: colors.skills,
-      percentage: (scoreBreakdown.skills_score / maxPossibleScore) * 100,
+      percentage: (scoreBreakdown?.skills_score ?? 0 / maxPossibleScore) * 100,
     },
     {
       name: 'Experience',
-      score: scoreBreakdown.experience_score,
+      score: scoreBreakdown?.experience_score,
       color: colors.experience,
-      percentage: (scoreBreakdown.experience_score / maxPossibleScore) * 100,
+      percentage:
+        (scoreBreakdown?.experience_score ?? 0 / maxPossibleScore) * 100,
     },
     {
       name: 'Expectations',
-      score: scoreBreakdown.expectations_score,
+      score: scoreBreakdown?.expectations_score,
       color: colors.expectations,
-      percentage: (scoreBreakdown.expectations_score / maxPossibleScore) * 100,
+      percentage:
+        (scoreBreakdown?.expectations_score ?? 0 / maxPossibleScore) * 100,
     },
     {
       name: 'Accessibility',
-      score: scoreBreakdown.accessibility_score,
+      score: scoreBreakdown?.accessibility_score,
       color: colors.accessibility,
-      percentage: (scoreBreakdown.accessibility_score / maxPossibleScore) * 100,
+      percentage:
+        (scoreBreakdown?.accessibility_score ?? 0 / maxPossibleScore) * 100,
     },
   ];
 
   return (
     <div className='w-full'>
-      <div className='mb-2'>
+      {/* <div className='mb-2'>
         <div className='flex justify-between items-center'>
           <span className='text-sm font-medium'>Score Breakdown</span>
           <span className='text-sm font-medium'>{totalScore}%</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Progress bar container */}
       <div className={`w-full h-${height} bg-gray-200 ${barClassName}`}>

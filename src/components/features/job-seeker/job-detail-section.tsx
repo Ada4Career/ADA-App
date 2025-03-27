@@ -26,6 +26,7 @@ import { formatDate } from '@/lib/utils';
 
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
 import JobApplicationModal from '@/components/features/job-seeker/job-application-modal';
+import { SegmentedProgressBar } from '@/components/segmented-progress-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -36,7 +37,7 @@ import useAuthStore from '@/store/useAuthStore';
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiError, ApiReturn } from '@/types/api.types';
-import { JobPostingData, JobPostingDataExtended } from '@/types/response/job';
+import { JobPostingDataExtended } from '@/types/response/job';
 
 export default function JobDetailSection({ id }: { id: string }) {
   // Add translation hooks for different sections
@@ -80,10 +81,10 @@ export default function JobDetailSection({ id }: { id: string }) {
   const { data, isPending } = useQuery<JobPostingDataExtended>({
     queryKey: ['detail-job'],
     queryFn: async () => {
-      const response = await api.get<ApiReturn<JobPostingData>>(
+      const response = await api.get<ApiReturn<JobPostingDataExtended>>(
         `${API_BASE_URL}/job-vacancy/${id}?email=${user?.email}`
       );
-      // console.log(response);
+      console.log(response.data.data);
       // const exp = getRandomExperience();
       // const cmp = getRandomCompany();
       // const stg = getRandomStage();
@@ -191,8 +192,8 @@ export default function JobDetailSection({ id }: { id: string }) {
   const qualifications = formatBulletPoints(data?.qualification ?? '');
 
   // Generate random match percentage between 65% and 95%
-  const matchPercentage =
-    data?.match_percentage || Math.floor(Math.random() * 31) + 65;
+  // const matchPercentage =
+  //   data?.match_percentage || Math.floor(Math.random() * 31) + 65;
 
   // Generate random salary range based on job type
   const generateSalaryRange = () => {
@@ -649,7 +650,7 @@ export default function JobDetailSection({ id }: { id: string }) {
               <CardContent className='p-6'>
                 <div className='flex flex-col items-center mb-6'>
                   <CircularProgressIndicator
-                    percentage={matchPercentage}
+                    percentage={data?.match_percentage ?? 0}
                     size={120}
                     strokeWidth={12}
                   />
@@ -664,6 +665,16 @@ export default function JobDetailSection({ id }: { id: string }) {
                     </li>
                   ))}
                 </ul>
+              </CardContent>
+            </Card>
+
+            <Card className='bg-gray-900 text-white'>
+              <CardContent className='p-6'>
+                <h4 className='mb-2'>Score Breakdown</h4>
+                <SegmentedProgressBar
+                  scoreBreakdown={data?.score_breakdown}
+                  height={3}
+                />
               </CardContent>
             </Card>
 

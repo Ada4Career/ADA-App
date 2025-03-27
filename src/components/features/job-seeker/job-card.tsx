@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl'; // Import useTranslations
 import { isRecent, smartTimeFormat } from '@/lib/luxon';
 
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
+import { SegmentedProgressBar } from '@/components/segmented-progress-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -161,6 +162,12 @@ export default function JobCard({ job, onClick }: JobCardProps) {
               percentage={job.match_percentage ?? 0}
               size={120}
               strokeWidth={12}
+            />
+          </div>
+          <div className='mb-4'>
+            <SegmentedProgressBar
+              height={2}
+              scoreBreakdown={job.score_breakdown}
             />
           </div>
 
