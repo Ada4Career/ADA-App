@@ -230,16 +230,16 @@ export const ApplicantCard = ({
             </Badge>
           ) : null}
           <Badge variant='outline' className='bg-blue-50'>
-            Skills: {apl.skills_score}
+            Skills: {apl.skills_score}/40
           </Badge>
           <Badge variant='outline' className='bg-blue-50'>
-            Experience: {apl.experience_score}
+            Experience: {apl.experience_score}/30
           </Badge>
           <Badge variant='outline' className='bg-blue-50'>
-            Expectations: {apl.expectations_score}
+            Expectations: {apl.expectations_score}/20
           </Badge>
           <Badge variant='outline' className='bg-blue-50'>
-            Accessibility: {apl.accessibility_score}
+            Accessibility: {apl.accessibility_score}/10
           </Badge>
         </div>
       </div>

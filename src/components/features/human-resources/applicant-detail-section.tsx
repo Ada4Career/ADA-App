@@ -3,10 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Download } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import api from '@/lib/axios';
+import { useApplicantStatus } from '@/hooks/hr/use-process-applicant';
 
+import ScoreBreakdown from '@/components/features/human-resources/score-breakdown';
 import { CircularProgressIndicator } from '@/components/features/job-seeker/circular-progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -23,44 +26,6 @@ type Props = {
   id: string;
 };
 
-const resumeData: SkillSectionItem[] = [
-  {
-    id: '1',
-    title: 'Relevant Skills',
-    description:
-      'Mauris, turpis augue mauris tellus massa, lacus. Id quam adipiscing tincidunt at feugiat arcu in',
-    isCompleted: true,
-  },
-  {
-    id: '2',
-    title: 'Work Experience',
-    description:
-      'Mauris, turpis augue mauris tellus massa, lacus. Id quam adipiscing tincidunt at feugiat arcu in',
-    isCompleted: false,
-  },
-  {
-    id: '3',
-    title: 'Educational Qualification',
-    description:
-      'Mauris, turpis augue mauris tellus massa, lacus. Id quam adipiscing tincidunt at feugiat arcu in',
-    isCompleted: true,
-  },
-  {
-    id: '4',
-    title: 'Soft Skills & Adaptability',
-    description:
-      'Mauris, turpis augue mauris tellus massa, lacus. Id quam adipiscing tincidunt at feugiat arcu in',
-    isCompleted: true,
-  },
-  {
-    id: '5',
-    title: 'Certifications & Additional Training',
-    description:
-      'Mauris, turpis augue mauris tellus massa, lacus. Id quam adipiscing tincidunt at feugiat arcu in',
-    isCompleted: true,
-  },
-];
-
 const ApplicantDetailSection = ({ id }: Props) => {
   const { acceptApplicant, rejectApplicant, isProcessing } =
     useApplicantStatus();
@@ -71,6 +36,7 @@ const ApplicantDetailSection = ({ id }: Props) => {
       const response = await api.get<ApiReturn<JobApplicant>>(
         `${API_BASE_URL}/job-application/${id}`
       );
+      console.log(response.data.data);
       return response.data.data;
     },
   });
@@ -146,20 +112,21 @@ const ApplicantDetailSection = ({ id }: Props) => {
             <p className='mt-6'>
               Thank you for reviewing the AI screening results for the
               candidate. Based on our system's analysis, the applicant has
-              achieved a score of {matchPercentage}%, indicating a fairly strong
-              alignment with the job requirements. Below is a breakdown of key
-              aspects that meet the company`s hiring criteria:
+              achieved a score of {applicant?.match_percentage}%, indicating a
+              fairly strong alignment with the job requirements. Below is a
+              breakdown of key aspects that meet the company`s hiring criteria:
             </p>
           </div>
           <div className='mt-4'>
-            <ResumeSkills items={resumeData} />
+            {/* <ResumeSkills items={resumeData} /> */}
+            <ScoreBreakdown applicant={applicant} />
           </div>
         </div>
         <div className='w-full h-fit md:w-96 bg-gray-900 rounded text-white p-6 flex flex-col'>
           <div className='flex flex-col gap-6 items-center mb-6'>
             <h3>User Score Results</h3>
             <CircularProgressIndicator
-              percentage={matchPercentage}
+              percentage={applicant?.match_percentage ?? 0}
               size={180}
               strokeWidth={24}
             />
@@ -237,51 +204,3 @@ const ApplicantDetailSection = ({ id }: Props) => {
 };
 
 export default ApplicantDetailSection;
-
-// components/ResumeSkills.tsx
-import { Check, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
-import { cn } from '@/lib/utils';
-import { useApplicantStatus } from '@/hooks/hr/use-process-applicant';
-
-// Define types for our component
-export interface SkillSectionItem {
-  id: string;
-  title: string;
-  description: string;
-  isCompleted: boolean;
-}
-
-export interface SkillSectionProps {
-  items: SkillSectionItem[];
-  className?: string;
-}
-
-const ResumeSkills = ({ items, className }: SkillSectionProps) => {
-  return (
-    <div className={cn('space-y-4', className)}>
-      {items.map((item) => (
-        <div key={item.id} className='flex items-start gap-4 p-1'>
-          <div
-            className={cn(
-              'flex h-10 w-10 shrink-0 items-center justify-center rounded-md',
-              item.isCompleted ? 'bg-green-500' : 'bg-red-500'
-            )}
-          >
-            {item.isCompleted ? (
-              <Check className='h-6 w-6 text-white' />
-            ) : (
-              <X className='h-6 w-6 text-white' />
-            )}
-          </div>
-
-          <div className='grid grid-cols-2 items-center space-y-1'>
-            <h3 className='font-medium  text-lg '>{item.title}</h3>
-            <p className='text-gray-500 text-sm  '>{item.description}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};

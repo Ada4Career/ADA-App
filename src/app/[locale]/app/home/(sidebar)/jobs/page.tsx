@@ -30,6 +30,7 @@ const HomePage = () => {
       const response = await api.get<
         ApiReturn<PaginatedResponse<JobPostingDataExtended>>
       >(`${API_BASE_URL}/job-vacancies/match/${user?.email}`);
+      console.log(response.data.data.items);
       return response.data.data.items;
       // return response.data.data.map((j) => {
       //   const exp = getRandomExperience();

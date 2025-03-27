@@ -93,8 +93,8 @@ export type JobApplicant = {
 
   // Additional fields
   match_percentage?: number;
-  matching_skills?: string[]; // New field
-  missing_skills?: string[]; // New field
+  matching_skills: string[]; // New field
+  missing_skills: string[]; // New field
   skills_score: number;
   skills_reasoning: string;
   experience_score: number;
