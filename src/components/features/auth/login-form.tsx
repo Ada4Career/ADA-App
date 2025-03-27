@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type React from 'react';
@@ -56,7 +57,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
 
   const { mutateAsync, isPending } = useMutation<
     ApiReturn<RegisterAndLoginResponse>,
-    ApiError,
+    AxiosError<ApiError>,
     z.infer<typeof formSchema>
   >({
     mutationFn: async (data) => {
@@ -88,6 +89,13 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
     onSuccess: (data) => {
       toast.success('Login success');
       router.push('/onboarding');
+    },
+    onError: (error) => {
+      if (error.response?.data.message) {
+        toast.error(error.response?.data.data);
+      } else {
+        toast.error('Something went wrong');
+      }
     },
   });
 
