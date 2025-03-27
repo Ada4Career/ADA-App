@@ -12,6 +12,8 @@ import {
  */
 type AccessibilityStore = {
   settings: AccessibilitySettings;
+  position: 'right' | 'left';
+  togglePostion: () => void;
   updateSettings: (
     category: keyof AccessibilitySettings,
     subcategory: string,
@@ -74,6 +76,12 @@ export const useAccessibilityStore = create<AccessibilityStore>()(
     (set, get) => ({
       settings: defaultSettings,
       hasOnboarded: false,
+      position: 'right',
+
+      togglePostion: () =>
+        set((state) => ({
+          position: state.position === 'right' ? 'left' : 'right',
+        })),
 
       setHasOnboarded: (value) =>
         set(() => ({

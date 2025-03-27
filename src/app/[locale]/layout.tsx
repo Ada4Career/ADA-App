@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import '@/styles/globals.css';
 import '@/styles/colors.css';
 
-import AccesibilityWidget from '@/components/AccessibilityWidget';
+import AbsolutePositionWidget from '@/components/accessiblity-widget/AbsolutePositionWidget';
 import ImplementWidget from '@/components/accessiblity-widget/ImplementWidget';
 import { ReactQueryClientProvider } from '@/components/layout/query-provider';
 
@@ -65,9 +65,7 @@ export default async function RootLayout({
       <html lang={locale}>
         <body>
           <NextIntlClientProvider locale={locale}>
-            <div className='fixed bottom-4 right-4 z-50'>
-              <AccesibilityWidget />
-            </div>
+            <AbsolutePositionWidget />
             <ImplementWidget />
             <ToastContainer />
             <NuqsAdapter>{children}</NuqsAdapter>

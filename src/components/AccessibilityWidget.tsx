@@ -283,7 +283,7 @@ const AccessibilityWidget = () => {
           ref={buttonRef}
           tabIndex={0}
           aria-description='Accessibility Widget'
-          className='fixed bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'
+          className=' w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'
           aria-label={t('openSettings')}
         >
           <PersonStanding className='w-8 h-8 md:w-10 md:h-10' />
@@ -330,7 +330,7 @@ const AccessibilityWidget = () => {
             </div>
           </div>
 
-          <div className='sticky bottom-0 z-10 bg-white dark:bg-gray-800 border-t'>
+          <div className='sticky bottom-0 z-10 p-4 bg-white dark:bg-gray-800 border-t'>
             <AccessibilityFooter />
           </div>
         </PopoverContent>
