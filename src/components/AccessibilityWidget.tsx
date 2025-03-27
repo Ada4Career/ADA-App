@@ -1,7 +1,7 @@
 'use client';
 import { PersonStanding, RefreshCcw } from 'lucide-react';
 import { useTranslations } from 'next-intl'; // Import useTranslations
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import AccessibilityWelcomeModal from '@/components/accessibility-welcome-modal';
 import { AccessibilityFooter } from '@/components/accessiblity-widget/AccessibilityFooter';
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/popover';
 
 import { useAccessibilityStore } from '@/store/useAccessibilityStore';
+import { useRefStore } from '@/store/useRefStore';
 
 export type AccessibilitySettings = {
   profiles: {
@@ -264,6 +265,14 @@ const AccessibilityWidget = () => {
     }
   };
 
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const setButtonRef = useRefStore((state) => state.setButtonRef);
+
+  useEffect(() => {
+    setButtonRef(buttonRef);
+    return () => setButtonRef(null);
+  }, [setButtonRef]);
+
   return (
     <>
       {/* Welcome Modal component */}
@@ -271,6 +280,7 @@ const AccessibilityWidget = () => {
 
       <Popover>
         <PopoverTrigger
+          ref={buttonRef}
           tabIndex={0}
           aria-description='Accessibility Widget'
           className='fixed bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors z-50'

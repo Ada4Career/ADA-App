@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { useAccessibilityStore } from '@/store/useAccessibilityStore';
+import { useRefStore } from '@/store/useRefStore';
 
 type ProfileCardProps = {
   icon: React.ReactNode;
@@ -51,6 +52,7 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const t = useTranslations('Accessibility.welcome');
   const { updateSettings } = useAccessibilityStore();
+  const clickButton = useRefStore((state) => state.clickButton);
 
   // Check if this is the first visit
   useEffect(() => {
@@ -72,6 +74,12 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
 
   // Function to skip profile selection
   const handleSkip = (): void => {
+    setOpen(false);
+    localStorage.setItem('accessibility-onboarding-shown', 'true');
+  };
+
+  const handleMore = () => {
+    clickButton();
     setOpen(false);
     localStorage.setItem('accessibility-onboarding-shown', 'true');
   };
@@ -127,6 +135,9 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
         </div>
 
         <DialogFooter className='!flex !flex-col'>
+          <Button className='text-sm mb-2' onClick={handleMore}>
+            Open More Settings
+          </Button>
           <Button variant='outline' onClick={handleSkip}>
             {t('skipButton') || 'Skip for now'}
           </Button>
