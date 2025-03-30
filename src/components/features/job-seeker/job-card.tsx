@@ -169,6 +169,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                     percentage={scoreBreakdown.skills_score || 0}
                     size={90}
                     strokeWidth={8}
+                    maxScore={40}
                     text='Skills'
                     colors={['#10b981']}
                     segments={[1]}
@@ -186,6 +187,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                     size={90}
                     strokeWidth={8}
                     text='Experience'
+                    maxScore={30}
                     colors={['#3b82f6']}
                     segments={[1]}
                   />
@@ -204,6 +206,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                     size={90}
                     strokeWidth={8}
                     text='Expectations'
+                    maxScore={20}
                     colors={['#f59e0b']}
                     segments={[1]}
                   />
@@ -223,6 +226,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                     strokeWidth={8}
                     text='Accessibility'
                     colors={['#ec4899']}
+                    maxScore={10}
                     segments={[1]}
                   />
                   <div className='mt-2 flex items-center gap-1'>
@@ -258,6 +262,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
               percentage={job.match_percentage ?? 0}
               size={120}
               strokeWidth={12}
+              maxScore={100}
             />
           </div>
 

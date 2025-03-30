@@ -868,7 +868,7 @@ export default function JobDetailSection({ id }: { id: string }) {
                 <h4 className='mb-2'>Score Breakdown</h4>
                 <SegmentedProgressBar
                   scoreBreakdown={data?.score_breakdown}
-                  height={3}
+                  height={12}
                 />
               </CardContent>
             </Card>

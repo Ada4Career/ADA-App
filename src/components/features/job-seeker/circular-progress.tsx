@@ -11,6 +11,9 @@ interface CircularProgressIndicatorProps {
   text?: string;
   animate?: boolean;
   animationDuration?: number;
+  maxScore?: number;
+  label?: string;
+  className?: string;
 }
 
 export function CircularProgressIndicator({
@@ -22,9 +25,43 @@ export function CircularProgressIndicator({
   text = 'Match',
   animate = true,
   animationDuration = 1000,
+  maxScore = 100,
+  label = 'Progress indicator',
+  className = '',
 }: CircularProgressIndicatorProps) {
   const [progress, setProgress] = useState(0);
-  const clampedPercentage = Math.min(100, Math.max(0, percentage));
+  // Scale percentage relative to maxScore
+  const scaledPercentage = (percentage / maxScore) * 100;
+  const clampedPercentage = Math.min(100, Math.max(0, scaledPercentage));
+
+  // Responsive size calculation
+  const [responsiveSize, setResponsiveSize] = useState(size);
+  const [responsiveStrokeWidth, setResponsiveStrokeWidth] =
+    useState(strokeWidth);
+
+  // Handle resize for responsiveness
+  useEffect(() => {
+    const updateSize = () => {
+      const windowWidth = window.innerWidth;
+      if (windowWidth < 640) {
+        // Small screens
+        setResponsiveSize(Math.max(80, size * 0.7));
+        setResponsiveStrokeWidth(Math.max(6, strokeWidth * 0.7));
+      } else if (windowWidth < 1024) {
+        // Medium screens
+        setResponsiveSize(Math.max(100, size * 0.85));
+        setResponsiveStrokeWidth(Math.max(8, strokeWidth * 0.85));
+      } else {
+        // Large screens
+        setResponsiveSize(size);
+        setResponsiveStrokeWidth(strokeWidth);
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [size, strokeWidth]);
 
   // Animation effect
   useEffect(() => {
@@ -59,7 +96,7 @@ export function CircularProgressIndicator({
   }, [clampedPercentage, animate, animationDuration]);
 
   // Calculate values for SVG
-  const radius = (size - strokeWidth) / 2;
+  const radius = (responsiveSize - responsiveStrokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
 
   // Validate segments
@@ -91,26 +128,47 @@ export function CircularProgressIndicator({
     extendedColors.push(colors[extendedColors.length % colors.length]);
   }
 
+  // Calculate the actual score value based on percentage and maxScore
+  const actualScore = Math.round((percentage / maxScore) * 100);
+
+  // Determine text size based on responsive size
+  const textSizeClass =
+    responsiveSize < 100
+      ? 'text-xl'
+      : responsiveSize < 150
+      ? 'text-2xl'
+      : 'text-3xl';
+
+  const subtextSizeClass =
+    responsiveSize < 100
+      ? 'text-xs'
+      : responsiveSize < 150
+      ? 'text-sm'
+      : 'text-base';
+
   return (
-    <div className='relative flex items-center justify-center'>
+    <div className={`relative flex items-center justify-center ${className}`}>
       <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
+        width={responsiveSize}
+        height={responsiveSize}
+        viewBox={`0 0 ${responsiveSize} ${responsiveSize}`}
         className='transform -rotate-90'
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progress)}
         role='progressbar'
+        aria-label={`${label}: ${Math.round(
+          percentage
+        )} out of ${maxScore} (${actualScore}%)`}
       >
         {/* Background circle */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={responsiveSize / 2}
+          cy={responsiveSize / 2}
           r={radius}
           fill='transparent'
           stroke='rgba(255, 255, 255, 0.1)'
-          strokeWidth={strokeWidth}
+          strokeWidth={responsiveStrokeWidth}
         />
 
         {/* Only render segment circles if there's actual progress */}
@@ -126,25 +184,34 @@ export function CircularProgressIndicator({
             return (
               <circle
                 key={index}
-                cx={size / 2}
-                cy={size / 2}
+                cx={responsiveSize / 2}
+                cy={responsiveSize / 2}
                 r={radius}
                 fill='transparent'
                 stroke={extendedColors[index]}
-                strokeWidth={strokeWidth}
+                strokeWidth={responsiveStrokeWidth}
                 strokeDasharray={`${
                   circumference * segment * segmentProgress
                 } ${circumference}`}
                 strokeDashoffset={-circumference * offset}
                 strokeLinecap='round'
+                aria-hidden='true'
               />
             );
           })}
       </svg>
 
-      <div className='absolute flex flex-col items-center justify-center text-white'>
-        <span className='text-3xl font-bold'>{Math.round(progress)}%</span>
-        {text && <span className='text-sm'>{text}</span>}
+      <div
+        className='absolute flex flex-col items-center justify-center text-white'
+        aria-hidden='true'
+      >
+        <span className={`font-bold ${textSizeClass}`}>
+          {Math.round(percentage)}
+          {maxScore !== 100 && (
+            <span className={subtextSizeClass}> / {maxScore}</span>
+          )}
+        </span>
+        {text && <span className={subtextSizeClass}>{text}</span>}
       </div>
     </div>
   );

@@ -27,55 +27,71 @@ export function SegmentedProgressBar({
     accessibility: '#ec4899', // pink
   };
 
+  // Define max scores for each category
+  const maxScores = {
+    skills: 40,
+    experience: 30,
+    expectations: 20,
+    accessibility: 10,
+  };
+
   // Calculate total score
-  const totalScore = Object.values(scoreBreakdown ?? []).reduce(
-    (sum, score) => sum + score,
-    0
-  );
-  const maxPossibleScore = 100; // Assuming the max total score is 100
+  const totalScore =
+    (scoreBreakdown?.skills_score || 0) +
+    (scoreBreakdown?.experience_score || 0) +
+    (scoreBreakdown?.expectations_score || 0) +
+    (scoreBreakdown?.accessibility_score || 0);
+
+  const maxPossibleScore = 100; // Total max score is still 100
 
   // Calculate what percentage of the bar each segment should take
   const segments = [
     {
       name: 'Skills',
-      score: scoreBreakdown?.skills_score,
+      score: scoreBreakdown?.skills_score || 0,
+      maxScore: maxScores.skills,
       color: colors.skills,
-      percentage: (scoreBreakdown?.skills_score ?? 0 / maxPossibleScore) * 100,
+      percentage:
+        ((scoreBreakdown?.skills_score || 0) / maxPossibleScore) * 100,
     },
     {
       name: 'Experience',
-      score: scoreBreakdown?.experience_score,
+      score: scoreBreakdown?.experience_score || 0,
+      maxScore: maxScores.experience,
       color: colors.experience,
       percentage:
-        (scoreBreakdown?.experience_score ?? 0 / maxPossibleScore) * 100,
+        ((scoreBreakdown?.experience_score || 0) / maxPossibleScore) * 100,
     },
     {
       name: 'Expectations',
-      score: scoreBreakdown?.expectations_score,
+      score: scoreBreakdown?.expectations_score || 0,
+      maxScore: maxScores.expectations,
       color: colors.expectations,
       percentage:
-        (scoreBreakdown?.expectations_score ?? 0 / maxPossibleScore) * 100,
+        ((scoreBreakdown?.expectations_score || 0) / maxPossibleScore) * 100,
     },
     {
       name: 'Accessibility',
-      score: scoreBreakdown?.accessibility_score,
+      score: scoreBreakdown?.accessibility_score || 0,
+      maxScore: maxScores.accessibility,
       color: colors.accessibility,
       percentage:
-        (scoreBreakdown?.accessibility_score ?? 0 / maxPossibleScore) * 100,
+        ((scoreBreakdown?.accessibility_score || 0) / maxPossibleScore) * 100,
     },
   ];
 
   return (
     <div className='w-full'>
-      {/* <div className='mb-2'>
-        <div className='flex justify-between items-center'>
-          <span className='text-sm font-medium'>Score Breakdown</span>
-          <span className='text-sm font-medium'>{totalScore}%</span>
-        </div>
-      </div> */}
-
       {/* Progress bar container */}
-      <div className={`w-full h-${height} bg-gray-200 ${barClassName}`}>
+      <div
+        className={`w-full bg-gray-200 ${barClassName}`}
+        style={{ height: `${height}px` }}
+        role='progressbar'
+        aria-valuenow={totalScore}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Total score: ${totalScore} out of 100`}
+      >
         <div className='flex h-full'>
           {segments.map((segment, index) => (
             <div
@@ -88,11 +104,7 @@ export function SegmentedProgressBar({
               className={`h-full ${index === 0 ? 'rounded-l-full' : ''} ${
                 index === segments.length - 1 ? 'rounded-r-full' : ''
               }`}
-              aria-valuenow={segment.score}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              role='progressbar'
-              aria-label={`${segment.name} score: ${segment.score}%`}
+              aria-hidden='true'
             />
           ))}
         </div>
@@ -100,15 +112,16 @@ export function SegmentedProgressBar({
 
       {/* Labels */}
       {showLabels && (
-        <div className='flex justify-between mt-2'>
+        <div className='flex flex-wrap justify-between mt-2 gap-y-2'>
           {segments.map((segment) => (
             <div key={`label-${segment.name}`} className='flex items-center'>
               <div
-                className='w-3 h-3 rounded-full mr-1'
+                className='w-3 h-3 rounded-full mr-1 flex-shrink-0'
                 style={{ backgroundColor: segment.color }}
+                aria-hidden='true'
               />
-              <span className='text-xs'>
-                {segment.name}: {segment.score}%
+              <span className='text-xs whitespace-nowrap'>
+                {segment.name}: {segment.score}/{segment.maxScore}
               </span>
             </div>
           ))}
