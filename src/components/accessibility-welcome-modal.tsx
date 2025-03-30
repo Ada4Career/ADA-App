@@ -21,6 +21,7 @@ type ProfileCardProps = {
   title: string;
   description: string;
   onClick: () => void;
+  profileName: string;
 };
 
 // Profile Card Component
@@ -29,14 +30,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   title,
   description,
   onClick,
+  profileName,
 }) => {
   return (
     <button
       onClick={onClick}
-      className='flex flex-col p-4 border rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors'
+      className='flex flex-col p-4 border rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-full text-left'
+      aria-label={`Select ${title} profile`}
+      id={`profile-${profileName}`}
     >
       <div className='flex items-center mb-2'>
-        {icon}
+        <span className='flex-shrink-0' aria-hidden='true'>
+          {icon}
+        </span>
         <h3 className='text-lg font-medium ml-2'>{title}</h3>
       </div>
       <p className='text-sm text-gray-600 dark:text-gray-300'>{description}</p>
@@ -86,62 +92,83 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className='w-[1800px]  max-h-[90vh] overflow-y-auto'>
+      <DialogContent className='sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6'>
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className='text-xl sm:text-2xl'>
             {t('title') || 'Welcome! Customize Your Experience'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className='text-sm sm:text-base mt-2'>
             {t('description') ||
               'Please select an accessibility profile that suits your needs, or skip to use the default interface.'}
           </DialogDescription>
         </DialogHeader>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 py-4'>
+        <div
+          className='grid grid-cols-1 sm:grid-cols-2 gap-4 py-4'
+          role='group'
+          aria-label='Accessibility profile options'
+        >
           <ProfileCard
-            icon={<Zap className='h-6 w-6 text-yellow-500' />}
+            icon={<Zap className='h-5 w-5 sm:h-6 sm:w-6 text-yellow-500' />}
             title={t('seizeSafe') || 'Seizure Safe'}
             description={
               t('seizeSafeDesc') || 'Eliminates flashes and reduces color'
             }
             onClick={() => handleProfileSelect('seizeSafe')}
+            profileName='seizeSafe'
           />
 
           <ProfileCard
-            icon={<Eye className='h-6 w-6 text-blue-500' />}
+            icon={<Eye className='h-5 w-5 sm:h-6 sm:w-6 text-blue-500' />}
             title={t('visionImpaired') || 'Vision Impaired'}
             description={t('visionImpairedDesc') || 'Enhances website visuals'}
             onClick={() => handleProfileSelect('visionImpaired')}
+            profileName='visionImpaired'
           />
 
           <ProfileCard
-            icon={<Sparkles className='h-6 w-6 text-purple-500' />}
+            icon={
+              <Sparkles className='h-5 w-5 sm:h-6 sm:w-6 text-purple-500' />
+            }
             title={t('adhd') || 'ADHD Friendly'}
             description={
               t('adhdDesc') || 'Reduces distractions and improves focus'
             }
             onClick={() => handleProfileSelect('adhd')}
+            profileName='adhd'
           />
 
           <ProfileCard
-            icon={<BrainCircuit className='h-6 w-6 text-green-500' />}
+            icon={
+              <BrainCircuit className='h-5 w-5 sm:h-6 sm:w-6 text-green-500' />
+            }
             title={t('cognitiveDisability') || 'Cognitive Disability'}
             description={
               t('cognitiveDisabilityDesc') ||
               'Assists with reading and focusing'
             }
             onClick={() => handleProfileSelect('cognitiveDisability')}
+            profileName='cognitiveDisability'
           />
         </div>
 
-        <DialogFooter className='!flex !flex-col'>
-          <Button className='text-sm mb-2' onClick={handleMore}>
+        <DialogFooter className='flex flex-col sm:flex-col gap-3 mt-4'>
+          <Button
+            className='text-sm w-full sm:w-auto '
+            onClick={handleMore}
+            aria-label='Open detailed accessibility settings'
+          >
             Open More Settings
           </Button>
-          <Button variant='outline' onClick={handleSkip}>
+          <Button
+            variant='outline'
+            onClick={handleSkip}
+            className='w-full sm:w-auto '
+            aria-label='Skip accessibility setup for now'
+          >
             {t('skipButton') || 'Skip for now'}
           </Button>
-          <div className='text-xs text-gray-500 mt-2'>
+          <div className='text-xs text-gray-500 mt-2 w-full'>
             {t('note') ||
               'You can change your accessibility settings anytime using the widget at the bottom right of the screen.'}
           </div>
