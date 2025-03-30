@@ -27,19 +27,37 @@ const FOOTER_ITEMS = [
 ];
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className='py-28 px-36'>
-      <div className='text-gray-700'>
-        <Separator />
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center gap-10 mt-6'>
-            {FOOTER_ITEMS.map((f) => (
-              <Link key={f.label} href={f.url}>
-                {f.label}
-              </Link>
-            ))}
-          </div>
-          <p>© 2024-2025, All Rights Reserved</p>
+    <footer
+      className='py-8 sm:py-12 md:py-16 lg:py-28 px-4 sm:px-8 md:px-16 lg:px-36'
+      aria-label='Site footer'
+    >
+      <div className='text-gray-700 max-w-6xl mx-auto'>
+        <Separator role='presentation' />
+
+        <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-6 mt-6'>
+          {/* Footer Links */}
+          <nav aria-label='Footer navigation'>
+            <ul className='flex flex-wrap items-center gap-4 sm:gap-6 md:gap-10'>
+              {FOOTER_ITEMS.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.url}
+                    className='hover:text-gradient-ms transition-colors text-sm md:text-base'
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Copyright Text */}
+          <p className='text-sm md:text-base order-first sm:order-last mt-2 sm:mt-0'>
+            © 2024-{currentYear}, All Rights Reserved
+          </p>
         </div>
       </div>
     </footer>

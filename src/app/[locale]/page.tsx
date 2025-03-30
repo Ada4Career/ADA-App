@@ -49,10 +49,7 @@ const FLOATING_ITEMS = [
 import Footer from '@/components/layout/footer';
 
 import mainGif from '~/gif/people-gif.gif';
-import aida from '~/images/aidalogo.png';
-import btp from '~/images/btplogo.png';
 import cv from '~/images/cvimg.png';
-import telyu from '~/images/telyulogo.png';
 
 export default function HomePage() {
   return (
@@ -65,24 +62,26 @@ export default function HomePage() {
       </section>
       <section>
         <main className='text-center mt-10  mx-auto max-w-6xl px-4 w-full flex flex-col items-center'>
-          <h1 className='font-medium text-3xl'>ADA.AI</h1>
-          <h2 className='font-bold text-6xl text-gradient-ms pb-2'>
+          <h1 className='font-medium text-2xl sm:text-2xl md:text-3xl'>
+            ADA.AI
+          </h1>
+          <h2 className='font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gradient-ms pb-2 mt-2'>
             Your Accessible AI Career Platform
-          </h2>
+          </h2>{' '}
           <div className='relative  w-full flex items-center justify-center my-12'>
             <AchievementCard
               type='points'
               points={FLOATING_ITEMS[0].points}
               title={FLOATING_ITEMS[0].title}
               imageAlt='Achievement Logo'
-              className='absolute left-0 top-1/2'
+              className='hidden md:inline absolute left-0 top-1/2'
             />
             <AchievementCard
               type='desc'
               description={FLOATING_ITEMS[1].points[0]}
               title={FLOATING_ITEMS[1].title}
               imageAlt='Achievement Logo'
-              className='absolute right-0 top-0'
+              className='hidden md:inline absolute right-0 top-0'
             />
             <AchievementCard
               type='points'
@@ -90,25 +89,9 @@ export default function HomePage() {
               description='loremipsum dolor'
               title={FLOATING_ITEMS[2].title}
               imageAlt='Achievement Logo'
-              className='absolute right-0 bottom-0'
+              className='hidden md:inline absolute right-0 bottom-0'
             />
 
-            {/* <div className='absolute left-0 top-1/2 bg-white backdrop-blur-sm bg-opacity-30 p-3 rounded-md flex z-[99] max-w-[480px] !text-start gap-3'>
-            <Image
-              src={achievement}
-              width={24}
-              height={24}
-              alt='Achievement Logo'
-            />
-            <div>
-              <p className='font-bold items-start text-start'>
-                What you can achieve with ADA?
-              </p>
-              <p className='text-sm'>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              </p>
-            </div>
-          </div> */}
             <Image
               className='translate-x-20'
               src={mainGif}
@@ -121,45 +104,40 @@ export default function HomePage() {
             />
           </div>
           <div className='w-full py-2 px-2 rounded-md'>
-            <div>
-              <h1 className='text-gradient-ms text-5xl pt-4'>
+            <div className='text-center px-4 md:px-0'>
+              <h2 className='text-gradient-ms text-3xl sm:text-4xl md:text-5xl pt-4'>
                 Don't Worry, #PastiADAKarier!
-              </h1>
-              <p className='text-gray-500 text-center mt-3'>
+              </h2>
+              <p className='text-gray-500 text-center mt-3 text-sm sm:text-base'>
                 Empowering job seekers with disabilities by offering
                 intelligent, AI-driven solutions that make it easier
-                <br />
+                {/* Only show line break on larger screens */}
+                <span className='hidden md:inline'>
+                  <br />
+                </span>
                 to find inclusive opportunities and connect with employers who
                 value your unique talents.
               </p>
-            </div>
-            <div className='mt-20 mb-10'>
-              <h2 className='text-lg text-gray-600 text-center flex flex-col items-center font-medium'>
-                Our Support Team
-              </h2>
-              <div className='flex items-center justify-center gap-4 mt-2'>
-                <Image src={btp} alt='BTP Logo' width={180} height={180} />
-                <Image
-                  src={telyu}
-                  alt='Telkom University Logo'
-                  width={180}
-                  height={180}
-                />
-              </div>
-            </div>
+            </div>{' '}
             <div
               id='product'
-              className='mt-10 grid grid-cols-7 gap-y-5 gap-x-6 text-start'
+              className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-5 md:gap-6 text-start px-4 md:px-0'
+              aria-labelledby='product-heading'
             >
-              <div className='col-span-5 rounded-md border-gradient-ms flex items-center justify-center'>
-                <div className='grid grid-cols-7 p-10 justify-center'>
-                  <div className='w-14 h-14 flex-1 flex-grow rounded-full bg-ms-rainbow text-white border-[1px] border-indigo-500 flex items-center justify-center'>
-                    <Waypoints />
+              <h2 id='product-heading' className='sr-only'>
+                Our Products
+              </h2>
+
+              {/* Job Matching Algorithm */}
+              <div className='lg:col-span-5 rounded-md border-gradient-ms flex items-center justify-center'>
+                <div className='grid grid-cols-1 sm:grid-cols-7 p-6 sm:p-10 w-full'>
+                  <div className='w-14 h-14 rounded-full bg-ms-rainbow text-white border border-indigo-500 flex items-center justify-center mb-4 sm:mb-0 mx-auto sm:mx-0'>
+                    <Waypoints aria-hidden='true' />
                   </div>
-                  <div className='flex flex-col gap-2 col-span-6'>
-                    <p className='font-semibold text-2xl text-gradient-ms'>
+                  <div className='flex flex-col gap-2 sm:col-span-6'>
+                    <h3 className='font-semibold text-xl sm:text-2xl text-gradient-ms text-center sm:text-left'>
                       Inclusive Job Matching Algorithm
-                    </p>
+                    </h3>
                     <p className='text-sm leading-loose font-light'>
                       An inclusive job matching algorithm that connects
                       candidates to opportunities by focusing on skills and
@@ -170,8 +148,10 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <div className='col-span-2 text-white flex flex-col gap-5 rounded-md bg-gradient-to-b from-[#988bea] to-[#8A79FD] px-4 pt-8'>
-                <h5 className='font-semibold text-xl'>AI Powered CV Builder</h5>
+
+              {/* CV Builder */}
+              <div className='lg:col-span-2 text-white flex flex-col gap-5 rounded-md bg-gradient-to-b from-[#988bea] to-[#8A79FD] px-4 pt-8'>
+                <h3 className='font-semibold text-xl'>AI Powered CV Builder</h3>
                 <p className='text-sm leading-relaxed font-light'>
                   No CV? No problem. Our AI-powered CV Builder creates a
                   professional, tailored resume from scratch. Just provide your
@@ -179,18 +159,22 @@ export default function HomePage() {
                   that highlights your skills, experience, and strengths—making
                   job applications easier than ever
                 </p>
-                <Image
-                  alt='CV Image'
-                  src={cv}
-                  width={260}
-                  height={194}
-                  className='translate-y-3'
-                />
+                <div className='flex justify-center'>
+                  <Image
+                    alt='CV Builder preview'
+                    src={cv}
+                    width={260}
+                    height={194}
+                    className='translate-y-3 object-contain'
+                  />
+                </div>
               </div>
-              <div className='col-span-2 text-white flex flex-col gap-5 rounded-md bg-gradient-to-b from-[#988bea] to-[#8A79FD] px-4 py-8'>
-                <h5 className='font-semibold text-xl'>
-                  Courses & Career Update Recomendation
-                </h5>
+
+              {/* Courses & Career */}
+              <div className='lg:col-span-2 text-white flex flex-col gap-5 rounded-md bg-gradient-to-b from-[#988bea] to-[#8A79FD] px-4 py-8'>
+                <h3 className='font-semibold text-xl'>
+                  Courses & Career Update Recommendation
+                </h3>
                 <p className='text-sm leading-relaxed font-light'>
                   This feature provides a dynamic career pathway update, guiding
                   users from entry-level roles, like Junior Developer, to
@@ -201,37 +185,36 @@ export default function HomePage() {
                   to help users prepare for each assessment.
                 </p>
               </div>
-              <div className='col-span-5 p-4 overflow-hidden rounded-md border-gradient-ms gap-x-4 items-center justify-center grid grid-cols-2'>
-                <div className='grid grid-cols-7 gap-x-12'>
-                  <Image src={aida} alt='AIDA logo' width={52} height={52} />
-                  <div className='flex flex-col gap-y-3 col-span-6'>
-                    <h5 className='text-xl text-gradient-ms font-semibold'>
-                      Say hi to AIDA, your AI Career Assistance
-                    </h5>
-                    <p className='leading-relaxed font-light'>
-                      AIDA offers quick, easy-to-digest insights and reminders
-                      to keep you focused and confident as you work toward your
-                      career goals. It helps you find the right job, stand out
-                      in interviews with relevant company insights, and see why
-                      you’re the perfect fit.
-                    </p>
+
+              {/* AIDA Feature */}
+              <div className='lg:col-span-5 p-4 overflow-hidden rounded-md border-gradient-ms items-center justify-center grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className='flex flex-col gap-y-3'>
+                  <div className='flex items-center gap-3 mb-2'>
+                    <h3 className='text-xl text-gradient-ms font-semibold'>
+                      Say hi to AIDA, your AI Career Assistant
+                    </h3>
                   </div>
+                  <p className='leading-relaxed font-light'>
+                    AIDA offers quick, easy-to-digest insights and reminders to
+                    keep you focused and confident as you work toward your
+                    career goals. It helps you find the right job, stand out in
+                    interviews with relevant company insights, and see why
+                    you're the perfect fit.
+                  </p>
                 </div>
-                {/* <Image
-                  src={aidamockup}
-                  alt='AIDA Mockup'
-                  width={480}
-                  height={280}
-                /> */}
-                <video
-                  src='/vid/aida.webm'
-                  width={480}
-                  height={240}
-                  autoPlay
-                  playsInline
-                  muted
-                  loop
-                ></video>{' '}
+                <div className='flex justify-center'>
+                  <video
+                    src='/vid/aida.webm'
+                    width={480}
+                    height={240}
+                    autoPlay
+                    playsInline
+                    muted
+                    loop
+                    aria-label='Demo of AIDA AI assistant in action'
+                    style={{ maxWidth: '100%', height: 'auto' }}
+                  ></video>
+                </div>
               </div>
             </div>
           </div>

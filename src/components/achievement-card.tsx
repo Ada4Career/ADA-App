@@ -30,7 +30,7 @@ const AchievementCard = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'max-w-[480px] bg-opacity-80 z-[50] rounded bg-white text-start ',
+        'max-w-[480px] bg-opacity-80 z-20 rounded bg-white text-start ',
         className
       )}
     >

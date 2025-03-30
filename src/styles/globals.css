@@ -28,6 +28,10 @@
   /* #endregion  /**======== Primary Color =========== */
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   /* inter var - latin */
   @font-face {
