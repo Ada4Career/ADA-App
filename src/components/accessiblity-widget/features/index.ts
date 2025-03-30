@@ -6,6 +6,7 @@ import { useContentScaling } from '@/components/accessiblity-widget/features/con
 import { useHighlightHover } from '@/components/accessiblity-widget/features/content/useHighlightHover';
 import { useLinkHighlight } from '@/components/accessiblity-widget/features/content/useHighlightLink';
 import { useHighlightTitles } from '@/components/accessiblity-widget/features/content/useHighlightTitles';
+import { useKeyboardNavigation } from '@/components/accessiblity-widget/features/content/useKeyboardNavigation';
 import { useReadableFont } from '@/components/accessiblity-widget/features/content/useReadableFont';
 import { useCursor } from '@/components/accessiblity-widget/features/orientation/useCursor';
 import { useHideImages } from '@/components/accessiblity-widget/features/orientation/useHideImage';
@@ -27,4 +28,5 @@ export const useAccesibilityEffects = () => {
   useHighlightTitles();
   useHighlightHover();
   useReadableFont();
+  useKeyboardNavigation();
 };

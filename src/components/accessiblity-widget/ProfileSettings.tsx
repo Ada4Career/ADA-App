@@ -10,6 +10,7 @@ type ProfileSettingsProps = {
     visionImpaired: boolean;
     adhd: boolean;
     cognitiveDisability: boolean;
+    keyboardNavigation: boolean;
   };
   updateSettings: (key: string, value: boolean) => void;
 };
@@ -101,6 +102,26 @@ export function ProfileSettings({
             handleProfileChange('cognitiveDisability', checked)
           }
           aria-describedby='cognitive-disability-description'
+        />
+      </div>
+      <Separator />
+
+      <div className='flex items-center justify-between'>
+        <div className='space-y-1'>
+          <Label
+            htmlFor='keyboard-navigation'
+            className='text-base font-medium'
+          >
+            Keyboard Navigation
+          </Label>
+        </div>
+        <Switch
+          id='keyboard-navigation'
+          checked={settings.keyboardNavigation}
+          onCheckedChange={(checked) =>
+            handleProfileChange('keyboardNavigation', checked)
+          }
+          aria-describedby='keyboard-navigation-description'
         />
       </div>
       <Separator />

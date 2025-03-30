@@ -26,6 +26,7 @@ export type AccessibilitySettings = {
     visionImpaired: boolean;
     adhd: boolean;
     cognitiveDisability: boolean;
+    keyboardNavigation: boolean;
   };
   orientation: {
     muteSounds: boolean;
@@ -54,6 +55,7 @@ export type AccessibilitySettings = {
     highlightHover: boolean;
     fontSize: 'default' | 'large' | 'larger';
     lineHeight: 'default' | 'large' | 'larger';
+    keyboardNavigation: boolean;
     letterSpacing: 'default' | 'large' | 'larger';
     alignment: 'left' | 'center' | 'right' | 'justify' | 'default';
   };
@@ -89,6 +91,7 @@ export const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
       highlightHover: false,
       fontSize: 'large',
       lineHeight: 'large',
+      keyboardNavigation: false,
       letterSpacing: 'large',
       alignment: 'left',
     },
@@ -121,6 +124,7 @@ export const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
       highlightHover: false,
       fontSize: 'larger',
       lineHeight: 'larger',
+      keyboardNavigation: false,
       letterSpacing: 'larger',
       alignment: 'left',
     },
@@ -151,6 +155,7 @@ export const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
       highlightTitles: true,
       highlightLinks: true,
       highlightHover: false,
+      keyboardNavigation: false,
       fontSize: 'default',
       lineHeight: 'large',
       letterSpacing: 'default',
@@ -183,10 +188,25 @@ export const profilePresets: Record<string, Partial<AccessibilitySettings>> = {
       highlightTitles: true,
       highlightLinks: true,
       highlightHover: false,
+      keyboardNavigation: false,
       fontSize: 'default',
       lineHeight: 'large',
       letterSpacing: 'large',
       alignment: 'left',
+    },
+  },
+  keyboardNavigation: {
+    content: {
+      contentScaling: 'default',
+      readableFont: false,
+      highlightTitles: true,
+      highlightLinks: true,
+      highlightHover: true,
+      keyboardNavigation: true,
+      fontSize: 'default',
+      lineHeight: 'default',
+      letterSpacing: 'default',
+      alignment: 'default',
     },
   },
 };

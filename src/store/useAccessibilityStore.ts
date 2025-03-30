@@ -35,6 +35,7 @@ const defaultSettings: AccessibilitySettings = {
     visionImpaired: false,
     adhd: false,
     cognitiveDisability: false,
+    keyboardNavigation: false,
   },
   orientation: {
     muteSounds: false,
@@ -64,6 +65,7 @@ const defaultSettings: AccessibilitySettings = {
     fontSize: 'default',
     lineHeight: 'default',
     letterSpacing: 'default',
+    keyboardNavigation: false,
     alignment: 'default',
   },
 };
