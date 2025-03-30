@@ -162,7 +162,7 @@ export default function JobCard({ job, onClick }: JobCardProps) {
                 Score Breakdown
               </h3> */}
 
-              <div className='grid grid-cols-4 gap-6'>
+              <div className='grid sm:grid-cols-4 grid-cols-2 gap-6'>
                 {/* Skills Score */}
                 <div className='flex flex-col items-center'>
                   <CircularProgressIndicator

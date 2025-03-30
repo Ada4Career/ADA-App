@@ -22,7 +22,7 @@ export function CircularProgressIndicator({
   strokeWidth = 10,
   colors = ['#8b5cf6', '#3b82f6', '#ec4899'],
   segments = [0.3, 0.4, 0.3],
-  text = 'Match',
+  text = 'Score',
   animate = true,
   animationDuration = 1000,
   maxScore = 100,

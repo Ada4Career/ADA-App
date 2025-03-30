@@ -35,7 +35,7 @@ function HeaderLabel() {
     return '';
   };
 
-  return <h3>{getHeaderLabel()}</h3>;
+  return <h3 className='text-base truncate'>{getHeaderLabel()}</h3>;
 }
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
