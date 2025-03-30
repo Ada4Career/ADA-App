@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Suspense, useEffect, useState } from 'react';
 
+import { MicrosoftLoginButton } from '@/components/features/auth/microsoft-login-button';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 
 import { LoginForm } from './login-form';
 import { RegisterForm } from './register-form';
@@ -50,7 +52,7 @@ function AuthDialogContent() {
         </Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='sm:max-w-[425px]'>
+        <DialogContent className=''>
           <DialogHeader>
             <DialogTitle>
               {activeForm === 'login' ? t('signIn') : 'Create Account'}
@@ -67,6 +69,12 @@ function AuthDialogContent() {
           ) : (
             <RegisterForm onLoginClick={toggleForm} />
           )}
+          <div className='flex items-center justify-center gap-3 overflow-hidden'>
+            <Separator className='!bg-gray-400' />
+            <p className='text-sm text-gray-600'>OR</p>
+            <Separator className='!bg-gray-400' />
+          </div>
+          <MicrosoftLoginButton />
         </DialogContent>
       </Dialog>
     </>

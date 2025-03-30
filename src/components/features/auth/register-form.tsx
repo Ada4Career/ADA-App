@@ -92,14 +92,23 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success('Register Successfully');
+      toast.success('Register Successfully', {
+        ariaLabel: 'Register success',
+        role: 'alert',
+      });
       router.push('/onboarding');
     },
     onError: (error) => {
       if (error.response?.data.message) {
-        toast.error(error.response?.data.message);
+        toast.error(error.response?.data.message, {
+          ariaLabel: 'Register failed - Email already exists',
+          role: 'alert',
+        });
       } else {
-        toast.error('Something went wrong');
+        toast.error('Something went wrong', {
+          ariaLabel: 'Register failed - Something went wrong',
+          role: 'alert',
+        });
       }
     },
   });
@@ -113,7 +122,7 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
   };
 
   return (
-    <div className='space-y-4 py-2 pb-4'>
+    <div className='space-y-4 py-2'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
           <FormField
@@ -197,13 +206,13 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
           </Button>
         </form>
       </Form>
-      <div className='mt-4 text-center'>
-        <p className='text-sm text-muted-foreground mb-2'>{t('already')}</p>
+      <div className='mt-4 text-center flex items-center  justify-center'>
+        <p className='text-sm text-muted-foreground'>{t('already')}</p>
         <Button
           type='button'
           variant='link'
           onClick={onLoginClick}
-          className='w-full'
+          className='w-fit p-1 underline'
         >
           {t('signIn')}
         </Button>

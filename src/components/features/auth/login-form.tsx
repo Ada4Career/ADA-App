@@ -87,14 +87,23 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
     },
 
     onSuccess: (data) => {
-      toast.success('Login success');
+      toast.success('Login success', {
+        ariaLabel: 'Login success',
+        role: 'alert',
+      });
       router.push('/onboarding');
     },
     onError: (error) => {
       if (error.response?.data.message) {
-        toast.error(error.response?.data.data);
+        toast.error(error.response?.data.data, {
+          ariaLabel: 'Login failed - Incorrect email or password',
+          role: 'alert',
+        });
       } else {
-        toast.error('Something went wrong');
+        toast.error('Something went wrong', {
+          ariaLabel: 'Login failed',
+          role: 'alert',
+        });
       }
     },
   });
@@ -106,7 +115,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
   };
 
   return (
-    <div className='space-y-4 py-2 pb-4'>
+    <div className='space-y-4 py-2'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
           <FormField
@@ -145,15 +154,13 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
             {isPending ? 'Signing in...' : t('signIn')}
           </Button>
 
-          <div className='mt-4 text-center'>
-            <p className='text-sm text-muted-foreground mb-2'>
-              {t('notAlready')}
-            </p>
+          <div className='mt-4 text-center flex items-center  justify-center'>
+            <p className='text-sm text-muted-foreground'>{t('notAlready')}</p>
             <Button
               type='button'
-              variant='ghost'
+              variant='link'
               onClick={onRegisterClick}
-              className='w-full'
+              className='w-fit p-1 underline'
             >
               {t('createAccount')}
             </Button>
