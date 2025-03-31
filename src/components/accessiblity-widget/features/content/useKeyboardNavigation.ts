@@ -5,7 +5,11 @@ import { useAccessibilityStore } from '@/store/useAccessibilityStore';
 
 export function useKeyboardNavigation() {
   const keyboardNavigationEnabled = useAccessibilityStore(
-    (state) => state.settings.profiles.keyboardNavigation ?? true
+    (state) => state.settings.profiles.keyboardNavigation ?? false
+  );
+
+  const toggleDialog = useAccessibilityStore(
+    (state) => state.toggleOpenKeyboardDialog
   );
 
   // Refs to track navigation state
@@ -16,6 +20,8 @@ export function useKeyboardNavigation() {
 
   useEffect(() => {
     if (!keyboardNavigationEnabled) return;
+
+    toggleDialog();
 
     // Create an announcement element for screen readers
     if (!announcementRef.current) {
@@ -146,14 +152,13 @@ export function useKeyboardNavigation() {
         }
 
         // For debugging - log what we found
-        console.log(
-          `Found ${elements.length} ${getElementTypeNameForKey(key)}:`,
-          elements
-        );
+        // console.log(
+        //   `Found ${elements.length} ${getElementTypeNameForKey(key)}:`,
+        //   elements
+        // );
 
         // Determine if we're cycling through elements or starting fresh
         if (lastKeyPressedRef.current === key) {
-          // Same key pressed again - move to next element
           currentIndexRef.current =
             (currentIndexRef.current + 1) % elements.length;
         } else {

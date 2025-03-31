@@ -109,7 +109,7 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
           aria-label='Accessibility profile options'
         >
           <ProfileCard
-            icon={<Zap className='h-5 w-5 sm:h-6 sm:w-6 text-yellow-500' />}
+            icon={<Zap className='h-5 w-5 sm:h-6 sm:w-6 ' />}
             title={t('seizeSafe') || 'Seizure Safe'}
             description={
               t('seizeSafeDesc') || 'Eliminates flashes and reduces color'
@@ -119,7 +119,7 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
           />
 
           <ProfileCard
-            icon={<Eye className='h-5 w-5 sm:h-6 sm:w-6 text-blue-500' />}
+            icon={<Eye className='h-5 w-5 sm:h-6 sm:w-6 ' />}
             title={t('visionImpaired') || 'Vision Impaired'}
             description={t('visionImpairedDesc') || 'Enhances website visuals'}
             onClick={() => handleProfileSelect('visionImpaired')}
@@ -127,9 +127,7 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
           />
 
           <ProfileCard
-            icon={
-              <Sparkles className='h-5 w-5 sm:h-6 sm:w-6 text-purple-500' />
-            }
+            icon={<Sparkles className='h-5 w-5 sm:h-6 sm:w-6 ' />}
             title={t('adhd') || 'ADHD Friendly'}
             description={
               t('adhdDesc') || 'Reduces distractions and improves focus'
@@ -139,9 +137,7 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
           />
 
           <ProfileCard
-            icon={
-              <BrainCircuit className='h-5 w-5 sm:h-6 sm:w-6 text-green-500' />
-            }
+            icon={<BrainCircuit className='h-5 w-5 sm:h-6 sm:w-6 ' />}
             title={t('cognitiveDisability') || 'Cognitive Disability'}
             description={
               t('cognitiveDisabilityDesc') ||
@@ -149,6 +145,16 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
             }
             onClick={() => handleProfileSelect('cognitiveDisability')}
             profileName='cognitiveDisability'
+          />
+
+          <ProfileCard
+            icon={
+              <BrainCircuit className='h-5 w-5 sm:grid-cols-2 sm:h-6 sm:w-6 ' />
+            }
+            title='KeyboardNavigation'
+            description='Easy keyboard navigation with shortcut'
+            onClick={() => handleProfileSelect('keyboardNavigation')}
+            profileName='keyboardNavigation'
           />
         </div>
 

@@ -24,6 +24,8 @@ type AccessibilityStore = {
   resetSettings: () => void;
   hasOnboarded: boolean;
   setHasOnboarded: (value: boolean) => void;
+  openKeyboardDialog: boolean;
+  toggleOpenKeyboardDialog: () => void;
 };
 
 /**
@@ -79,6 +81,12 @@ export const useAccessibilityStore = create<AccessibilityStore>()(
       settings: defaultSettings,
       hasOnboarded: false,
       position: 'right',
+      openKeyboardDialog: false,
+
+      toggleOpenKeyboardDialog: () =>
+        set((state) => ({
+          openKeyboardDialog: !state.openKeyboardDialog,
+        })),
 
       togglePostion: () =>
         set((state) => ({

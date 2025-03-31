@@ -10,6 +10,7 @@ import '@/styles/colors.css';
 
 import AbsolutePositionWidget from '@/components/accessiblity-widget/AbsolutePositionWidget';
 import ImplementWidget from '@/components/accessiblity-widget/ImplementWidget';
+import KeyboardNavigationDialog from '@/components/accessiblity-widget/KeyboardNavigationDialog';
 import { ReactQueryClientProvider } from '@/components/layout/query-provider';
 
 import { siteConfig } from '@/constant/config';
@@ -66,6 +67,7 @@ export default async function RootLayout({
         <body>
           <NextIntlClientProvider locale={locale}>
             <AbsolutePositionWidget />
+            <KeyboardNavigationDialog />
             <ImplementWidget />
             <ToastContainer />
             <NuqsAdapter>{children}</NuqsAdapter>
