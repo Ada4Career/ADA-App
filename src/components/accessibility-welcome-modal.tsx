@@ -176,7 +176,7 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
             icon={
               <Volume2Icon className='h-5 w-5 sm:grid-cols-2 sm:h-6 sm:w-6 ' />
             }
-            title='Text-to-Speech (Coming Soon)'
+            title='Text-to-Speech (On Progress)'
             description='Transform any text to sound'
             disabled={true}
             onClick={() => {
