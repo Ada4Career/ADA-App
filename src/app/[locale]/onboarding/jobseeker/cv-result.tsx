@@ -51,7 +51,7 @@ const CVResult = () => {
   } = useQuery<Resume>({
     queryKey: ['resume'],
     queryFn: async () => {
-      console.log(userData, 'ini data');
+      // console.log(userData, 'ini data');
       const response = await api.post(`${API_AI_URL}/resume`, {
         name: userData?.name,
         email: userData?.email,

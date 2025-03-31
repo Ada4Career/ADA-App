@@ -233,7 +233,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
         answers: data,
       };
 
-      console.log(dataToSend, 'ini dikirim');
+      // console.log(dataToSend, 'ini dikirim');
 
       const response = await api.post(
         `${API_BASE_URL}/questionnaire`,
@@ -287,7 +287,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
     const currentAnswer = answers[currentDisability];
     // console.log('f1');
     if (!currentAnswer?.impairmentType) {
-      console.log('f1');
+      // console.log('f1');
       return false;
     }
 
@@ -296,7 +296,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
       currentAnswer.impairmentType === 'Other' &&
       !currentAnswer.customImpairmentType
     ) {
-      console.log(currentAnswer);
+      // console.log(currentAnswer);
       return false;
     }
 

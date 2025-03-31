@@ -36,7 +36,7 @@ const ApplicantDetailSection = ({ id }: Props) => {
       const response = await api.get<ApiReturn<JobApplicant>>(
         `${API_BASE_URL}/job-application/${id}`
       );
-      console.log(response.data.data);
+      // console.log(response.data.data);
       return response.data.data;
     },
   });
