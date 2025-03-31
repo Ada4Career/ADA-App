@@ -1,5 +1,12 @@
 'use client';
-import { BrainCircuit, Eye, Sparkles, Zap } from 'lucide-react';
+import {
+  BrainCircuit,
+  Eye,
+  KeyboardIcon,
+  Sparkles,
+  Volume2Icon,
+  Zap,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -22,6 +29,7 @@ type ProfileCardProps = {
   description: string;
   onClick: () => void;
   profileName: string;
+  disabled?: boolean;
 };
 
 // Profile Card Component
@@ -31,11 +39,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   description,
   onClick,
   profileName,
+  disabled = false,
 }) => {
   return (
     <button
       onClick={onClick}
-      className='flex flex-col p-4 border rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-full text-left'
+      disabled={disabled}
+      className={`flex flex-col p-4 border rounded-lg transition-colors w-full text-left ${
+        disabled
+          ? 'text-gray-400 cursor-not-allowed'
+          : 'hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+      } `}
+      aria-disabled={disabled}
       aria-label={`Select ${title} profile`}
       id={`profile-${profileName}`}
     >
@@ -149,12 +164,26 @@ const AccessibilityWelcomeModal = ({ changeProfile }: Props) => {
 
           <ProfileCard
             icon={
-              <BrainCircuit className='h-5 w-5 sm:grid-cols-2 sm:h-6 sm:w-6 ' />
+              <KeyboardIcon className='h-5 w-5 sm:grid-cols-2 sm:h-6 sm:w-6 ' />
             }
-            title='KeyboardNavigation'
+            title='Keyboard Navigation'
             description='Easy keyboard navigation with shortcut'
             onClick={() => handleProfileSelect('keyboardNavigation')}
             profileName='keyboardNavigation'
+          />
+
+          <ProfileCard
+            icon={
+              <Volume2Icon className='h-5 w-5 sm:grid-cols-2 sm:h-6 sm:w-6 ' />
+            }
+            title='Text-to-Speech (Coming Soon)'
+            description='Transform any text to sound'
+            disabled={true}
+            onClick={() => {
+              console.log('Coming Soon');
+            }}
+            // onClick
+            profileName='textToSpeech'
           />
         </div>
 

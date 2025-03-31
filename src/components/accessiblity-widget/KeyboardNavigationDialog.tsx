@@ -18,9 +18,10 @@ const KeyboardNavigationDialog: React.FC = () => {
   // Close dialog when X key is pressed
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      console.log('halo');
-      console.log(e.key.toLowerCase());
-      if (openKeyboardDialog && e.key.toLowerCase() === 'x') {
+      if (
+        (openKeyboardDialog && e.key.toLowerCase() === 'x') ||
+        (openKeyboardDialog && e.key === 'Enter')
+      ) {
         toggleOpenKeyboardDialog();
         close();
       }
