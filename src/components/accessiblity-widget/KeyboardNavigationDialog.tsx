@@ -32,7 +32,7 @@ const KeyboardNavigationDialog: React.FC = () => {
   }, [openKeyboardDialog]);
 
   return (
-    <Dialog open={openKeyboardDialog} onOpenChange={close}>
+    <Dialog open={openKeyboardDialog} onOpenChange={toggleOpenKeyboardDialog}>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle>Keyboard Navigation</DialogTitle>
