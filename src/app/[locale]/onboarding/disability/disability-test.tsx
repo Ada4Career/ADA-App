@@ -1,6 +1,7 @@
 'use client';
 import { useMutation } from '@tanstack/react-query';
 import {
+  ArrowBigRightDash,
   ArrowLeft,
   ArrowRight,
   AudioLines,
@@ -8,6 +9,7 @@ import {
   EyeIcon,
   HandHeart,
   HandIcon,
+  InfoIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
@@ -50,6 +52,7 @@ const impairmentIcons = {
   mute: <AudioLines />,
   motoric: <HandIcon />,
   mental: <HandHeart />,
+  nothing: <ArrowBigRightDash />,
 };
 
 function transformData(
@@ -130,6 +133,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
       tImpairments('mental.ptsdOcd'),
       tImpairments('mental.other'),
     ],
+    nothing: [],
   };
   // State for tracking selected disability types and step progress
   const [selectedDisabilities, setSelectedDisabilities] = React.useState<
@@ -233,8 +237,6 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
         answers: data,
       };
 
-      // console.log(dataToSend, 'ini dikirim');
-
       const response = await api.post(
         `${API_BASE_URL}/questionnaire`,
         dataToSend
@@ -251,14 +253,33 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
   const handleNext = async () => {
     try {
       if (currentStep === 0) {
-        setCurrentDisabilityIndex(0);
+        // Check if "nothing" is the only selected option
+        if (
+          selectedDisabilities.length === 1 &&
+          selectedDisabilities[0] === 'nothing'
+        ) {
+          // Submit directly with just the basic questions
+          const structured = [
+            {
+              question: t('haveDisability'),
+              answer: 'No',
+            },
+            {
+              question: t('whatType'),
+              answer: 'None',
+            },
+          ];
+          await mutateAsync(structured);
+        } else {
+          // Continue with the normal flow for other disabilities
+          setCurrentDisabilityIndex(0);
+        }
       } else if (currentDisabilityIndex < selectedDisabilities.length - 1) {
         // Move to the next disability form
         setCurrentDisabilityIndex((prev) => prev + 1);
         setCustomType('');
       } else {
         // Completed all forms, submit
-
         const transformedDataPerDisability = transformData(answers);
         const structured = [
           {
@@ -328,6 +349,20 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
   // Check if the previous button should be disabled
   const isPreviousEnabled = () => {
     return currentStep > 0;
+  };
+
+  const handleNoDisabilities = async () => {
+    const structured = [
+      {
+        question: t('haveDisability'),
+        answer: 'No',
+      },
+      {
+        question: t('whatType'),
+        answer: 'None',
+      },
+    ];
+    await mutateAsync(structured);
   };
 
   return (
@@ -402,6 +437,7 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
                 {disabilityTypes.map((disability, index) => (
                   <ChoiceItem
                     key={disability.id}
+                    className={disability.id == 'nothing' ? 'bg-yellow-50' : ''}
                     icon={
                       currentStep === 0
                         ? impairmentIcons[
@@ -524,29 +560,44 @@ const DisabilityTest = ({ refetch }: { refetch: () => void }) => {
           )}
 
           {/* Navigation Buttons with improved accessibility and responsiveness */}
-          <div className='w-full mt-8 justify-between sm:justify-end gap-3 sm:gap-5 flex flex-col sm:flex-row'>
+
+          <div className='mt-8 w-full justify-between flex'>
             <Button
-              variant='ghost'
-              className='text-base sm:text-lg px-6 py-3 sm:px-8 sm:py-4 md:px-14 md:py-6 w-full sm:w-auto'
-              onClick={handlePrevious}
-              disabled={!isPreviousEnabled() || isPending}
+              variant='outline'
+              className='text-base sm:text-lg px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-6 '
+              onClick={handleNoDisabilities}
+              disabled={isPending}
               aria-label={t('previousStep')}
             >
-              <ArrowLeft className='mr-2' aria-hidden='true' />
-              {t('previous')}
+              <InfoIcon className='mr-2' aria-hidden='true' />I have no
+              disabilities
             </Button>
+            <div className='w-full justify-between sm:justify-end gap-3 sm:gap-5 flex flex-col sm:flex-row'>
+              <Button
+                variant='ghost'
+                className='text-base sm:text-lg px-6 py-3 sm:px-8 sm:py-4 md:px-14 md:py-6 w-full sm:w-auto'
+                onClick={handlePrevious}
+                disabled={!isPreviousEnabled() || isPending}
+                aria-label={t('previousStep')}
+              >
+                <ArrowLeft className='mr-2' aria-hidden='true' />
+                {t('previous')}
+              </Button>
 
-            <Button
-              className='text-base sm:text-lg px-6 py-3 sm:px-8 sm:py-4 md:px-14 md:py-6 bg-blue-600 w-full sm:w-auto'
-              onClick={handleNext}
-              disabled={!isNextEnabled() || isPending}
-              aria-label={
-                currentStep === totalSteps - 1 ? t('submitForm') : t('nextStep')
-              }
-            >
-              {currentStep === totalSteps - 1 ? t('submit') : t('next')}{' '}
-              <ArrowRight className='ml-2' aria-hidden='true' />
-            </Button>
+              <Button
+                className='text-base sm:text-lg px-6 py-3 sm:px-8 sm:py-4 md:px-14 md:py-6 bg-blue-600 w-full sm:w-auto'
+                onClick={handleNext}
+                disabled={!isNextEnabled() || isPending}
+                aria-label={
+                  currentStep === totalSteps - 1
+                    ? t('submitForm')
+                    : t('nextStep')
+                }
+              >
+                {currentStep === totalSteps - 1 ? t('submit') : t('next')}{' '}
+                <ArrowRight className='ml-2' aria-hidden='true' />
+              </Button>
+            </div>
           </div>
 
           {/* Accessibility information for screen readers */}

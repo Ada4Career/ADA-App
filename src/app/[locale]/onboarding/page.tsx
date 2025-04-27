@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { LoaderCircleIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import React from 'react';
 
 import api from '@/lib/axios';
@@ -9,6 +10,8 @@ import api from '@/lib/axios';
 import DisabilityTest from '@/app/[locale]/onboarding/disability/disability-test';
 import HRFormPage from '@/app/[locale]/onboarding/hr/hr-onboard';
 import JobSeekerFormPage from '@/app/[locale]/onboarding/jobseeker/jobseeker-onboard';
+import JobseekerOnboardCv from '@/app/[locale]/onboarding/jobseeker/jobseeker-onboard-cv';
+import JobseekerOnboardStart from '@/app/[locale]/onboarding/jobseeker/jobseeker-onboard-start';
 import { API_BASE_URL } from '@/constant/config';
 
 import { ApiReturn } from '@/types/api.types';
@@ -17,6 +20,7 @@ import { DisabilityResponse } from '@/types/response/disability';
 
 const OnboardingPage = () => {
   const router = useRouter();
+  const [mode] = useQueryState('mode');
   const { data, isPending } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -47,14 +51,18 @@ const OnboardingPage = () => {
   });
 
   const renderOnboard = () => {
-    // console.log(data?.data.data);
-    // console.log(disabilityData?.data);
     if (data?.data.data.role[0] == 'jobseeker') {
       if (disabilityData?.data == undefined) {
         return <DisabilityTest refetch={refetch} />;
       } else {
         if (data.data.data.gender == '') {
-          return <JobSeekerFormPage />;
+          if (mode == 'create') {
+            <JobSeekerFormPage />;
+          } else if (mode == 'upload') {
+            return <JobseekerOnboardCv />;
+          } else {
+            return <JobseekerOnboardStart />;
+          }
         } else {
           router.replace('/onboarding/jobseeker/result');
         }

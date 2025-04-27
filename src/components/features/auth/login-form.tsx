@@ -74,6 +74,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
       const token = loginResponse.data.data.token;
       setToken(token);
       setTokenEmail(loginResponse.data.data.email);
+      console.log('ini token', token);
       const meResponse = await api.get<ApiReturn<UserInterface>>(
         `${API_BASE_URL}/me`
       );
@@ -82,7 +83,7 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
         ...meData,
         token: token,
       });
-
+      console.log('aman');
       return loginResponse.data;
     },
 
@@ -94,6 +95,8 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
       router.push('/onboarding');
     },
     onError: (error) => {
+      console.log('ga aman');
+      console.log(error);
       if (error.response?.data.message) {
         toast.error(error.response?.data.data, {
           ariaLabel: 'Login failed - Incorrect email or password',

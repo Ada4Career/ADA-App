@@ -123,6 +123,9 @@ export const useChatConversation = (userEmail: string) => {
       // Invalidate the conversations list to include the new one
       client.invalidateQueries({ queryKey: ['conversations', userEmail] });
     },
+    onError: (error) => {
+      console.error('Error starting conversation:', error);
+    },
   });
 
   // Mutation to add a message to an existing conversation
