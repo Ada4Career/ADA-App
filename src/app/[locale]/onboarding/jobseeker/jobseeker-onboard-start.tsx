@@ -2,6 +2,7 @@ import { useQueryState } from 'nuqs';
 import React, { useEffect } from 'react';
 
 import AdaLogo from '@/components/ada-logo';
+import KeyHandler from '@/components/key-handler';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
@@ -55,7 +56,7 @@ const JobseekerOnboardStart = () => {
               size='lg'
               onClick={handleCreateClick}
             >
-              <div className='p-2 bg-white text-black rounded text-lg'>S</div>
+              <KeyHandler label='S' />
               Start from Scratch
             </Button>
           </div>
@@ -66,7 +67,7 @@ const JobseekerOnboardStart = () => {
               size='lg'
               onClick={handleUploadClick}
             >
-              <div className='p-2 bg-white text-black rounded text-lg'>U</div>
+              <KeyHandler label='U' />
               Use your existing file
             </Button>
           </div>

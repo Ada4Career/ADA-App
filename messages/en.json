@@ -332,5 +332,73 @@
     "switchLanguage": "Language",
     "english": "English",
     "indonesian": "Indonesian"
+  },
+  "Resume": {
+    "title": "Build Your Professional Resume",
+    "description": "Complete each section to create a comprehensive resume that showcases your skills and experience.",
+    "yourProgress": "Your Progress",
+    "previous": "Previous",
+    "next": "Next",
+    "submit": "Submit Resume",
+    "successMessage": "Your resume has been successfully created!",
+    "errorMessage": "Please check your form for errors and try again.",
+    "PersonalInfo": {
+      "title": "Personal Information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "your.email@example.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "e.g., +1 (555) 123-4567",
+      "address": "Address",
+      "addressPlaceholder": "Your current address",
+      "linkedin": "LinkedIn Profile",
+      "linkedinPlaceholder": "https://linkedin.com/in/yourprofile",
+      "summary": "Professional Summary/Objective",
+      "summaryPlaceholder": "Write a brief summary of your professional background and career objectives (100-200 words)"
+    },
+    "Education": {
+      "title": "Education Background",
+      "education": "Education",
+      "institution": "Institution/University",
+      "institutionPlaceholder": "Enter university or institution name",
+      "degree": "Degree",
+      "degreePlaceholder": "e.g., Bachelor of Science, Master of Arts",
+      "fieldOfStudy": "Field of Study",
+      "fieldOfStudyPlaceholder": "e.g., Computer Science, Business Administration",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "gpa": "GPA (Optional)",
+      "gpaPlaceholder": "e.g., 3.8/4.0",
+      "addEducation": "Add Another Education",
+      "remove": "Remove"
+    },
+    "Experience": {
+      "title": "Work Experience",
+      "experience": "Experience",
+      "title": "Job Title",
+      "titlePlaceholder": "e.g., Software Engineer, Marketing Manager",
+      "company": "Company",
+      "companyPlaceholder": "Company name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "responsibilities": "Key Responsibilities",
+      "responsibilityPlaceholder": "Describe a key responsibility or achievement",
+      "addResponsibility": "Add Responsibility",
+      "addExperience": "Add Another Experience",
+      "remove": "Remove"
+    },
+    "Skills": {
+      "title": "Skills",
+      "technicalSkills": "Technical Skills",
+      "technicalSkillPlaceholder": "e.g., JavaScript, Python, Data Analysis",
+      "addTechnicalSkill": "Add Technical Skill",
+      "researchSkills": "Research Skills",
+      "researchSkillPlaceholder": "e.g., Statistical Analysis, Literature Review",
+      "addResearchSkill": "Add Research Skill",
+      "softSkills": "Soft Skills",
+      "softSkillPlaceholder": "e.g., Leadership, Communication, Problem-solving",
+      "addSoftSkill": "Add Soft Skill"
+    }
   }
 }

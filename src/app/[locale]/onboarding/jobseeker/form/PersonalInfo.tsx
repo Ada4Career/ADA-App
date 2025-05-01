@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'; // Import useTranslations
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import {
@@ -9,26 +9,21 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
-import type { JobSeekerSectionProps } from '@/app/[locale]/onboarding/form.types';
+import { ResumeFormSectionProps } from '@/types/entities/cv.types';
 
-const PersonalInfo = ({ form }: JobSeekerSectionProps) => {
-  // Add translation hook
-  const t = useTranslations('Onboarding.JobSeeker.PersonalInfo');
+const PersonalInfo = ({ form }: ResumeFormSectionProps) => {
+  const t = useTranslations('Resume.PersonalInfo');
 
   return (
-    <>
+    <div className='w-full space-y-4'>
+      <h2 className='text-xl font-semibold'>{t('title')}</h2>
+
+      {/* Full Name */}
       <FormField
         control={form.control}
-        name='personalInfo.fullName'
+        name='personal_info.full_name'
         render={({ field }) => (
           <FormItem className='w-full'>
             <FormLabel>{t('fullName')}</FormLabel>
@@ -40,17 +35,17 @@ const PersonalInfo = ({ form }: JobSeekerSectionProps) => {
         )}
       />
 
+      {/* Email */}
       <FormField
         control={form.control}
-        name='personalInfo.age'
+        name='personal_info.contact_info.email'
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t('age')}</FormLabel>
+          <FormItem className='w-full'>
+            <FormLabel>{t('email')}</FormLabel>
             <FormControl>
               <Input
-                type='number'
-                className='w-full'
-                placeholder={t('agePlaceholder')}
+                type='email'
+                placeholder={t('emailPlaceholder')}
                 {...field}
               />
             </FormControl>
@@ -59,36 +54,27 @@ const PersonalInfo = ({ form }: JobSeekerSectionProps) => {
         )}
       />
 
+      {/* Phone */}
       <FormField
         control={form.control}
-        name='personalInfo.gender'
+        name='personal_info.contact_info.phone'
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t('gender')}</FormLabel>
+          <FormItem className='w-full'>
+            <FormLabel>{t('phone')}</FormLabel>
             <FormControl>
-              <Select {...field} onValueChange={field.onChange}>
-                <SelectTrigger className='w-full text-start p-2 border border-gray-200 rounded-md'>
-                  <SelectValue placeholder={t('genderPlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value='male'>{t('genderMale')}</SelectItem>
-                    <SelectItem value='female'>{t('genderFemale')}</SelectItem>
-                    <SelectItem value='other'>{t('genderOther')}</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Input placeholder={t('phonePlaceholder')} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
 
+      {/* Address */}
       <FormField
         control={form.control}
-        name='personalInfo.address'
+        name='personal_info.contact_info.address'
         render={({ field }) => (
-          <FormItem>
+          <FormItem className='w-full'>
             <FormLabel>{t('address')}</FormLabel>
             <FormControl>
               <Input placeholder={t('addressPlaceholder')} {...field} />
@@ -97,7 +83,41 @@ const PersonalInfo = ({ form }: JobSeekerSectionProps) => {
           </FormItem>
         )}
       />
-    </>
+
+      {/* LinkedIn */}
+      <FormField
+        control={form.control}
+        name='personal_info.contact_info.linkedin'
+        render={({ field }) => (
+          <FormItem className='w-full'>
+            <FormLabel>{t('linkedin')}</FormLabel>
+            <FormControl>
+              <Input placeholder={t('linkedinPlaceholder')} {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {/* Summary/Objective */}
+      <FormField
+        control={form.control}
+        name='personal_info.summary_objective'
+        render={({ field }) => (
+          <FormItem className='w-full'>
+            <FormLabel>{t('summary')}</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder={t('summaryPlaceholder')}
+                className='min-h-32'
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
   );
 };
 

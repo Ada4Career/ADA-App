@@ -18,6 +18,8 @@ import { ApiReturn } from '@/types/api.types';
 import { UserInterface } from '@/types/entities/user.types';
 import { DisabilityResponse } from '@/types/response/disability';
 
+const APP_MODE = process.env.NEXT_PUBLIC_APP_MODE;
+
 const OnboardingPage = () => {
   const router = useRouter();
   const [mode] = useQueryState('mode');
@@ -51,27 +53,33 @@ const OnboardingPage = () => {
   });
 
   const renderOnboard = () => {
-    if (data?.data.data.role[0] == 'jobseeker') {
-      if (disabilityData?.data == undefined) {
-        return <DisabilityTest refetch={refetch} />;
-      } else {
-        if (data.data.data.gender == '') {
-          if (mode == 'create') {
-            <JobSeekerFormPage />;
-          } else if (mode == 'upload') {
-            return <JobseekerOnboardCv />;
-          } else {
-            return <JobseekerOnboardStart />;
-          }
-        } else {
-          router.replace('/onboarding/jobseeker/result');
-        }
-      }
-    } else {
+    const isJobseeker = data?.data.data.role[0] === 'jobseeker';
+    const hasGender = data?.data.data.gender !== '';
+
+    if (!isJobseeker) {
       return <HRFormPage />;
     }
-  };
 
+    if (hasGender) {
+      router.replace('/onboarding/jobseeker/result');
+      return;
+    }
+
+    if (APP_MODE === 'disability') {
+      if (!disabilityData?.data) {
+        return <DisabilityTest refetch={refetch} />;
+      }
+    }
+
+    switch (mode) {
+      case 'create':
+        return <JobSeekerFormPage />;
+      case 'upload':
+        return <JobseekerOnboardCv />;
+      default:
+        return <JobseekerOnboardStart />;
+    }
+  };
   if (isPending || isLoadingDisability) {
     return (
       <div className='w-screen h-screen flex items-center justify-center'>

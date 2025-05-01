@@ -332,5 +332,73 @@
     "switchLanguage": "Bahasa",
     "english": "Inggris",
     "indonesian": "Indonesia"
+  },
+  "Resume": {
+    "title": "Buat Resume Profesional Anda",
+    "description": "Lengkapi setiap bagian untuk membuat resume komprehensif yang menampilkan keterampilan dan pengalaman Anda.",
+    "yourProgress": "Kemajuan Anda",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya",
+    "submit": "Kirim Resume",
+    "successMessage": "Resume Anda telah berhasil dibuat!",
+    "errorMessage": "Silakan periksa formulir Anda untuk kesalahan dan coba lagi.",
+    "PersonalInfo": {
+      "title": "Informasi Pribadi",
+      "fullName": "Nama Lengkap",
+      "fullNamePlaceholder": "Masukkan nama lengkap Anda",
+      "email": "Alamat Email",
+      "emailPlaceholder": "email.anda@contoh.com",
+      "phone": "Nomor Telepon",
+      "phonePlaceholder": "Contoh: +62 812-3456-7890",
+      "address": "Alamat",
+      "addressPlaceholder": "Alamat tinggal Anda saat ini",
+      "linkedin": "Profil LinkedIn",
+      "linkedinPlaceholder": "https://linkedin.com/in/profilAnda",
+      "summary": "Ringkasan/Tujuan Profesional",
+      "summaryPlaceholder": "Tulis ringkasan singkat tentang latar belakang profesional dan tujuan karier Anda (100-200 kata)"
+    },
+    "Education": {
+      "title": "Latar Belakang Pendidikan",
+      "education": "Pendidikan",
+      "institution": "Institusi/Universitas",
+      "institutionPlaceholder": "Masukkan nama universitas atau institusi",
+      "degree": "Gelar",
+      "degreePlaceholder": "Contoh: Sarjana Teknik, Magister Manajemen",
+      "fieldOfStudy": "Bidang Studi",
+      "fieldOfStudyPlaceholder": "Contoh: Ilmu Komputer, Administrasi Bisnis",
+      "startDate": "Tanggal Mulai",
+      "endDate": "Tanggal Selesai",
+      "gpa": "IPK (Opsional)",
+      "gpaPlaceholder": "Contoh: 3,8/4,0",
+      "addEducation": "Tambah Pendidikan Lain",
+      "remove": "Hapus"
+    },
+    "Experience": {
+      "title": "Pengalaman Kerja",
+      "experience": "Pengalaman",
+      "title": "Jabatan",
+      "titlePlaceholder": "Contoh: Software Engineer, Manajer Pemasaran",
+      "company": "Perusahaan",
+      "companyPlaceholder": "Nama perusahaan",
+      "startDate": "Tanggal Mulai",
+      "endDate": "Tanggal Selesai",
+      "responsibilities": "Tanggung Jawab Utama",
+      "responsibilityPlaceholder": "Jelaskan tanggung jawab atau pencapaian utama",
+      "addResponsibility": "Tambah Tanggung Jawab",
+      "addExperience": "Tambah Pengalaman Lain",
+      "remove": "Hapus"
+    },
+    "Skills": {
+      "title": "Keterampilan",
+      "technicalSkills": "Keterampilan Teknis",
+      "technicalSkillPlaceholder": "Contoh: JavaScript, Python, Analisis Data",
+      "addTechnicalSkill": "Tambah Keterampilan Teknis",
+      "researchSkills": "Keterampilan Penelitian",
+      "researchSkillPlaceholder": "Contoh: Analisis Statistik, Tinjauan Literatur",
+      "addResearchSkill": "Tambah Keterampilan Penelitian",
+      "softSkills": "Soft Skills",
+      "softSkillPlaceholder": "Contoh: Kepemimpinan, Komunikasi, Pemecahan Masalah",
+      "addSoftSkill": "Tambah Soft Skill"
+    }
   }
 }
