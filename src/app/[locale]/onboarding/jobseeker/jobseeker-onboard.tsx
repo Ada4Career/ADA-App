@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Education from '@/app/[locale]/onboarding/jobseeker/form/Education';
 import Experience from '@/app/[locale]/onboarding/jobseeker/form/Experience';
 import PersonalInfo from '@/app/[locale]/onboarding/jobseeker/form/PersonalInfo';
+import ResumeReview from '@/app/[locale]/onboarding/jobseeker/form/Review';
 import Skills from '@/app/[locale]/onboarding/jobseeker/form/Skills';
 import { API_BASE_URL } from '@/constant/config';
 
@@ -48,43 +49,52 @@ const ResumeFormPage = () => {
     mode: 'onTouched',
     defaultValues: {
       personal_info: {
-        full_name: '',
+        full_name: 'John Doe',
         contact_info: {
-          email: '',
-          phone: '',
-          address: '',
-          linkedin: '',
+          email: 'john.doe@example.com',
+          phone: '+1 234 567 8900',
+          address: '123 Main Street, City, Country',
+          linkedin: 'https://linkedin.com/in/johndoe',
         },
-        summary_objective: '',
+        summary_objective:
+          'Experienced professional seeking opportunities to leverage skills in software development.',
       },
       education: [
         {
-          institution: '',
-          degree: '',
-          field_of_study: '',
-          start_date: '',
-          end_date: '',
-          gpa: '',
+          institution: 'University of Technology',
+          degree: 'Bachelor of Science',
+          field_of_study: 'Computer Science',
+          start_date: '2018-09',
+          end_date: '2022-06',
+          gpa: '3.8',
         },
       ],
       experience: [
         {
-          title: '',
-          company: '',
-          start_date: '',
-          end_date: '',
-          responsibilities: [''],
+          title: 'Software Developer',
+          company: 'Tech Solutions Inc.',
+          start_date: '2022-07',
+          end_date: '2023-12',
+          responsibilities: [
+            'Developed full-stack applications',
+            'Collaborated with cross-functional teams',
+            'Implemented new features and optimizations',
+          ],
         },
       ],
       skills: {
-        technical: [''],
-        research: [''],
-        soft: [''],
+        technical: ['JavaScript', 'React', 'Node.js', 'Python', 'SQL'],
+        research: [
+          'Data Analysis',
+          'Market Research',
+          'Technical Documentation',
+        ],
+        soft: ['Communication', 'Team Leadership', 'Problem Solving'],
       },
     },
   });
 
-  const totalSteps = 4;
+  const totalSteps = 5;
   const progress = (step / totalSteps) * 100;
 
   const router = useRouter();
@@ -122,7 +132,8 @@ const ResumeFormPage = () => {
   });
 
   const onSubmit = async (values: ResumeData) => {
-    await mutateAsyncUptData(values);
+    console.log(values);
+    // await mutateAsyncUptData(values);
   };
 
   // Function to validate current step before proceeding
@@ -155,6 +166,10 @@ const ResumeFormPage = () => {
           // Validate skills
           const skillsData = form.getValues('skills');
           await skillsSchema.parseAsync(skillsData);
+          isValid = true;
+          break;
+
+        case 5:
           isValid = true;
           break;
         default:
@@ -194,6 +209,8 @@ const ResumeFormPage = () => {
         return <Experience form={form} />;
       case 4:
         return <Skills form={form} />;
+      case 5:
+        return <ResumeReview form={form} />;
       default:
         return null;
     }
