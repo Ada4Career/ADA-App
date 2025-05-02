@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+import Awards from '@/app/[locale]/onboarding/jobseeker/form/Award';
+
 import Education from './Education';
 import Experience from './Experience';
 import PersonalInfo from './PersonalInfo';
@@ -19,11 +21,13 @@ const ResumeReview = ({ form }: ResumeFormSectionProps) => {
     education: boolean;
     experience: boolean;
     skills: boolean;
+    awards: boolean;
   }>({
     personalInfo: false,
     education: true,
     experience: true,
     skills: false,
+    awards: false,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -124,6 +128,27 @@ const ResumeReview = ({ form }: ResumeFormSectionProps) => {
         {expandedSections.skills && (
           <CardContent className='pt-6'>
             <Skills form={form} />
+          </CardContent>
+        )}
+      </Card>
+
+      <Card className='w-full'>
+        <CardHeader
+          className='bg-slate-50 border-b cursor-pointer flex flex-row items-center justify-between'
+          onClick={() => toggleSection('awards')}
+        >
+          <CardTitle className='text-lg'>{t('awards')}</CardTitle>
+          <Button variant='ghost' size='sm'>
+            {expandedSections.awards ? (
+              <ChevronUpIcon size={18} />
+            ) : (
+              <ChevronDownIcon size={18} />
+            )}
+          </Button>
+        </CardHeader>
+        {expandedSections.awards && (
+          <CardContent className='pt-6'>
+            <Awards form={form} />
           </CardContent>
         )}
       </Card>

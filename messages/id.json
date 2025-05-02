@@ -399,6 +399,34 @@
       "softSkills": "Soft Skills",
       "softSkillPlaceholder": "Contoh: Kepemimpinan, Komunikasi, Pemecahan Masalah",
       "addSoftSkill": "Tambah Soft Skill"
+    },
+    "Review": {
+      "title": "Mari Buat Curriculum Vitae Baru",
+      "description": "Silakan masukkan informasi Anda untuk membantu kami mengenal Anda lebih baik!",
+      "personalInfo": "Informasi Pribadi",
+      "education": "Pendidikan",
+      "experience": "Pengalaman Kerja",
+      "skills": "Keterampilan",
+      "awards": "Penghargaan & Prestasi",
+      "technicalSkills": "Keterampilan Teknis",
+      "researchSkills": "Keterampilan Penelitian",
+      "softSkills": "Soft Skills",
+      "responsibilities": "Tanggung Jawab",
+      "summary": "Ringkasan Profesional",
+      "reviewMessage": "Silakan tinjau semua bagian dengan seksama. Anda dapat kembali untuk melakukan perubahan jika diperlukan.",
+      "reviewInstructions": "Klik pada judul bagian untuk memperluas atau menyembunyikannya. Lakukan perubahan akhir sebelum mengirim."
+    },
+    "Awards": {
+      "title": "Penghargaan & Prestasi",
+      "award": "Penghargaan",
+      "remove": "Hapus",
+      "addAward": "Tambah Penghargaan",
+      "titlePlaceholder": "Masukkan judul penghargaan",
+      "issuer": "Organisasi Pemberi",
+      "issuerPlaceholder": "Masukkan nama organisasi pemberi penghargaan",
+      "date": "Tanggal Diterima",
+      "description": "Deskripsi",
+      "descriptionPlaceholder": "Jelaskan makna penghargaan ini dan mengapa Anda menerimanya"
     }
   }
 }

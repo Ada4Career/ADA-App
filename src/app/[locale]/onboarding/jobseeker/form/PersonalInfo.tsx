@@ -102,7 +102,7 @@ const PersonalInfo = ({ form }: ResumeFormSectionProps) => {
       {/* Summary/Objective */}
       <FormField
         control={form.control}
-        name='personal_info.summary_objective'
+        name='summary_objective'
         render={({ field }) => (
           <FormItem className='w-full'>
             <FormLabel>{t('summary')}</FormLabel>

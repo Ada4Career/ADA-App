@@ -399,6 +399,34 @@
       "softSkills": "Soft Skills",
       "softSkillPlaceholder": "e.g., Leadership, Communication, Problem-solving",
       "addSoftSkill": "Add Soft Skill"
+    },
+    "Review": {
+      "title": "Let's create a new Curriculum Vitae",
+      "description": "Kindly input your information to help us know you better!",
+      "personalInfo": "Personal Information",
+      "education": "Education",
+      "experience": "Experience",
+      "skills": "Skills",
+      "awards": "Awards & Achievements",
+      "technicalSkills": "Technical Skills",
+      "researchSkills": "Research Skills",
+      "softSkills": "Soft Skills",
+      "responsibilities": "Responsibilities",
+      "summary": "Professional Summary",
+      "reviewMessage": "Please review all sections carefully. You can go back to make changes if needed.",
+      "reviewInstructions": "Click on any section header to expand or collapse it. Make any final changes before submitting."
+    },
+    "Awards": {
+      "title": "Awards & Achievements",
+      "award": "Award",
+      "remove": "Remove",
+      "addAward": "Add Award",
+      "titlePlaceholder": "Enter award title",
+      "issuer": "Issuing Organization",
+      "issuerPlaceholder": "Enter the organization that issued the award",
+      "date": "Date Received",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the significance of this award and why you received it"
     }
   }
 }

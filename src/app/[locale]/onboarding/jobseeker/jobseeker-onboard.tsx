@@ -21,6 +21,7 @@ import { Form } from '@/components/ui/form';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import Awards from '@/app/[locale]/onboarding/jobseeker/form/Award';
 import Education from '@/app/[locale]/onboarding/jobseeker/form/Education';
 import Experience from '@/app/[locale]/onboarding/jobseeker/form/Experience';
 import PersonalInfo from '@/app/[locale]/onboarding/jobseeker/form/PersonalInfo';
@@ -30,6 +31,7 @@ import { API_BASE_URL } from '@/constant/config';
 
 import { ApiError, ApiReturn } from '@/types/api.types';
 import {
+  awardSchema,
   educationSchema,
   experienceSchema,
   personalInfoSchema,
@@ -56,9 +58,9 @@ const ResumeFormPage = () => {
           address: '123 Main Street, City, Country',
           linkedin: 'https://linkedin.com/in/johndoe',
         },
-        summary_objective:
-          'Experienced professional seeking opportunities to leverage skills in software development.',
       },
+      summary_objective:
+        'Experienced professional seeking opportunities to leverage skills in software development.',
       education: [
         {
           institution: 'University of Technology',
@@ -91,10 +93,19 @@ const ResumeFormPage = () => {
         ],
         soft: ['Communication', 'Team Leadership', 'Problem Solving'],
       },
+      awards: [
+        {
+          title: 'Best Developer Award',
+          issuer: 'Tech Solutions Inc.',
+          date: '2023-12',
+          description:
+            'Recognized for outstanding performance in software development.',
+        },
+      ],
     },
   });
 
-  const totalSteps = 5;
+  const totalSteps = 6;
   const progress = (step / totalSteps) * 100;
 
   const router = useRouter();
@@ -110,14 +121,19 @@ const ResumeFormPage = () => {
       // Format the data as needed for your API
       const formattedData = {
         personal_info: data.personal_info,
+        summary_objective: data.summary_objective,
         education: data.education,
         experience: data.experience,
         skills: data.skills,
+        awards: data.awards,
       };
 
+      const formData = new FormData();
+      formData.append('cv_json', JSON.stringify(formattedData));
+
       const response = await api.post(
-        `${API_BASE_URL}/resume/${email}`,
-        formattedData
+        `${API_BASE_URL}/cv/analyze/${email}`,
+        formData
       );
 
       return response.data;
@@ -132,8 +148,8 @@ const ResumeFormPage = () => {
   });
 
   const onSubmit = async (values: ResumeData) => {
-    console.log(values);
-    // await mutateAsyncUptData(values);
+    // console.lsog(values);
+    await mutateAsyncUptData(values);
   };
 
   // Function to validate current step before proceeding
@@ -168,8 +184,14 @@ const ResumeFormPage = () => {
           await skillsSchema.parseAsync(skillsData);
           isValid = true;
           break;
-
         case 5:
+          // Validate skills
+          const awardsData = form.getValues('awards');
+          await z.array(awardSchema).parseAsync(awardsData);
+          isValid = true;
+          break;
+
+        case 6:
           isValid = true;
           break;
         default:
@@ -210,6 +232,8 @@ const ResumeFormPage = () => {
       case 4:
         return <Skills form={form} />;
       case 5:
+        return <Awards form={form} />;
+      case 6:
         return <ResumeReview form={form} />;
       default:
         return null;

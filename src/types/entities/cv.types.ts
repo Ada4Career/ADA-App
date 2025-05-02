@@ -10,10 +10,12 @@ export const personalInfoSchema = z.object({
     address: z.string().min(5, 'Invalid address'),
     linkedin: z.string().url('Invalid LinkedIn URL'),
   }),
-  summary_objective: z
-    .string()
-    .min(10, 'Summary/Objective should be at least 10 characters'),
 });
+
+// Summary/Objective Schema
+export const summaryObjectiveSchema = z
+  .string()
+  .min(10, 'Summary/Objective should be at least 10 characters');
 
 // Education Schema
 export const educationSchema = z.object({
@@ -36,6 +38,14 @@ export const experienceSchema = z.object({
   ),
 });
 
+// Awards Schema
+export const awardSchema = z.object({
+  title: z.string().min(2, 'Award title too short'),
+  issuer: z.string().optional(),
+  date: z.string().min(1, 'Date required'),
+  description: z.string().min(10, 'Description too short'),
+});
+
 // Skills Schema
 export const skillsSchema = z.object({
   technical: z.array(z.string().min(1, 'Technical skill required')),
@@ -46,17 +56,21 @@ export const skillsSchema = z.object({
 // Resume Schema (the full form)
 export const resumeSchema = z.object({
   personal_info: personalInfoSchema,
+  summary_objective: summaryObjectiveSchema,
   education: z.array(educationSchema),
   experience: z.array(experienceSchema),
   skills: skillsSchema,
+  awards: z.array(awardSchema),
 });
 
 // Types from schema
 export type ResumeData = z.infer<typeof resumeSchema>;
 export type PersonalInfoData = z.infer<typeof personalInfoSchema>;
+export type SummaryObjectiveData = z.infer<typeof summaryObjectiveSchema>;
 export type EducationData = z.infer<typeof educationSchema>;
 export type ExperienceData = z.infer<typeof experienceSchema>;
 export type SkillsData = z.infer<typeof skillsSchema>;
+export type AwardData = z.infer<typeof awardSchema>;
 
 // Props for react-hook-form
 export interface ResumeFormSectionProps {

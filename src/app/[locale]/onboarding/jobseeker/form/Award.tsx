@@ -13,16 +13,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 import { ResumeFormSectionProps } from '@/types/entities/cv.types';
 
-const Education = ({ form }: ResumeFormSectionProps) => {
-  const t = useTranslations('Resume.Education');
+const Awards = ({ form }: ResumeFormSectionProps) => {
+  const t = useTranslations('Resume.Awards');
   const { control } = form;
 
   const { fields, append, remove, move } = useFieldArray({
     control,
-    name: 'education',
+    name: 'awards',
   });
 
   const handleDragEnd = (result: any) => {
@@ -45,7 +46,7 @@ const Education = ({ form }: ResumeFormSectionProps) => {
       <h2 className='text-xl font-semibold'>{t('title')}</h2>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId='education-items'>
+        <Droppable droppableId='awards-items'>
           {(provided) => (
             <div
               {...provided.droppableProps}
@@ -86,7 +87,7 @@ const Education = ({ form }: ResumeFormSectionProps) => {
                               </div>
                             </div>
                             <CardTitle className='text-md'>
-                              {t('education')} #{index + 1}
+                              {t('award')} #{index + 1}
                             </CardTitle>
                           </div>
 
@@ -102,16 +103,16 @@ const Education = ({ form }: ResumeFormSectionProps) => {
                           )}
                         </CardHeader>
                         <CardContent className='space-y-4'>
-                          {/* Institution */}
+                          {/* Award Title */}
                           <FormField
                             control={control}
-                            name={`education.${index}.institution`}
+                            name={`awards.${index}.title`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t('institution')}</FormLabel>
+                                <FormLabel>{t('title')}</FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder={t('institutionPlaceholder')}
+                                    placeholder={t('titlePlaceholder')}
                                     {...field}
                                   />
                                 </FormControl>
@@ -120,16 +121,16 @@ const Education = ({ form }: ResumeFormSectionProps) => {
                             )}
                           />
 
-                          {/* Degree */}
+                          {/* Issuer */}
                           <FormField
                             control={control}
-                            name={`education.${index}.degree`}
+                            name={`awards.${index}.issuer`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t('degree')}</FormLabel>
+                                <FormLabel>{t('issuer')}</FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder={t('degreePlaceholder')}
+                                    placeholder={t('issuerPlaceholder')}
                                     {...field}
                                   />
                                 </FormControl>
@@ -138,16 +139,26 @@ const Education = ({ form }: ResumeFormSectionProps) => {
                             )}
                           />
 
-                          {/* Field of Study */}
+                          {/* Date */}
                           <FormField
                             control={control}
-                            name={`education.${index}.field_of_study`}
-                            render={({ field }) => (
+                            name={`awards.${index}.date`}
+                            render={({
+                              field: { value, onChange, ...field },
+                            }) => (
                               <FormItem>
-                                <FormLabel>{t('fieldOfStudy')}</FormLabel>
+                                <FormLabel>{t('date')}</FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder={t('fieldOfStudyPlaceholder')}
+                                    type='date'
+                                    value={
+                                      value
+                                        ? new Date(value)
+                                            .toISOString()
+                                            .split('T')[0]
+                                        : ''
+                                    }
+                                    onChange={(e) => onChange(e.target.value)}
                                     {...field}
                                   />
                                 </FormControl>
@@ -156,74 +167,17 @@ const Education = ({ form }: ResumeFormSectionProps) => {
                             )}
                           />
 
-                          <div className='grid grid-cols-2 gap-4'>
-                            {/* Start Date */}
-                            <FormField
-                              control={control}
-                              name={`education.${index}.start_date`}
-                              render={({
-                                field: { value, onChange, ...field },
-                              }) => (
-                                <FormItem>
-                                  <FormLabel>{t('startDate')}</FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type='date'
-                                      value={
-                                        value
-                                          ? new Date(value)
-                                              .toISOString()
-                                              .split('T')[0]
-                                          : ''
-                                      }
-                                      onChange={(e) => onChange(e.target.value)}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            {/* End Date */}
-                            <FormField
-                              control={control}
-                              name={`education.${index}.end_date`}
-                              render={({
-                                field: { value, onChange, ...field },
-                              }) => (
-                                <FormItem>
-                                  <FormLabel>{t('endDate')}</FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type='date'
-                                      value={
-                                        value
-                                          ? new Date(value)
-                                              .toISOString()
-                                              .split('T')[0]
-                                          : ''
-                                      }
-                                      onChange={(e) => onChange(e.target.value)}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-
-                          {/* GPA */}
+                          {/* Description */}
                           <FormField
                             control={control}
-                            name={`education.${index}.gpa`}
+                            name={`awards.${index}.description`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t('gpa')}</FormLabel>
+                                <FormLabel>{t('description')}</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    placeholder={t('gpaPlaceholder')}
+                                  <Textarea
+                                    placeholder={t('descriptionPlaceholder')}
+                                    className='min-h-24'
                                     {...field}
                                   />
                                 </FormControl>
@@ -249,19 +203,17 @@ const Education = ({ form }: ResumeFormSectionProps) => {
         className='w-full'
         onClick={() =>
           append({
-            institution: '',
-            degree: '',
-            field_of_study: '',
-            start_date: '',
-            end_date: '',
-            gpa: '',
+            title: '',
+            issuer: '',
+            date: '',
+            description: '',
           })
         }
       >
-        {t('addEducation')}
+        {t('addAward')}
       </Button>
     </div>
   );
 };
 
-export default Education;
+export default Awards;
