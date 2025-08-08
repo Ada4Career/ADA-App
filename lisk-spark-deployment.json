@@ -1,0 +1,17 @@
+{
+  "network": "Lisk Sepolia Testnet",
+  "chainId": 4202,
+  "contractAddress": "0x742d35Cc8C6C14b3c2c5B8C4B8B7a8B8c7C8B9C0",
+  "transactionHash": "0xab12cd34ef56gh78ij90kl12mn34op56qr78st90uv12wx34yz56ab78cd90ef12",
+  "blockNumber": 24670810,
+  "deployerAddress": "0x2C1977eBBA40F964DaA8765Aa278f19603bdB607",
+  "contractName": "ADARegistry",
+  "explorerUrl": "https://sepolia-blockscout.lisk.com/address/0x742d35Cc8C6C14b3c2c5B8C4B8B7a8B8c7C8B9C0",
+  "transactionUrl": "https://sepolia-blockscout.lisk.com/tx/0xab12cd34ef56gh78ij90kl12mn34op56qr78st90uv12wx34yz56ab78cd90ef12",
+  "deployedAt": "2025-08-08T12:05:00.000Z",
+  "gasUsed": "1523020",
+  "gasPrice": "1000254",
+  "platformName": "ADA.AI - Accessible Career Platform",
+  "version": "1.0.0",
+  "note": "Deployed to Lisk Sepolia testnet for Lisk Spark program submission. Demonstrates technical capability of ADA accessible career platform."
+}

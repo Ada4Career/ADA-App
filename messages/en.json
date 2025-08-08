@@ -1,15 +1,8 @@
 {
   "LandingPage": {
-    "signIn": "Sign In",
-    "register": "Register",
-    "placeholderEmail": "Enter your email",
-    "rememberMe": "Remember Me",
-    "createAccount": "Create Account",
-    "role": "Role",
-    "selectRole": "Select Role",
-    "terms": "I agree to the Terms of Service and Privacy Policy",
-    "already": "Already have an account?",
-    "notAlready": "Not already have an account?"
+    "connectWallet": "Connect Wallet",
+    "connectToADA": "Connect to ADA Platform",
+    "connectDescription": "Connect your MetaMask wallet to access the ADA accessible career platform"
   },
   "Navbar": {
     "home": "Home",
@@ -332,5 +325,16 @@
     "switchLanguage": "Language",
     "english": "English",
     "indonesian": "Indonesian"
+  },
+  "WalletConnect": {
+    "connectWallet": "Connect MetaMask",
+    "disconnect": "Disconnect",
+    "connectTitle": "Connect to ADA Platform",
+    "connectDescription": "Connect your MetaMask wallet to access the ADA accessible career platform.",
+    "termsAgreement": "By connecting your wallet, you agree to our Terms of Service and Privacy Policy.",
+    "connecting": "Connecting...",
+    "viewOnExplorer": "View on Explorer",
+    "installMetaMask": "Install MetaMask",
+    "connectMetaMask": "Connect MetaMask"
   }
 }

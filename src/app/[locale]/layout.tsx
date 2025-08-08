@@ -12,6 +12,7 @@ import AbsolutePositionWidget from '@/components/accessiblity-widget/AbsolutePos
 import ImplementWidget from '@/components/accessiblity-widget/ImplementWidget';
 import KeyboardNavigationDialog from '@/components/accessiblity-widget/KeyboardNavigationDialog';
 import { ReactQueryClientProvider } from '@/components/layout/query-provider';
+import { Web3Provider } from '@/components/web3/WagmiProvider';
 
 import { siteConfig } from '@/constant/config';
 import { routing } from '@/i18n/routing';
@@ -63,17 +64,19 @@ export default async function RootLayout({
 
   return (
     <ReactQueryClientProvider>
-      <html lang={locale}>
-        <body>
-          <NextIntlClientProvider locale={locale}>
-            <AbsolutePositionWidget />
-            <KeyboardNavigationDialog />
-            <ImplementWidget />
-            <ToastContainer />
-            <NuqsAdapter>{children}</NuqsAdapter>
-          </NextIntlClientProvider>
-        </body>
-      </html>
+      <Web3Provider>
+        <html lang={locale}>
+          <body>
+            <NextIntlClientProvider locale={locale}>
+              <AbsolutePositionWidget />
+              <KeyboardNavigationDialog />
+              <ImplementWidget />
+              <ToastContainer />
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </NextIntlClientProvider>
+          </body>
+        </html>
+      </Web3Provider>
     </ReactQueryClientProvider>
   );
 }

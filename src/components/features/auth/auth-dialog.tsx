@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Suspense, useEffect, useState } from 'react';
 
-import { MicrosoftLoginButton } from '@/components/features/auth/microsoft-login-button';
+import { MetaMaskConnect } from '@/components/web3/WalletConnect';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,68 +13,60 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
-
-import { LoginForm } from './login-form';
-import { RegisterForm } from './register-form';
 
 // Create a separate component for the parts that use useSearchParams
 function AuthDialogContent() {
   const t = useTranslations('LandingPage');
   const [open, setOpen] = useState(false);
-  const [activeForm, setActiveForm] = useState<'login' | 'register'>('login');
   const searchParams = useSearchParams();
 
   useEffect(() => {
     // Check URL parameters for auth type
     const authParam = searchParams.get('auth');
     if (authParam === 'login' || authParam === 'register') {
-      setActiveForm(authParam);
       setOpen(true);
     }
   }, [searchParams]);
 
-  const openDialog = (form: 'login' | 'register') => {
-    setActiveForm(form);
+  const openDialog = () => {
     setOpen(true);
   };
 
-  const toggleForm = () => {
-    setActiveForm(activeForm === 'login' ? 'register' : 'login');
+  const handleWalletSuccess = (address: string) => {
+    console.log('MetaMask connected:', address);
+    // Here you can add logic to register/login with the wallet address
+    // For now, we'll just close the dialog
+    setOpen(false);
   };
 
   return (
     <>
       <div className='space-x-4'>
-        <Button onClick={() => openDialog('login')}>{t('signIn')}</Button>
-        <Button onClick={() => openDialog('register')} variant='outline'>
-          {t('register')}
-        </Button>
+        <Button onClick={openDialog}>Connect Wallet</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className=''>
+        <DialogContent className='sm:max-w-md'>
           <DialogHeader>
-            <DialogTitle>
-              {activeForm === 'login' ? t('signIn') : 'Create Account'}
-            </DialogTitle>
+            <DialogTitle>Connect to ADA Platform</DialogTitle>
             <DialogDescription>
-              {activeForm === 'login'
-                ? 'Sign in to your account to access your dashboard.'
-                : 'Create a new account to get started.'}
+              Connect your MetaMask wallet to access the ADA accessible career platform.
             </DialogDescription>
           </DialogHeader>
-
-          {activeForm === 'login' ? (
-            <LoginForm onRegisterClick={toggleForm} />
-          ) : (
-            <RegisterForm onLoginClick={toggleForm} />
-          )}
-          <div className='flex items-center justify-center gap-3 overflow-hidden'>
-            <Separator className='!bg-gray-400' />
-            <p className='text-sm text-gray-600'>OR</p>
-            <Separator className='!bg-gray-400' />
+          
+          <div className='py-4'>
+            <MetaMaskConnect 
+              onSuccess={handleWalletSuccess}
+              variant="default"
+              className="w-full h-12"
+            />
           </div>
-          <MicrosoftLoginButton />
+          
+          <div className="text-xs text-gray-500 text-center">
+            <p>
+              By connecting your wallet, you agree to our Terms of Service and
+              Privacy Policy.
+            </p>
+          </div>
         </DialogContent>
       </Dialog>
     </>
@@ -83,15 +75,11 @@ function AuthDialogContent() {
 
 // Main component with Suspense boundary
 export default function AuthDialog() {
-  const t = useTranslations('LandingPage');
   return (
     <Suspense
       fallback={
         <div className='space-x-4'>
-          <Button disabled>{t('signIn')}</Button>
-          <Button disabled variant='outline'>
-            {t('register')}
-          </Button>
+          <Button disabled>Connect Wallet</Button>
         </div>
       }
     >
