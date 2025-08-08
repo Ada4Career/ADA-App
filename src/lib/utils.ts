@@ -131,7 +131,7 @@ export function getRandomInclusiveStatement(): string {
 }
 
 // Helper function to truncate wallet addresses
-export function truncateAddress(address: string, length: number = 6): string {
+export function truncateAddress(address: string, length = 6): string {
   if (!address) return '';
   return `${address.slice(0, length)}...${address.slice(-4)}`;
 }
