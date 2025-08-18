@@ -1,8 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+
+import { useRouter } from '@/i18n/navigation';
 
 import { MetaMaskConnect } from '@/components/web3/WalletConnect';
 import { Button } from '@/components/ui/button';
@@ -16,9 +17,9 @@ import {
 
 // Create a separate component for the parts that use useSearchParams
 function AuthDialogContent() {
-  const t = useTranslations('LandingPage');
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     // Check URL parameters for auth type
@@ -32,11 +33,12 @@ function AuthDialogContent() {
     setOpen(true);
   };
 
-  const handleWalletSuccess = (address: string) => {
-    console.log('MetaMask connected:', address);
-    // Here you can add logic to register/login with the wallet address
-    // For now, we'll just close the dialog
+  const handleWalletSuccess = (_address: string) => {
+    // Demo: wallet connection successful
     setOpen(false);
+    
+    // Redirect to buy tokens page after successful wallet connection
+    router.push('/app/home/buy-tokens');
   };
 
   return (

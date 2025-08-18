@@ -15,8 +15,8 @@ const HR_ROUTE = '/app/hr/dashboard';
 const routeRoleMap = {
   '/': 'public',
   '/onboarding': 'onboarding',
-  '/app/home/jobs': 'jobseeker',
-  '/app/hr/dashboard': 'human_resources',
+  '/app/home': 'jobseeker',
+  '/app/hr': 'human_resources',
   '/app/profile': 'authenticated',
 };
 
@@ -110,37 +110,54 @@ export default async function middleware(request: NextRequest) {
   }
 
   try {
-    const userResponse = await fetch(`${API_BASE_URL}/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    // Handle demo token for testing purposes
+    let user, userRole;
+    
+    if (token === 'demo-token') {
+      // Demo user data
+      user = {
+        email: 'demo@example.com',
+        gender: 'male',
+        role: ['jobseeker'],
+        job_seeker_data: {
+          resume_url: 'demo-resume.pdf'
+        }
+      };
+      userRole = 'jobseeker';
+    } else {
+      // Real API call for production
+      const userResponse = await fetch(`${API_BASE_URL}/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    // Invalid token
-    if (!userResponse.ok) {
-      const loginPath = LOGIN_ROUTE;
-      const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
+      // Invalid token
+      if (!userResponse.ok) {
+        const loginPath = LOGIN_ROUTE;
+        const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
 
-      const response = NextResponse.redirect(
-        new URL(localizedLoginPath, request.url)
-      );
-      response.cookies.delete('ada4career-token');
-      response.cookies.delete('ada4career-email');
-      return response;
-    }
+        const response = NextResponse.redirect(
+          new URL(localizedLoginPath, request.url)
+        );
+        response.cookies.delete('ada4career-token');
+        response.cookies.delete('ada4career-email');
+        return response;
+      }
 
-    const userData = await userResponse.json();
-    const user = userData.data;
-    const userRole = user?.role?.[0];
+      const userData = await userResponse.json();
+      user = userData.data;
+      userRole = user?.role?.[0];
 
-    if (!userRole) {
-      const loginPath = LOGIN_ROUTE;
-      const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
+      if (!userRole) {
+        const loginPath = LOGIN_ROUTE;
+        const localizedLoginPath = getLocalizedUrl(loginPath, currentLocale);
 
-      const response = NextResponse.redirect(
-        new URL(localizedLoginPath, request.url)
-      );
-      response.cookies.delete('ada4career-token');
-      response.cookies.delete('ada4career-email');
-      return response;
+        const response = NextResponse.redirect(
+          new URL(localizedLoginPath, request.url)
+        );
+        response.cookies.delete('ada4career-token');
+        response.cookies.delete('ada4career-email');
+        return response;
+      }
     }
 
     // Prepare the next response (but don't return it yet)

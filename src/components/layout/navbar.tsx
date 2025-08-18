@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,8 +18,6 @@ const NAV_LINKS = [
     url: '#product',
   },
 ];
-
-const queryClient = new QueryClient();
 
 const Navbar = () => {
   // const { user, isAuthenticated, isPending } = useAuthStore();
@@ -75,9 +72,7 @@ const Navbar = () => {
             ) : (
             )} */}
             <ChangeLangButton />
-            <QueryClientProvider client={queryClient}>
-              <AuthDialog />
-            </QueryClientProvider>
+            <AuthDialog />
             {/* <LoginDialog />
             <RegisterDialog /> */}
           </div>
@@ -119,9 +114,7 @@ const Navbar = () => {
             ))}
             <div className='flex flex-col space-y-4 pt-4 border-t'>
               <ChangeLangButton />
-              <QueryClientProvider client={queryClient}>
-                <AuthDialog />
-              </QueryClientProvider>
+              <AuthDialog />
             </div>
           </div>
         </div>

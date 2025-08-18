@@ -1,9 +1,9 @@
 'use client';
 
-import { BookOpen, Home, MessageCircle, TreeDeciduous } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl'; // Import useTranslations
+import { useTranslations } from 'next-intl';
+import { BookOpen, Home, MessageCircle, TreeDeciduous, Coins } from 'lucide-react';
 
 import AdaLogo from '@/components/ada-logo';
 import {
@@ -45,6 +45,11 @@ export function AppSidebar() {
       icon: <TreeDeciduous className='h-12 w-12' />,
       url: '/app/home/career-tree',
       label: t('careerTree'),
+    },
+    {
+      icon: <Coins className='h-12 w-12' />,
+      url: '/app/home/buy-tokens',
+      label: t('tokens'),
     },
   ];
 
